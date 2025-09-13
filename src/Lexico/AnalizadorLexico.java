@@ -1,3 +1,8 @@
+package Lexico;
+
+import Utils.SourceManager;
+import Utils.Token;
+
 import java.io.IOException;
 import java.util.Arrays;
 

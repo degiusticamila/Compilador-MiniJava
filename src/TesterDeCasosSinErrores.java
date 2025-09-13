@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 
+import Lexico.ExcepcionLexica;
 import org.hamcrest.CoreMatchers;
 import org.junit.After;
 import org.junit.Test;

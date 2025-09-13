@@ -1,9 +1,9 @@
-//Author: Juan Dingevan
+package Utils;//Author: Juan Dingevan
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
-public class SourceManagerImpl implements SourceManager{
+public class SourceManagerImpl implements SourceManager {
     private BufferedReader reader;
     private String currentLine;
     private int lineNumber;

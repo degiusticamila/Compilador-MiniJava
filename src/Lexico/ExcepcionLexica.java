@@ -1,4 +1,4 @@
-import java.util.ArrayList;
+package Lexico;
 
 public class ExcepcionLexica extends Exception{
     private String lexema;

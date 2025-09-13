@@ -1,4 +1,4 @@
-//Author: Juan Dingevan
+package Utils;//Author: Juan Dingevan
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
