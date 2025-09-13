@@ -157,7 +157,9 @@ public final class Primeros extends HashMap<NoTerminales, ArrayList<String>>{
     public ArrayList<String> getPrimeros(NoTerminales nt) {
         return primeros.get(nt);
     }
-
+    public boolean estaEnPrimeros(NoTerminales nt, String tokenID){
+        return primeros.get(nt).contains(tokenID);
+    }
     //implementar memberPrimeros
     //dado un NT y un String? me fijo si ese valor esta en la clave
 }
