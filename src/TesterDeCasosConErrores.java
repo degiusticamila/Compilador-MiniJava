@@ -1,7 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
 
-import Lexico.ExcepcionLexica;
 import org.hamcrest.CoreMatchers;
 import org.junit.After;
 import org.junit.Test;
@@ -51,11 +50,11 @@ public class TesterDeCasosConErrores {
        
         
     @Test
-    public void test1() throws ExcepcionLexica, IOException {
+    public void test1() {
         probarFallo(input);
     }
 
-    private void probarFallo(String name) throws ExcepcionLexica, IOException {
+    private void probarFallo(String name) {
         String testCaseFilePath = testFilesDirectoryPath+name;
         String errorCode = getErrorCode(testCaseFilePath);
         String[] args = {testCaseFilePath};
@@ -68,6 +67,7 @@ public class TesterDeCasosConErrores {
 
         assertThat("No se encontro el codigo: " + errorCode,  outContent.toString(), CoreMatchers.containsString(errorCode));
     }
+
 
     String getErrorCode(String testCaseFilePath)  {
         String lineWithTheCode = null;

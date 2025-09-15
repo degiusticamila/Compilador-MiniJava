@@ -21,7 +21,7 @@ public enum NoTerminales
     ArgFormal,
     BloqueOpcional,
     Bloque,
-    ListaSentancias,
+    ListaSentencias,
     Sentencia,
     VarLocal,
     Return,

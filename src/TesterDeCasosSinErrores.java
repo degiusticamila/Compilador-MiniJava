@@ -1,10 +1,8 @@
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 
-import Lexico.ExcepcionLexica;
 import org.hamcrest.CoreMatchers;
 import org.junit.After;
 import org.junit.Test;
@@ -24,7 +22,7 @@ public class TesterDeCasosSinErrores {
 
     //TODO: el tipo de esta variable init tiene que ser la clase que tiene el main
     private static final Main init = null;
-   
+
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private final PrintStream originalOut = System.out;
     private boolean fullCompilerOuputPrintingInEachTest = true;
@@ -61,12 +59,12 @@ public class TesterDeCasosSinErrores {
        
         
     @Test
-    public void testIterado() throws ExcepcionLexica, IOException {
+    public void testIterado() {
         probarExito(input);
     }
 
      
-    void probarExito(String name) throws ExcepcionLexica, IOException {
+    void probarExito(String name){
             String path = testFilesDirectoryPath+name;
             String[] args = {path};
             init.main(args);

@@ -1,14 +1,22 @@
 import Lexico.AnalizadorLexico;
 import Lexico.ExcepcionLexica;
+import Sintactico.AnalizadorSintactico;
+import Sintactico.ExcepcionSintactica;
+import Utils.SourceManager;
 import Utils.SourceManagerImpl;
 import Utils.Token;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class Main {
-    public static void main(String[] args){
+    private static SourceManager sourceManager;
+    private static AnalizadorSintactico analizadorSintactico;
+    private static AnalizadorLexico analizadorLexico;
+
+    public static void analisisLexico(String[] args){
         try {
-            SourceManagerImpl sourceManager = new SourceManagerImpl();
+            sourceManager = new SourceManagerImpl();
             sourceManager.open(args[0]);
             AnalizadorLexico analizadorLexico = new AnalizadorLexico(sourceManager);
             String test = "[SinErrores]";
@@ -41,4 +49,25 @@ public class Main {
             e.printStackTrace();
         }
     }
+    public static void analisisSintactico() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+        analizadorLexico = new AnalizadorLexico(sourceManager);
+        analizadorSintactico = new AnalizadorSintactico(analizadorLexico);
+    }
+    public static void main(String[] args) {
+        sourceManager = new SourceManagerImpl();
+        try {
+            sourceManager.open(args[0]);
+            analisisSintactico();
+            System.out.println("[SinErrores]");
+        } catch (ExcepcionSintactica | ExcepcionLexica ex) {
+            System.out.println("Error Sintactico en línea: "+sourceManager.getLineNumber()+"\n" +
+                    "[Error:"+analizadorLexico.getLexema()+"|"+sourceManager.getLineNumber()+"]");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+                sourceManager.close();
+        } catch (IOException ignored) {}
+    }
+
 }

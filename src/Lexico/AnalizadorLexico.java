@@ -542,64 +542,64 @@ public class AnalizadorLexico {
     }
     public Token generarTokenPalabraClave() throws ExcepcionLexica {
         if(lexema.equals("class")){
-            return new Token("pr_class", lexema,sourceManager.getLineNumber());
+            return new Token("class", lexema,sourceManager.getLineNumber());
         }
         if(lexema.equals("extends")){
-            return new Token("pr_extends",lexema,sourceManager.getLineNumber());
+            return new Token("extends",lexema,sourceManager.getLineNumber());
         }
         if(lexema.equals("public")){
-            return new Token("pr_public",lexema,sourceManager.getLineNumber());
+            return new Token("public",lexema,sourceManager.getLineNumber());
         }
         if(lexema.equals("static")){
-            return new Token("pr_static",lexema,sourceManager.getLineNumber());
+            return new Token("static",lexema,sourceManager.getLineNumber());
         }
         if(lexema.equals("void")){
-            return new Token("pr_void",lexema,sourceManager.getLineNumber());
+            return new Token("void",lexema,sourceManager.getLineNumber());
         }
         if(lexema.equals("boolean")){
-            return new Token("pr_boolean",lexema,sourceManager.getLineNumber());
+            return new Token("boolean",lexema,sourceManager.getLineNumber());
         }
         if(lexema.equals("char")){
-            return new Token("pr_char",lexema,sourceManager.getLineNumber());
+            return new Token("char",lexema,sourceManager.getLineNumber());
         }
         if(lexema.equals("int")){
-            return new Token("pr_int",lexema,sourceManager.getLineNumber());
+            return new Token("int",lexema,sourceManager.getLineNumber());
         }
         if(lexema.equals("abstract")){
-            return new Token("pr_abstract",lexema,sourceManager.getLineNumber());
+            return new Token("abstract",lexema,sourceManager.getLineNumber());
         }
         if(lexema.equals("final")){
-            return new Token("pr_final",lexema,sourceManager.getLineNumber());
+            return new Token("final",lexema,sourceManager.getLineNumber());
         }
         if(lexema.equals("if")){
-            return new Token("pr_if",lexema,sourceManager.getLineNumber());
+            return new Token("if",lexema,sourceManager.getLineNumber());
         }
         if(lexema.equals("else")){
-            return new Token("pr_else",lexema,sourceManager.getLineNumber());
+            return new Token("else",lexema,sourceManager.getLineNumber());
         }
         if(lexema.equals("while")){
-            return new Token("pr_while",lexema,sourceManager.getLineNumber());
+            return new Token("while",lexema,sourceManager.getLineNumber());
         }
         if(lexema.equals("return")){
-            return new Token("pr_return",lexema,sourceManager.getLineNumber());
+            return new Token("return",lexema,sourceManager.getLineNumber());
         }
         if(lexema.equals("var")){
-            return new Token("pr_var",lexema,sourceManager.getLineNumber());
+            return new Token("var",lexema,sourceManager.getLineNumber());
         }
         if(lexema.equals("this")){
-            return new Token("pr_this",lexema,sourceManager.getLineNumber());
+            return new Token("this",lexema,sourceManager.getLineNumber());
         }
         if(lexema.equals("new")){
-            return new Token("pr_new",lexema,sourceManager.getLineNumber());
+            return new Token("new",lexema,sourceManager.getLineNumber());
         }
         if(lexema.equals("null")){
-            return new Token("pr_null",lexema,sourceManager.getLineNumber());
+            return new Token("null",lexema,sourceManager.getLineNumber());
         }
         if(lexema.equals("true")){
-            return new Token("pr_true",lexema,sourceManager.getLineNumber());
+            return new Token("true",lexema,sourceManager.getLineNumber());
         }
         if(lexema.equals("false")){
-            return new Token("pr_false",lexema,sourceManager.getLineNumber());
+            return new Token("false",lexema,sourceManager.getLineNumber());
         }
         else{
             throw new ExcepcionLexica(lexema,sourceManager.getLineNumber(),"Identificador o palabra clave invalida");

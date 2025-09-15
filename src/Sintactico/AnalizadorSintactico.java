@@ -12,12 +12,12 @@ public class AnalizadorSintactico {
     private Token tokenActual;
     private Primeros primeros;
     public AnalizadorSintactico(AnalizadorLexico analizadorLexico) throws ExcepcionLexica, IOException, ExcepcionSintactica {
+        primeros = new Primeros();
         this.analizadorLexico = analizadorLexico;
         this.tokenActual = analizadorLexico.proximoToken();
-        primeros = new Primeros();
         inicial();
     }
-    private void inicial() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    public void inicial() throws ExcepcionLexica, IOException, ExcepcionSintactica {
             listaClases();
             match("EOF");
     }
@@ -418,7 +418,7 @@ public class AnalizadorSintactico {
         }
         else{/* $ */}
     }
-    void primario() throws ExcepcionSintactica, ExcepcionLexica, IOException {
+    /*void primario() throws ExcepcionSintactica, ExcepcionLexica, IOException {
         if(tokenActual.getId().equals("this")){
             match("this");
         }
@@ -442,6 +442,39 @@ public class AnalizadorSintactico {
         }
         else{
             throw new ExcepcionSintactica(tokenActual, tokenActual.getLexema());
+        }
+    }
+    */
+    private void primario() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+        if(tokenActual.getId().equals("this")){
+            match("this");
+        }
+        else if(tokenActual.getId().equals("stringLiteral")){
+            match("stringLiteral");
+        }
+        else if(tokenActual.getId().equals("idMetVar")){
+            match("idMetVar");
+            llamadaMetodoResto();
+        }
+        else if(primeros.estaEnPrimeros(NoTerminales.LlamadaConstructor, tokenActual.getId())){
+            llamadaConstructor();
+        }
+        else if(primeros.estaEnPrimeros(NoTerminales.LlamadaMetodoEstatico, tokenActual.getId())){
+            llamadaMetodoEstatico();
+        }
+        else if(primeros.estaEnPrimeros(NoTerminales.ExpresionParentizada, tokenActual.getId())){
+            expresionParentizada();
+        }
+        else{
+            throw new ExcepcionSintactica(tokenActual, tokenActual.getLexema());
+        }
+    }
+    void llamadaMetodoResto() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+        if(primeros.estaEnPrimeros(NoTerminales.ArgsActuales, tokenActual.getId())){
+            argsActuales();
+        }
+        else{
+            /* $ es el caso de accesoVar*/
         }
     }
     void accesoVar() throws ExcepcionLexica, IOException, ExcepcionSintactica {
@@ -502,9 +535,13 @@ public class AnalizadorSintactico {
     }
 
     void match(String nombreToken) throws ExcepcionSintactica, IOException, ExcepcionLexica {
-        if(nombreToken.equals(tokenActual.getLexema())){
+        System.out.println(nombreToken+" "+ tokenActual.getId());
+        if(nombreToken.equals(tokenActual.getId())){
+            analizadorLexico.setLexema("");
             tokenActual = analizadorLexico.proximoToken();
+            System.out.println(tokenActual.getLexema());
         }
+
         else{
             throw new ExcepcionSintactica(tokenActual, tokenActual.getLexema());
         }
