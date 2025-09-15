@@ -517,7 +517,7 @@ public class AnalizadorLexico {
         }
     }
     public Token e38(){
-        return new Token("&",lexema,sourceManager.getLineNumber());
+        return new Token("&&",lexema,sourceManager.getLineNumber());
     }
     public void setLexema(String lexema) {
         this.lexema = lexema;
