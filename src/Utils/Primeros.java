@@ -230,7 +230,7 @@ public final class Primeros extends HashMap<NoTerminales, ArrayList<String>>{
         primeros.get(NoTerminales.Inicial).addAll(primeros.get(NoTerminales.ListaClases));
     }
     public boolean estaEnPrimeros(NoTerminales nt, String tokenID){
-       getMapeo();
+       //getMapeo();
 
         return primeros.get(nt).contains(tokenID);
     }
