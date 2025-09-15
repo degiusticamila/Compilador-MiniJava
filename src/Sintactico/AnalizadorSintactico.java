@@ -518,6 +518,7 @@ public class AnalizadorSintactico {
     void listaExpsResto() throws ExcepcionLexica, IOException, ExcepcionSintactica {
         if(tokenActual.getId().equals(",")){
             match(",");
+
             listaExpsResto();
         }
         else{/* $ */}
@@ -535,11 +536,11 @@ public class AnalizadorSintactico {
     }
 
     void match(String nombreToken) throws ExcepcionSintactica, IOException, ExcepcionLexica {
-        System.out.println(nombreToken+" "+ tokenActual.getId());
+        //System.out.println(nombreToken+" "+ tokenActual.getId());
         if(nombreToken.equals(tokenActual.getId())){
             analizadorLexico.setLexema("");
             tokenActual = analizadorLexico.proximoToken();
-            System.out.println(tokenActual.getLexema());
+            //System.out.println(tokenActual.getLexema());
         }
 
         else{

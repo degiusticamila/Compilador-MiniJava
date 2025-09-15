@@ -68,7 +68,7 @@ public final class Primeros extends HashMap<NoTerminales, ArrayList<String>>{
         inicializarEntrada(NoTerminales.While, "while");
 
         inicializarEntrada(NoTerminales.OperadorAsignacion, "=");
-        inicializarEntrada(NoTerminales.OperadorBinario, "||", "&&", "==", "!=", ">", "<", ">=", "<=", "+", "-","*", "/", "%");
+        inicializarEntrada(NoTerminales.OperadorBinario, "||","&&","==","!=",">", "<", ">=", "<=", "+", "-","*", "/", "%");
         inicializarEntrada(NoTerminales.OperadorUnario, "+", "++", "-", "--", "!");
 
         inicializarEntrada(NoTerminales.Primitivo, "true", "false", "intLiteral", "charLiteral", "null");
@@ -165,9 +165,9 @@ public final class Primeros extends HashMap<NoTerminales, ArrayList<String>>{
         /* REACOMODADO!*/
         primeros.get(NoTerminales.RestoEncadenado).addAll(primeros.get(NoTerminales.ArgsActuales));
 
-        primeros.get(NoTerminales.ListaExps).addAll(primeros.get(NoTerminales.Expresion));
+       // primeros.get(NoTerminales.ListaExps).addAll(primeros.get(NoTerminales.Expresion));
 
-        primeros.get(NoTerminales.ListaExpsOpcional).addAll(primeros.get(NoTerminales.ListaExps));
+      //  primeros.get(NoTerminales.ListaExpsOpcional).addAll(primeros.get(NoTerminales.ListaExps));
 
         primeros.get(NoTerminales.Primario).addAll(primeros.get(NoTerminales.ExpresionParentizada));
         primeros.get(NoTerminales.Primario).addAll(primeros.get(NoTerminales.LlamadaMetodoEstatico));
@@ -193,6 +193,9 @@ public final class Primeros extends HashMap<NoTerminales, ArrayList<String>>{
 
         primeros.get(NoTerminales.ExpresionOpcional).addAll(primeros.get(NoTerminales.Expresion));
 
+        primeros.get(NoTerminales.ListaExps).addAll(primeros.get(NoTerminales.Expresion));
+        primeros.get(NoTerminales.ListaExpsOpcional).addAll(primeros.get(NoTerminales.ListaExps));
+
         primeros.get(NoTerminales.Sentencia).addAll(primeros.get(NoTerminales.VarLocal)); //ojo, segun drive es primeros de Asignacion
         primeros.get(NoTerminales.Sentencia).addAll(primeros.get(NoTerminales.Bloque));
         primeros.get(NoTerminales.Sentencia).addAll(primeros.get(NoTerminales.While));
@@ -213,6 +216,7 @@ public final class Primeros extends HashMap<NoTerminales, ArrayList<String>>{
         primeros.get(NoTerminales.Tipo).addAll(primeros.get(NoTerminales.TipoPrimitivo));
         primeros.get(NoTerminales.ArgFormal).addAll(primeros.get(NoTerminales.Tipo)); //nueva
         primeros.get(NoTerminales.ListaArgsFormales).addAll(primeros.get(NoTerminales.ArgFormal)); //nueva
+        primeros.get(NoTerminales.ListaArgsFormalesOpcional).addAll(primeros.get(NoTerminales.ListaArgsFormales));
         primeros.get(NoTerminales.TipoMetodo).addAll(primeros.get(NoTerminales.Tipo));
 
         primeros.get(NoTerminales.MiembroResto).addAll(primeros.get(NoTerminales.ArgsFormales));
@@ -225,12 +229,9 @@ public final class Primeros extends HashMap<NoTerminales, ArrayList<String>>{
         primeros.get(NoTerminales.ListaClases).addAll(primeros.get(NoTerminales.Clase));
         primeros.get(NoTerminales.Inicial).addAll(primeros.get(NoTerminales.ListaClases));
     }
-    public ArrayList<String> getPrimeros(NoTerminales nt) {
-        return primeros.get(nt);
-    }
     public boolean estaEnPrimeros(NoTerminales nt, String tokenID){
-       // getMapeo();
-        
+       getMapeo();
+
         return primeros.get(nt).contains(tokenID);
     }
     public HashMap<NoTerminales, ArrayList<String>> getMapeo() {
@@ -239,9 +240,8 @@ public final class Primeros extends HashMap<NoTerminales, ArrayList<String>>{
             ArrayList<String> valor = entrada.getValue();
             System.out.println("Clave: " + clave + ", Valor: " + valor);
         }
-        return primeros; // devolvés el mismo mapa
+        return primeros;
     }
-    //implementar memberPrimeros
-    //dado un NT y un String? me fijo si ese valor esta en la clave
+
 }
 
