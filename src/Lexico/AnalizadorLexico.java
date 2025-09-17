@@ -149,8 +149,8 @@ public class AnalizadorLexico {
             return e11();
         }
         if (caracterActual == sourceManager.END_OF_FILE){
-            actualizarLexema();
-            actualizarCaracterActual();
+            //actualizarLexema();
+            //actualizarCaracterActual();
             return new Token("EOF","EOF",sourceManager.getLineNumber());
         }
         actualizarLexema();

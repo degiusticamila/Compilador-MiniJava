@@ -536,15 +536,23 @@ public class AnalizadorSintactico {
     }
 
     void match(String nombreToken) throws ExcepcionSintactica, IOException, ExcepcionLexica {
-        //System.out.println(nombreToken+" "+ tokenActual.getId());
+        System.out.println(nombreToken+" "+ tokenActual.getId());
         if(nombreToken.equals(tokenActual.getId())){
+
             analizadorLexico.setLexema("");
             tokenActual = analizadorLexico.proximoToken();
             //System.out.println(tokenActual.getLexema());
         }
 
         else{
-            throw new ExcepcionSintactica(tokenActual, tokenActual.getLexema());
+                /*if (tokenActual.getId().equals("EOF")) {
+                    throw new ExcepcionSintactica(tokenActual, "EOF");
+                }else{
+                    throw new ExcepcionSintactica(tokenActual, tokenActual.getLexema());
+                }
+
+                 */
+           throw new ExcepcionSintactica(tokenActual, tokenActual.getLexema());
         }
     }
 }

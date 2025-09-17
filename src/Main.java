@@ -60,8 +60,18 @@ public class Main {
             analisisSintactico();
             System.out.println("[SinErrores]");
         } catch (ExcepcionSintactica | ExcepcionLexica ex) {
-            System.out.println("Error Sintactico en línea: "+sourceManager.getLineNumber()+"\n" +
-                    "[Error:"+analizadorLexico.getLexema()+"|"+sourceManager.getLineNumber()+"]");
+            try { //NUEVO
+                System.out.println("Error Sintactico en línea: "+sourceManager.getLineNumber()+"\n" +
+                        "[Error:"+(analizadorLexico.getLexema().isEmpty() ? analizadorLexico.proximoToken().getId() : analizadorLexico.getLexema())
+                        +"|"+sourceManager.getLineNumber()+"]");
+            } catch (ExcepcionLexica e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            //System.out.println("Error Sintactico en línea: "+sourceManager.getLineNumber()+"\n" +
+            //        "[Error:"+analizadorLexico.getLexema()+"|"+sourceManager.getLineNumber()+"]");
         } catch (IOException e) {
             e.printStackTrace();
         }
