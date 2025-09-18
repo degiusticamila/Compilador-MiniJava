@@ -228,6 +228,11 @@ public final class Primeros extends HashMap<NoTerminales, ArrayList<String>>{
         primeros.get(NoTerminales.Clase).addAll(primeros.get(NoTerminales.ModificadorOpcional));
         primeros.get(NoTerminales.ListaClases).addAll(primeros.get(NoTerminales.Clase));
         primeros.get(NoTerminales.Inicial).addAll(primeros.get(NoTerminales.ListaClases));
+
+        //Primeros para los LOGROS
+        /*--------------------------Atributos inicializados--------------------------------*/
+        primeros.get(NoTerminales.MiembroResto).addAll(primeros.get(NoTerminales.OperadorAsignacion));
+
     }
     public boolean estaEnPrimeros(NoTerminales nt, String tokenID){
        //getMapeo();

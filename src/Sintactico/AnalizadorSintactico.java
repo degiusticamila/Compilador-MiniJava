@@ -95,9 +95,20 @@ public class AnalizadorSintactico {
             argsFormales();
             bloqueOpcional();
         }
+        //ATRIBUTOS INICIALIZADOS
+        else if (primeros.estaEnPrimeros(NoTerminales.OperadorAsignacion, tokenActual.getId())){
+            operadorAsignacion();
+            expresion();
+            match(";");
+        }
         else{
             throw new ExcepcionSintactica(tokenActual,tokenActual.getId());
         }
+       /* else{
+            throw new ExcepcionSintactica(tokenActual,tokenActual.getId());
+        }
+
+        */
     }
     private void constructor() throws ExcepcionLexica, IOException, ExcepcionSintactica {
         match("public");
