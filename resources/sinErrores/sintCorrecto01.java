@@ -7,6 +7,7 @@ class Prueba1{
     boolean testSintactico = true;
 
     public Prueba1(){
+       // int x; Esto se debería poder para el logro de variables clásicas
         numeroMagico = 100;
         caracterBonito = '*';
         testSintactico = false;
@@ -27,5 +28,13 @@ class Prueba1{
             }
             ++i;
         }
+    }
+    boolean testConstructor(){
+        var a = 2 * (3 + 4);
+        var miVariable = "hola";
+        return true;
+
+        var miclase = new MiClase(param1);
+        var miclase = new MiClase(param1, param2);
     }
 }

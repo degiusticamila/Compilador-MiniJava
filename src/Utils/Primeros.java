@@ -90,6 +90,11 @@ public final class Primeros extends HashMap<NoTerminales, ArrayList<String>>{
         inicializarEntrada(NoTerminales.ListaExpsResto, ",");
 
         inicializarEntrada(NoTerminales.Encadenado, ".");
+
+        inicializarEntrada(NoTerminales.TipoParametricoOpcional, "<");
+
+        inicializarEntrada(NoTerminales.TipoParametricoInst, "<");
+        inicializarEntrada(NoTerminales.TipoParametricoInstResto, ">", "idClase");
     }
 
     private void noterminales(){

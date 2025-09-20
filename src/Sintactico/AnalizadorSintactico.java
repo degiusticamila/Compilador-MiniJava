@@ -32,6 +32,10 @@ public class AnalizadorSintactico {
             modificadorOpcional();
             match("class");
             match("idClase");
+
+            //OPCIONAL GENERICIDAD
+            tipoParametricoOpcional();
+
             herenciaOpcional();
             match("{");
             listaMiembros();
@@ -53,6 +57,9 @@ public class AnalizadorSintactico {
         if(tokenActual.getId().equals("extends")){
             match("extends");
             match("idClase");
+
+            //GENERICIDAD E2
+            tipoParametricoOpcional();
         }
         else{ /* $ */ }
     }
@@ -66,6 +73,7 @@ public class AnalizadorSintactico {
     void miembro() throws ExcepcionLexica, IOException, ExcepcionSintactica {
         if(primeros.estaEnPrimeros(NoTerminales.Tipo,tokenActual.getId())){
             tipo();
+            tipoParametricoOpcional();
             match("idMetVar");
             miembroResto();
         }
@@ -78,6 +86,8 @@ public class AnalizadorSintactico {
         else if(primeros.estaEnPrimeros(NoTerminales.ModificadorOpcional,tokenActual.getId())){
             modificadorOpcional();
             tipoMetodo();
+            //GENERICIDAD E2
+            tipoParametricoOpcional();
             match("idMetVar");
             argsFormales();
             bloqueOpcional();
@@ -133,6 +143,7 @@ public class AnalizadorSintactico {
         }
         else if(tokenActual.getId().equals("idClase")){
             match("idClase");
+           // tipoParametricoOpcional();
         }
         else{
             throw new ExcepcionSintactica(tokenActual, tokenActual.getLexema());
@@ -237,6 +248,10 @@ public class AnalizadorSintactico {
     }
     void varLocal() throws ExcepcionLexica, IOException, ExcepcionSintactica {
         match("var");
+
+        //OPCIONAL GENERICIDAD
+        tipoParametricoOpcional();
+
         match("idMetVar");
         match("=");
         expresionCompuesta();
@@ -494,7 +509,42 @@ public class AnalizadorSintactico {
     void llamadaConstructor() throws ExcepcionLexica, IOException, ExcepcionSintactica {
         match("new");
         match("idClase");
+
+        //OPCIONAL GENERICIDAD
+        if(primeros.estaEnPrimeros(NoTerminales.TipoParametricoInst, tokenActual.getId())){
+            tipoParametricoInst();
+
+        }
         argsActuales();
+    }
+    void tipoParametricoOpcional() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+        if(tokenActual.getId().equals("<")){
+            match("<");
+            match("idClase");
+            match(">");
+        }
+        else{ /* $ */}
+    }
+    void tipoParametricoInst() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+        if(tokenActual.getId().equals("<")){
+            match("<");
+            tipoParametricoInstResto();
+        }
+        else{/*$*/}
+
+
+    }
+    void tipoParametricoInstResto() throws ExcepcionSintactica, ExcepcionLexica, IOException {
+        if(tokenActual.getId().equals(">")){
+            match(">");
+        }
+        else if(tokenActual.getId().equals("idClase")){
+            match("idClase");
+            match(">");
+        }
+        else{
+            throw new ExcepcionSintactica(tokenActual, tokenActual.getLexema());
+        }
     }
     void expresionParentizada() throws ExcepcionLexica, IOException, ExcepcionSintactica {
         match("(");
@@ -529,8 +579,8 @@ public class AnalizadorSintactico {
     void listaExpsResto() throws ExcepcionLexica, IOException, ExcepcionSintactica {
         if(tokenActual.getId().equals(",")){
             match(",");
-
-            listaExpsResto();
+            listaExps();
+            //listaExpsResto();
         }
         else{/* $ */}
     }

@@ -21,7 +21,7 @@ class Prueba2{
         while(true != false){
             this.metodo1();
         }
-        //while(true == false){
+        while(true == false){
             if (true || false) {}
         if(a != b){}
             if(a >= b){}
@@ -29,6 +29,6 @@ class Prueba2{
         if(a && b){}
             if (true && false) {}
 
-        //}
+        }
     }
 }
