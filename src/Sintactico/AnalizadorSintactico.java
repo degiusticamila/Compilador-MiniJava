@@ -18,15 +18,29 @@ public class AnalizadorSintactico {
         inicial();
     }
     public void inicial() throws ExcepcionLexica, IOException, ExcepcionSintactica {
-            listaClases();
-            match("EOF");
+        listaClases();
+        match("EOF");
     }
     private void listaClases() throws ExcepcionLexica, IOException, ExcepcionSintactica {
-        if(primeros.estaEnPrimeros(NoTerminales.Clase, tokenActual.getId())){
-            clase();
+
+        if(primeros.estaEnPrimeros(NoTerminales.Clase_Interfaz, tokenActual.getId())){
+            clase_interfaz();
             listaClases();
         }
-        else{ /* $ */}
+        else{
+            /* $ */
+        }
+    }
+    private void clase_interfaz() throws ExcepcionSintactica, ExcepcionLexica, IOException {
+        if(primeros.estaEnPrimeros(NoTerminales.Clase, tokenActual.getId())){
+            clase();
+        }
+        else if(primeros.estaEnPrimeros(NoTerminales.Interfaz, tokenActual.getId())){
+            interfaz();
+        }
+        else{
+            throw new ExcepcionSintactica(tokenActual,tokenActual.getLexema());
+        }
     }
     private void clase() throws ExcepcionLexica, IOException, ExcepcionSintactica {
             modificadorOpcional();
@@ -40,6 +54,44 @@ public class AnalizadorSintactico {
             match("{");
             listaMiembros();
             match("}");
+    }
+    private void interfaz() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+
+            match("interface");
+            match("idClase");
+            tipoParametricoOpcional();
+            herenciaOpcionalInterfaz();
+            match("{");
+            //ME FALTA EL CUERPO DE LA INTERFAZ!
+            listaMiembrosInterfaz();
+            match("}");
+
+    }
+    private void listaMiembrosInterfaz() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+       if(primeros.estaEnPrimeros(NoTerminales.MiembrosInterfaz, tokenActual.getId())){
+           miembrosInterfaz();
+           listaMiembrosInterfaz();
+       }
+       else{
+           /* $ */
+       }
+    }
+    private void miembrosInterfaz() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+        //Para el logro de visibilidad agregar mod interfaz
+        modificadorOpcional();
+        tipoMetodo();
+        tipoParametricoOpcional();
+        match("idMetVar");
+        argsFormales();
+        match(";");
+    }
+    private void herenciaOpcionalInterfaz() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+        if(tokenActual.getId().equals("extends")){
+            match("extends");
+            match("idClase");
+            tipoParametricoOpcional();
+        }
+        else{/* $*/}
     }
     void modificadorOpcional() throws ExcepcionLexica, IOException, ExcepcionSintactica {
         if(tokenActual.getId().equals("abstract")){
@@ -57,8 +109,12 @@ public class AnalizadorSintactico {
         if(tokenActual.getId().equals("extends")){
             match("extends");
             match("idClase");
-
             //GENERICIDAD E2
+            tipoParametricoOpcional();
+        }
+        else if(tokenActual.getId().equals("implements")){
+            match("implements");
+            match("idClase");
             tipoParametricoOpcional();
         }
         else{ /* $ */ }

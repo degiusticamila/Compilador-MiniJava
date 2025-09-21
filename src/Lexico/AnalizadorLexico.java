@@ -167,7 +167,7 @@ public class AnalizadorLexico {
         }
     }
     public Token scanIdentificadorVarOMetodo() throws ExcepcionLexica, IOException {
-        if(Arrays.asList(palabrasClave).contains(lexema)){
+        /*if(Arrays.asList(palabrasClave).contains(lexema)){
             return generarTokenPalabraClave();
         } else if(Character.isLetter(caracterActual) || Character.isDigit(caracterActual) || caracterActual == '_'){
                 actualizarLexema();
@@ -175,6 +175,18 @@ public class AnalizadorLexico {
                 return scanIdentificadorVarOMetodo();
         } else{
             return new Token("idMetVar", lexema,sourceManager.getLineNumber());
+        }
+         */
+        while (Character.isLetter(caracterActual) || Character.isDigit(caracterActual) || caracterActual == '_') {
+            actualizarLexema();
+            actualizarCaracterActual();
+        }
+
+        // después de consumir el identificador completo, verifico palabra clave
+        if (Arrays.asList(palabrasClave).contains(lexema)) {
+            return generarTokenPalabraClave();
+        } else {
+            return new Token("idMetVar", lexema, sourceManager.getLineNumber());
         }
     }
     public Token scanLiteralEntero() throws ExcepcionLexica, IOException {
@@ -533,7 +545,7 @@ public class AnalizadorLexico {
     }
     public void inicializarPalabrasClave(){
         palabrasClave = new String[] {
-                "class","extends","public","static",
+                "class","extends","implements","public","static", "interface",
                 "void","boolean","char","int",
                 "abstract","final","if","else",
                 "while","return","var","this",
@@ -546,6 +558,9 @@ public class AnalizadorLexico {
         }
         if(lexema.equals("extends")){
             return new Token("extends",lexema,sourceManager.getLineNumber());
+        }
+        if(lexema.equals("interface")){
+            return new Token("interface", lexema, sourceManager.getLineNumber());
         }
         if(lexema.equals("public")){
             return new Token("public",lexema,sourceManager.getLineNumber());
@@ -600,6 +615,9 @@ public class AnalizadorLexico {
         }
         if(lexema.equals("false")){
             return new Token("false",lexema,sourceManager.getLineNumber());
+        }
+        if(lexema.equals("implements")){
+            return new Token("implements", lexema, sourceManager.getLineNumber());
         }
         else{
             throw new ExcepcionLexica(lexema,sourceManager.getLineNumber(),"Identificador o palabra clave invalida");

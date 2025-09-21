@@ -34,8 +34,15 @@ public final class Primeros extends HashMap<NoTerminales, ArrayList<String>>{
 
         inicializarEntrada(NoTerminales.Inicial,"EOF");
         inicializarEntrada(NoTerminales.Clase, "class");
+        inicializarEntrada(NoTerminales.Interfaz, "interface");
         inicializarEntrada(NoTerminales.ModificadorOpcional, "abstract","static", "final");
         inicializarEntrada(NoTerminales.HerenciaOpcional, "extends");
+        inicializarEntrada(NoTerminales.HerenciaOpcionalInterfaz, "extends");
+        inicializarEntrada(NoTerminales.HerenciaOpcional, "implements");
+
+        //Logro interfaces genericas
+        inicializarEntrada(NoTerminales.ListaMiembrosInterfaz, "void");
+
 
         inicializarEntrada(NoTerminales.Miembro, "void");
 
@@ -74,8 +81,6 @@ public final class Primeros extends HashMap<NoTerminales, ArrayList<String>>{
         inicializarEntrada(NoTerminales.Primitivo, "true", "false", "intLiteral", "charLiteral", "null");
 
         inicializarEntrada(NoTerminales.Primario, "this", "stringLiteral");
-
-        //inicializarEntrada(NoTerminales.AccesoVar, "idMetVar");
 
         inicializarEntrada(NoTerminales.LlamadaConstructor, "new");
 
@@ -178,7 +183,6 @@ public final class Primeros extends HashMap<NoTerminales, ArrayList<String>>{
         primeros.get(NoTerminales.Primario).addAll(primeros.get(NoTerminales.LlamadaMetodoEstatico));
         primeros.get(NoTerminales.Primario).addAll(primeros.get(NoTerminales.LlamadaMetodo));
         primeros.get(NoTerminales.Primario).addAll(primeros.get(NoTerminales.LlamadaConstructor));
-        //primeros.get(NoTerminales.Primario).addAll(primeros.get(NoTerminales.AccesoVar));
 
         primeros.get(NoTerminales.ReferenciaResto).addAll(primeros.get(NoTerminales.Encadenado));
 
@@ -201,7 +205,7 @@ public final class Primeros extends HashMap<NoTerminales, ArrayList<String>>{
         primeros.get(NoTerminales.ListaExps).addAll(primeros.get(NoTerminales.Expresion));
         primeros.get(NoTerminales.ListaExpsOpcional).addAll(primeros.get(NoTerminales.ListaExps));
 
-        primeros.get(NoTerminales.Sentencia).addAll(primeros.get(NoTerminales.VarLocal)); //ojo, segun drive es primeros de Asignacion
+        primeros.get(NoTerminales.Sentencia).addAll(primeros.get(NoTerminales.VarLocal));
         primeros.get(NoTerminales.Sentencia).addAll(primeros.get(NoTerminales.Bloque));
         primeros.get(NoTerminales.Sentencia).addAll(primeros.get(NoTerminales.While));
         primeros.get(NoTerminales.Sentencia).addAll(primeros.get(NoTerminales.If));
@@ -211,10 +215,6 @@ public final class Primeros extends HashMap<NoTerminales, ArrayList<String>>{
         primeros.get(NoTerminales.ListaSentencias).addAll(primeros.get(NoTerminales.Sentencia));
 
         primeros.get(NoTerminales.BloqueOpcional).addAll(primeros.get(NoTerminales.Bloque));
-
-        //primeros.get(NoTerminales.ArgFormal).addAll(primeros.get(NoTerminales.Tipo));
-
-        //primeros.get(NoTerminales.ListaArgsFormales).addAll(primeros.get(NoTerminales.ArgFormal));
 
         primeros.get(NoTerminales.ListaMiembros).addAll(primeros.get(NoTerminales.Miembro));
 
@@ -230,8 +230,15 @@ public final class Primeros extends HashMap<NoTerminales, ArrayList<String>>{
         primeros.get(NoTerminales.Miembro).addAll(primeros.get(NoTerminales.ModificadorOpcional));
         primeros.get(NoTerminales.Miembro).addAll(primeros.get(NoTerminales.Constructor));
 
+        primeros.get(NoTerminales.MiembrosInterfaz).addAll(primeros.get(NoTerminales.ModificadorOpcional));
+        primeros.get(NoTerminales.MiembrosInterfaz).addAll(primeros.get(NoTerminales.TipoMetodo));
+        primeros.get(NoTerminales.ListaMiembrosInterfaz).addAll(primeros.get(NoTerminales.MiembrosInterfaz));
         primeros.get(NoTerminales.Clase).addAll(primeros.get(NoTerminales.ModificadorOpcional));
-        primeros.get(NoTerminales.ListaClases).addAll(primeros.get(NoTerminales.Clase));
+
+        primeros.get(NoTerminales.Clase_Interfaz).addAll(primeros.get(NoTerminales.Clase));
+        /*---------------------------Interfaces---------------------------------------------*/
+        primeros.get(NoTerminales.Clase_Interfaz).addAll(primeros.get(NoTerminales.Interfaz));
+        primeros.get(NoTerminales.ListaClases).addAll(primeros.get(NoTerminales.Clase_Interfaz));
         primeros.get(NoTerminales.Inicial).addAll(primeros.get(NoTerminales.ListaClases));
 
         //Primeros para los LOGROS
