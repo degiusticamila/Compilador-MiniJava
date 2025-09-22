@@ -545,7 +545,7 @@ public class AnalizadorLexico {
     }
     public void inicializarPalabrasClave(){
         palabrasClave = new String[] {
-                "class","extends","implements","public","static", "interface",
+                "class","extends","implements","public","private","static", "interface",
                 "void","boolean","char","int",
                 "abstract","final","if","else",
                 "while","return","var","this",
@@ -564,6 +564,9 @@ public class AnalizadorLexico {
         }
         if(lexema.equals("public")){
             return new Token("public",lexema,sourceManager.getLineNumber());
+        }
+        if(lexema.equals("private")){
+            return new Token("private",lexema,sourceManager.getLineNumber());
         }
         if(lexema.equals("static")){
             return new Token("static",lexema,sourceManager.getLineNumber());

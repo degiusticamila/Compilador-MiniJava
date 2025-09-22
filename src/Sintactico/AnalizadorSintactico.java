@@ -39,7 +39,7 @@ public class AnalizadorSintactico {
             interfaz();
         }
         else{
-            throw new ExcepcionSintactica(tokenActual,tokenActual.getLexema());
+            throw new ExcepcionSintactica(tokenActual,"idClase o interface");
         }
     }
     private void clase() throws ExcepcionLexica, IOException, ExcepcionSintactica {
@@ -56,16 +56,23 @@ public class AnalizadorSintactico {
             match("}");
     }
     private void interfaz() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+            //modificadorOpcionalInterfaz();
 
             match("interface");
             match("idClase");
             tipoParametricoOpcional();
             herenciaOpcionalInterfaz();
             match("{");
-            //ME FALTA EL CUERPO DE LA INTERFAZ!
+
             listaMiembrosInterfaz();
             match("}");
 
+    }
+    private void modificadorOpcionalInterfaz() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+        if(tokenActual.getId().equals("public")){
+            match("public");
+        }
+        else {/* $ */}
     }
     private void listaMiembrosInterfaz() throws ExcepcionLexica, IOException, ExcepcionSintactica {
        if(primeros.estaEnPrimeros(NoTerminales.MiembrosInterfaz, tokenActual.getId())){
@@ -125,6 +132,22 @@ public class AnalizadorSintactico {
             listaMiembros();
         }
         else{ /* $ */}
+       /* if(primeros.estaEnPrimeros(NoTerminales.VisibilidadOpcional,tokenActual.getId())){
+
+            visibilidadOpcional();
+            miembro();
+            listaMiembros();
+        }
+        else{/*$*///}
+    }
+    private void visibilidadOpcional() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+        if(tokenActual.getId().equals("public")){
+            match("public");
+        }
+        else if(tokenActual.getId().equals("private")){
+            match("private");
+        }
+        else{/*$*/}
     }
     void miembro() throws ExcepcionLexica, IOException, ExcepcionSintactica {
         if(primeros.estaEnPrimeros(NoTerminales.Tipo,tokenActual.getId())){
@@ -142,6 +165,7 @@ public class AnalizadorSintactico {
         else if(primeros.estaEnPrimeros(NoTerminales.ModificadorOpcional,tokenActual.getId())){
             modificadorOpcional();
             tipoMetodo();
+
             //GENERICIDAD E2
             tipoParametricoOpcional();
             match("idMetVar");
@@ -168,13 +192,8 @@ public class AnalizadorSintactico {
             match(";");
         }
         else{
-            throw new ExcepcionSintactica(tokenActual,tokenActual.getId());
+            throw new ExcepcionSintactica(tokenActual,"; | argFormal | =");
         }
-       /* else{
-            throw new ExcepcionSintactica(tokenActual,tokenActual.getId());
-        }
-
-        */
     }
     private void constructor() throws ExcepcionLexica, IOException, ExcepcionSintactica {
         match("public");
@@ -190,7 +209,7 @@ public class AnalizadorSintactico {
             match("void");
         }
         else{
-            throw new ExcepcionSintactica(tokenActual, tokenActual.getLexema());
+            throw new ExcepcionSintactica(tokenActual,"un tipo | void");
         }
     }
     void tipo() throws ExcepcionSintactica, ExcepcionLexica, IOException {
@@ -199,10 +218,9 @@ public class AnalizadorSintactico {
         }
         else if(tokenActual.getId().equals("idClase")){
             match("idClase");
-           // tipoParametricoOpcional();
         }
         else{
-            throw new ExcepcionSintactica(tokenActual, tokenActual.getLexema());
+            throw new ExcepcionSintactica(tokenActual,  "TipoPrimitivo | idClase");
         }
     }
     void tipoPrimitivo() throws ExcepcionSintactica, ExcepcionLexica, IOException {
@@ -216,7 +234,7 @@ public class AnalizadorSintactico {
             match("int");
         }
         else{
-            throw new ExcepcionSintactica(tokenActual, tokenActual.getLexema());
+            throw new ExcepcionSintactica(tokenActual,"boolean | char | int");
         }
     }
     void argsFormales() throws ExcepcionLexica, IOException, ExcepcionSintactica {
@@ -258,7 +276,7 @@ public class AnalizadorSintactico {
             match(";");
         }
         else{
-            throw new ExcepcionSintactica(tokenActual, tokenActual.getLexema());
+            throw new ExcepcionSintactica(tokenActual,"Bloque | ;");
         }
     }
     void bloque() throws ExcepcionLexica, IOException, ExcepcionSintactica {
@@ -299,7 +317,7 @@ public class AnalizadorSintactico {
             bloque();
         }
         else{
-            throw new ExcepcionSintactica(tokenActual, tokenActual.getLexema());
+            throw new ExcepcionSintactica(tokenActual, "; | Expresion | varLocal | return | if | while | bloque");
         }
     }
     void varLocal() throws ExcepcionLexica, IOException, ExcepcionSintactica {
@@ -359,15 +377,8 @@ public class AnalizadorSintactico {
         if(tokenActual.getId().equals("=")){
             match("=");
         }
-        /*else if(tokenActual.getId().equals("+=")){
-            match("+=");
-        }
-        else if(tokenActual.getId().equals("-=")){
-            match("-=");
-        }
-         */
         else{
-            throw new ExcepcionSintactica(tokenActual, tokenActual.getLexema());
+            throw new ExcepcionSintactica(tokenActual,"=");
         }
     }
     void expresionCompuesta() throws ExcepcionLexica, IOException, ExcepcionSintactica {
@@ -423,7 +434,7 @@ public class AnalizadorSintactico {
             match("%");
         }
         else{
-            throw new ExcepcionSintactica(tokenActual, tokenActual.getLexema());
+            throw new ExcepcionSintactica(tokenActual, "Operador Binario");
         }
     }
     void expresionBasica() throws ExcepcionSintactica, ExcepcionLexica, IOException {
@@ -435,7 +446,7 @@ public class AnalizadorSintactico {
             operando();
         }
         else{
-            throw new ExcepcionSintactica(tokenActual, tokenActual.getLexema());
+            throw new ExcepcionSintactica(tokenActual,  "operador unario | operando");
         }
     }
     void operadorUnario() throws ExcepcionSintactica, ExcepcionLexica, IOException {
@@ -455,7 +466,7 @@ public class AnalizadorSintactico {
             match("!");
         }
         else{
-            throw new ExcepcionSintactica(tokenActual, tokenActual.getLexema());
+            throw new ExcepcionSintactica(tokenActual,  "operador unario");
         }
     }
     void operando() throws ExcepcionSintactica, ExcepcionLexica, IOException {
@@ -466,7 +477,7 @@ public class AnalizadorSintactico {
             referencia();
         }
         else{
-            throw new ExcepcionSintactica(tokenActual, tokenActual.getLexema());
+            throw new ExcepcionSintactica(tokenActual,"Operando");
         }
     }
     void primitivo() throws ExcepcionSintactica, ExcepcionLexica, IOException {
@@ -486,7 +497,7 @@ public class AnalizadorSintactico {
             match("null");
         }
         else {
-            throw new ExcepcionSintactica(tokenActual, tokenActual.getLexema());
+            throw new ExcepcionSintactica(tokenActual,"primitivo");
         }
     }
     void referencia() throws ExcepcionLexica, IOException, ExcepcionSintactica {
@@ -500,33 +511,6 @@ public class AnalizadorSintactico {
         }
         else{/* $ */}
     }
-    /*void primario() throws ExcepcionSintactica, ExcepcionLexica, IOException {
-        if(tokenActual.getId().equals("this")){
-            match("this");
-        }
-        else if(tokenActual.getId().equals("stringLiteral")){
-            match("stringLiteral");
-        }
-        else if(primeros.estaEnPrimeros(NoTerminales.AccesoVar, tokenActual.getId())){
-            accesoVar();
-        }
-        else if(primeros.estaEnPrimeros(NoTerminales.LlamadaConstructor, tokenActual.getId())){
-            llamadaConstructor();
-        }
-        else if(primeros.estaEnPrimeros(NoTerminales.LlamadaMetodo,  tokenActual.getId())){
-            llamadaMetodo();
-        }
-        else if(primeros.estaEnPrimeros(NoTerminales.LlamadaMetodoEstatico, tokenActual.getId())){
-            llamadaMetodoEstatico();
-        }
-        else if(primeros.estaEnPrimeros(NoTerminales.ExpresionParentizada, tokenActual.getId())){
-            expresionParentizada();
-        }
-        else{
-            throw new ExcepcionSintactica(tokenActual, tokenActual.getLexema());
-        }
-    }
-    */
     private void primario() throws ExcepcionLexica, IOException, ExcepcionSintactica {
         if(tokenActual.getId().equals("this")){
             match("this");
@@ -548,7 +532,7 @@ public class AnalizadorSintactico {
             expresionParentizada();
         }
         else{
-            throw new ExcepcionSintactica(tokenActual, tokenActual.getLexema());
+            throw new ExcepcionSintactica(tokenActual, "this | stringLiteral | idMetVar | llamadaConstructor | LlamadaMetodoEstatico | expParentizada ");
         }
     }
     void llamadaMetodoResto() throws ExcepcionLexica, IOException, ExcepcionSintactica {
@@ -569,7 +553,6 @@ public class AnalizadorSintactico {
         //OPCIONAL GENERICIDAD
         if(primeros.estaEnPrimeros(NoTerminales.TipoParametricoInst, tokenActual.getId())){
             tipoParametricoInst();
-
         }
         argsActuales();
     }
@@ -587,8 +570,6 @@ public class AnalizadorSintactico {
             tipoParametricoInstResto();
         }
         else{/*$*/}
-
-
     }
     void tipoParametricoInstResto() throws ExcepcionSintactica, ExcepcionLexica, IOException {
         if(tokenActual.getId().equals(">")){
@@ -599,7 +580,7 @@ public class AnalizadorSintactico {
             match(">");
         }
         else{
-            throw new ExcepcionSintactica(tokenActual, tokenActual.getLexema());
+            throw new ExcepcionSintactica(tokenActual,  "> | idClase");
         }
     }
     void expresionParentizada() throws ExcepcionLexica, IOException, ExcepcionSintactica {
@@ -636,7 +617,6 @@ public class AnalizadorSintactico {
         if(tokenActual.getId().equals(",")){
             match(",");
             listaExps();
-            //listaExpsResto();
         }
         else{/* $ */}
     }
@@ -653,23 +633,15 @@ public class AnalizadorSintactico {
     }
 
     void match(String nombreToken) throws ExcepcionSintactica, IOException, ExcepcionLexica {
-        System.out.println(nombreToken+" "+ tokenActual.getId());
+        //System.out.println(nombreToken+" "+ tokenActual.getId());
         if(nombreToken.equals(tokenActual.getId())){
 
             analizadorLexico.setLexema("");
             tokenActual = analizadorLexico.proximoToken();
             //System.out.println(tokenActual.getLexema());
         }
-
         else{
-                /*if (tokenActual.getId().equals("EOF")) {
-                    throw new ExcepcionSintactica(tokenActual, "EOF");
-                }else{
-                    throw new ExcepcionSintactica(tokenActual, tokenActual.getLexema());
-                }
-
-                 */
-           throw new ExcepcionSintactica(tokenActual, tokenActual.getLexema());
+           throw new ExcepcionSintactica(tokenActual, nombreToken);
         }
     }
 }

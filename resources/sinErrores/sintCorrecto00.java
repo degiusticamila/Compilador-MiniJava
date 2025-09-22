@@ -1,6 +1,6 @@
 ///[SinErrores]
 
-class Prueba1{
+ class Prueba1{
     void declaracionesVariables(){
         var num = 5;
         var a = 'a';

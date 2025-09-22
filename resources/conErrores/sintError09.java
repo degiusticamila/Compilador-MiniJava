@@ -1,8 +1,8 @@
-///[Error:int|5]
+///[Error:a|4]
 // Falta ;
 class Clase extends Exception{
-   int numero
-           int numero2;
+   int numero a
+    var numero2;
 }
 
 

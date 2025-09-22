@@ -9,6 +9,9 @@ public enum NoTerminales
     ListaMiembrosInterfaz,
     MiembrosInterfaz,
     Interfaz,
+    ModificadorOpcionalInterfaz,
+    VisibilidadOpcional,
+
     ModificadorOpcional,
     HerenciaOpcional,
     HerenciaOpcionalInterfaz,

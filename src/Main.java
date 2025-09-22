@@ -57,10 +57,32 @@ public class Main {
         sourceManager = new SourceManagerImpl();
         try {
             sourceManager.open(args[0]);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            analisisSintactico();
+            System.out.println("[SinErrores]");
+        } catch (ExcepcionLexica e) {
+            System.out.println("Error Lexico: " + e.getMessage());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ExcepcionSintactica e) {
+            System.out.println("Error Sintactico: " + e.getMessage());
+            System.out.println(e.formatoCorto());
+        }
+        try {
+            sourceManager.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        /*sourceManager = new SourceManagerImpl();
+        try {
+            sourceManager.open(args[0]);
             analisisSintactico();
             System.out.println("[SinErrores]");
         } catch (ExcepcionSintactica | ExcepcionLexica ex) {
-            try { //NUEVO
+            try {
                 System.out.println("Error Sintactico en línea: "+sourceManager.getLineNumber()+"\n" +
                         "[Error:"+(analizadorLexico.getLexema().isEmpty() ? analizadorLexico.proximoToken().getId() : analizadorLexico.getLexema())
                         +"|"+sourceManager.getLineNumber()+"]");
@@ -69,15 +91,13 @@ public class Main {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-
-            //System.out.println("Error Sintactico en línea: "+sourceManager.getLineNumber()+"\n" +
-            //        "[Error:"+analizadorLexico.getLexema()+"|"+sourceManager.getLineNumber()+"]");
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
                 sourceManager.close();
         } catch (IOException ignored) {}
+         */
     }
 
 }

@@ -35,6 +35,7 @@ public final class Primeros extends HashMap<NoTerminales, ArrayList<String>>{
         inicializarEntrada(NoTerminales.Inicial,"EOF");
         inicializarEntrada(NoTerminales.Clase, "class");
         inicializarEntrada(NoTerminales.Interfaz, "interface");
+        //inicializarEntrada(NoTerminales.ModificadorOpcionalInterfaz, "public");
         inicializarEntrada(NoTerminales.ModificadorOpcional, "abstract","static", "final");
         inicializarEntrada(NoTerminales.HerenciaOpcional, "extends");
         inicializarEntrada(NoTerminales.HerenciaOpcionalInterfaz, "extends");
@@ -45,10 +46,13 @@ public final class Primeros extends HashMap<NoTerminales, ArrayList<String>>{
 
 
         inicializarEntrada(NoTerminales.Miembro, "void");
-
         inicializarEntrada(NoTerminales.MiembroResto, ";");
 
+
         inicializarEntrada(NoTerminales.Constructor, "public");
+        inicializarEntrada(NoTerminales.Constructor, "idClase");
+
+        //inicializarEntrada(NoTerminales.VisibilidadOpcional, "public", "private");
 
         inicializarEntrada(NoTerminales.TipoMetodo, "void");
 
@@ -216,7 +220,12 @@ public final class Primeros extends HashMap<NoTerminales, ArrayList<String>>{
 
         primeros.get(NoTerminales.BloqueOpcional).addAll(primeros.get(NoTerminales.Bloque));
 
+        /*---------------------------Visibilidad mejorada----------------------------------------------*/
+        //primeros.get(NoTerminales.ListaMiembros).addAll(primeros.get(NoTerminales.VisibilidadOpcional));
+        /*---------------------------------------------------------------------------------------------*/
+
         primeros.get(NoTerminales.ListaMiembros).addAll(primeros.get(NoTerminales.Miembro));
+
 
         primeros.get(NoTerminales.Tipo).addAll(primeros.get(NoTerminales.TipoPrimitivo));
         primeros.get(NoTerminales.ArgFormal).addAll(primeros.get(NoTerminales.Tipo)); //nueva
@@ -230,12 +239,15 @@ public final class Primeros extends HashMap<NoTerminales, ArrayList<String>>{
         primeros.get(NoTerminales.Miembro).addAll(primeros.get(NoTerminales.ModificadorOpcional));
         primeros.get(NoTerminales.Miembro).addAll(primeros.get(NoTerminales.Constructor));
 
+        //primeros.get(NoTerminales.Interfaz).addAll(primeros.get(NoTerminales.ModificadorOpcionalInterfaz)); //NUEVO PARA PUBLIC
+
         primeros.get(NoTerminales.MiembrosInterfaz).addAll(primeros.get(NoTerminales.ModificadorOpcional));
         primeros.get(NoTerminales.MiembrosInterfaz).addAll(primeros.get(NoTerminales.TipoMetodo));
         primeros.get(NoTerminales.ListaMiembrosInterfaz).addAll(primeros.get(NoTerminales.MiembrosInterfaz));
         primeros.get(NoTerminales.Clase).addAll(primeros.get(NoTerminales.ModificadorOpcional));
 
         primeros.get(NoTerminales.Clase_Interfaz).addAll(primeros.get(NoTerminales.Clase));
+
         /*---------------------------Interfaces---------------------------------------------*/
         primeros.get(NoTerminales.Clase_Interfaz).addAll(primeros.get(NoTerminales.Interfaz));
         primeros.get(NoTerminales.ListaClases).addAll(primeros.get(NoTerminales.Clase_Interfaz));
@@ -245,9 +257,12 @@ public final class Primeros extends HashMap<NoTerminales, ArrayList<String>>{
         /*--------------------------Atributos inicializados--------------------------------*/
         primeros.get(NoTerminales.MiembroResto).addAll(primeros.get(NoTerminales.OperadorAsignacion));
 
+
+
+
     }
     public boolean estaEnPrimeros(NoTerminales nt, String tokenID){
-       //getMapeo();
+        //getMapeo();
 
         return primeros.get(nt).contains(tokenID);
     }
