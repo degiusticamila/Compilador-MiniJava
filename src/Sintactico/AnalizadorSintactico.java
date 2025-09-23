@@ -504,7 +504,7 @@ public class AnalizadorSintactico {
         }
         else{/* $ */}
     }
-    private private void primario() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private void primario() throws ExcepcionLexica, IOException, ExcepcionSintactica {
         if(tokenActual.getId().equals("this")){
             match("this");
         }
