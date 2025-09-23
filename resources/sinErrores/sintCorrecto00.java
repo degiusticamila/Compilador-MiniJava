@@ -15,5 +15,11 @@
         var num = new Prueba1<T>();
         var nm = new Prueba1<>();
         Prueba1.metodo(12, 'b');
+        var i = 0;
+        while (i < 10) {
+            i = 1;
+            ++i;
+        }
     }
+    int sum(int a, int b) { return a + b; }
 }

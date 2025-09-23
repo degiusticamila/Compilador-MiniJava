@@ -4,12 +4,13 @@
 class Prueba3{
 
     static int prueba1(int a) 
-    {
+    { if ((n.get() == null) && true) { ; }
         {
             ;
         }
     
     }
+    static int getValue();
     
 }
 
