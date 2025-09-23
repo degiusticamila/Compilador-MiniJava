@@ -565,9 +565,12 @@ public class AnalizadorLexico {
         if(lexema.equals("public")){
             return new Token("public",lexema,sourceManager.getLineNumber());
         }
+        /*
         if(lexema.equals("private")){
             return new Token("private",lexema,sourceManager.getLineNumber());
         }
+
+         */
         if(lexema.equals("static")){
             return new Token("static",lexema,sourceManager.getLineNumber());
         }

@@ -9,4 +9,11 @@
         var mivarNula = null;
         var sum = 5 + 10;
     }
+    void chequearConstructores(){
+        var num = new Prueba1();
+        var num = new Prueba1(12, true, 'a', null);
+        var num = new Prueba1<T>();
+        var nm = new Prueba1<>();
+        Prueba1.metodo(12, 'b');
+    }
 }
