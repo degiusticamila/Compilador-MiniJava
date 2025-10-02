@@ -2,6 +2,7 @@ import Lexico.AnalizadorLexico;
 import Lexico.ExcepcionLexica;
 import Sintactico.AnalizadorSintactico;
 import Sintactico.ExcepcionSintactica;
+import TablaDeSimbolos.ExcepcionSemantica;
 import Utils.SourceManager;
 import Utils.SourceManagerImpl;
 import Utils.Token;
@@ -14,7 +15,7 @@ public class Main {
     private static AnalizadorSintactico analizadorSintactico;
     private static AnalizadorLexico analizadorLexico;
 
-    public static void analisisSintactico() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    public static void analisisSintactico() throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
         analizadorLexico = new AnalizadorLexico(sourceManager);
         analizadorSintactico = new AnalizadorSintactico(analizadorLexico);
     }
@@ -32,6 +33,8 @@ public class Main {
         } catch (ExcepcionSintactica e) {
             System.out.println("Error Sintactico: " + e.getMessage());
             System.out.println(e.formatoCorto());
+        } catch(ExcepcionSemantica e){
+            System.out.println(e.getMessage());
         }
         cerrarArchivo(args);
     }

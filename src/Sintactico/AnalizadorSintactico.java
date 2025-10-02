@@ -2,6 +2,9 @@ package Sintactico;
 
 import Lexico.AnalizadorLexico;
 import Lexico.ExcepcionLexica;
+import TablaDeSimbolos.Clase;
+import TablaDeSimbolos.ExcepcionSemantica;
+import TablaDeSimbolos.TablaSimbolos;
 import Utils.Primeros;
 import Utils.Token;
 
@@ -11,17 +14,19 @@ public class AnalizadorSintactico {
     private AnalizadorLexico analizadorLexico;
     private Token tokenActual;
     private Primeros primeros;
-    public AnalizadorSintactico(AnalizadorLexico analizadorLexico) throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private TablaSimbolos tablaSimbolos;
+    public AnalizadorSintactico(AnalizadorLexico analizadorLexico) throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
         primeros = new Primeros();
+        tablaSimbolos = new TablaSimbolos();
         this.analizadorLexico = analizadorLexico;
         this.tokenActual = analizadorLexico.proximoToken();
         inicial();
     }
-    private void inicial() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private void inicial() throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
         listaClases();
         match("EOF");
     }
-    private void listaClases() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private void listaClases() throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
 
         if(primeros.estaEnPrimeros(NoTerminales.Clase_Interfaz, tokenActual.getId())){
             clase_interfaz();
@@ -31,7 +36,7 @@ public class AnalizadorSintactico {
             /* $ */
         }
     }
-    private void clase_interfaz() throws ExcepcionSintactica, ExcepcionLexica, IOException {
+    private void clase_interfaz() throws ExcepcionSintactica, ExcepcionLexica, IOException, ExcepcionSemantica {
         if(primeros.estaEnPrimeros(NoTerminales.Clase, tokenActual.getId())){
             clase();
         }
@@ -42,15 +47,20 @@ public class AnalizadorSintactico {
             throw new ExcepcionSintactica(tokenActual,"idClase o interface");
         }
     }
-    private void clase() throws ExcepcionLexica, IOException, ExcepcionSintactica {
-            modificadorOpcional();
+    private void clase() throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
+            Token modificador = modificadorOpcional();
             match("class");
+            Token clase = tokenActual;
             match("idClase");
+            Clase c = new Clase(clase,modificador);
+            tablaSimbolos.setClaseActual(c);
 
-            //OPCIONAL GENERICIDAD
-            tipoParametricoOpcional();
+            //tipoParametricoOpcional();
+            //tablaSimbolos.insertarClase(clase.getLexema(),clase.getNroLinea(),tablaSimbolos.getClaseActual());
+            tablaSimbolos.insertarClase(clase.getLexema(),clase.getNroLinea(),tablaSimbolos.getClaseActual());
+            Token ancestro = herenciaOpcional();
 
-            herenciaOpcional();
+            tablaSimbolos.getClaseActual().setHerencia(ancestro);
             match("{");
             listaMiembros();
             match("}");
@@ -63,7 +73,6 @@ public class AnalizadorSintactico {
             tipoParametricoOpcional();
             herenciaOpcionalInterfaz();
             match("{");
-
             listaMiembrosInterfaz();
             match("}");
 
@@ -100,31 +109,42 @@ public class AnalizadorSintactico {
         }
         else{/* $*/}
     }
-    private void modificadorOpcional() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private Token modificadorOpcional() throws ExcepcionLexica, IOException, ExcepcionSintactica {
         if(tokenActual.getId().equals("abstract")){
             match("abstract");
+            return new Token("abstract","abstract",0);
         }
         else if(tokenActual.getId().equals("static")){
             match("static");
+            return new Token("static","static",0);
         }
         else if(tokenActual.getId().equals("final")){
             match("final");
+            return new Token("final","final",0);
         }
-        else{ /* $ */ }
+        else{
+            return null;
+        }
     }
-    private void herenciaOpcional() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private Token herenciaOpcional() throws ExcepcionLexica, IOException, ExcepcionSintactica {
         if(tokenActual.getId().equals("extends")){
             match("extends");
+            Token nombreHerencia =  tokenActual;
             match("idClase");
+            return nombreHerencia;
+
             //GENERICIDAD E2
-            tipoParametricoOpcional();
+            //tipoParametricoOpcional();
         }
-        else if(tokenActual.getId().equals("implements")){
+        /*else if(tokenActual.getId().equals("implements")){
             match("implements");
             match("idClase");
             tipoParametricoOpcional();
         }
-        else{ /* $ */ }
+         */
+        else{
+           return new Token("idClase","Object",0);
+        }
     }
     private void listaMiembros() throws ExcepcionLexica, IOException, ExcepcionSintactica {
         if(primeros.estaEnPrimeros(NoTerminales.Miembro,tokenActual.getId())){
