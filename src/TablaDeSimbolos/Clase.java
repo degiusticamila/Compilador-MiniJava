@@ -27,4 +27,26 @@ public class Clase {
             this.herencia = herencia;
         }
     }
+    public void insertarMetodo(Token metodo) throws ExcepcionSemantica {
+        if(!metodoDeclarado(metodo.getLexema())){
+            //lo inserto
+        }
+        else{
+            throw new ExcepcionSemantica(nombre.getLexema(), nombre.getNroLinea());
+        }
+    }
+    public void insertarAtributo(Token atributo) throws ExcepcionSemantica {
+        if(!atributoDeclarado(atributo.getLexema())){
+            //lo inserto
+        }
+        else{
+            throw new ExcepcionSemantica(nombre.getLexema(), nombre.getNroLinea());
+        }
+    }
+    public boolean metodoDeclarado(String metodo){
+        return metodos.containsKey(metodo);
+    }
+    public boolean atributoDeclarado(String atributo){
+        return atributos.containsKey(atributo);
+    }
 }

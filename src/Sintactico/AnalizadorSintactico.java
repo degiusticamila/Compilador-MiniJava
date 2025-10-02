@@ -4,6 +4,7 @@ import Lexico.AnalizadorLexico;
 import Lexico.ExcepcionLexica;
 import TablaDeSimbolos.Clase;
 import TablaDeSimbolos.ExcepcionSemantica;
+import TablaDeSimbolos.Metodo;
 import TablaDeSimbolos.TablaSimbolos;
 import Utils.Primeros;
 import Utils.Token;
@@ -54,13 +55,12 @@ public class AnalizadorSintactico {
             match("idClase");
             Clase c = new Clase(clase,modificador);
             tablaSimbolos.setClaseActual(c);
+            tipoParametricoOpcional();
 
-            //tipoParametricoOpcional();
-            //tablaSimbolos.insertarClase(clase.getLexema(),clase.getNroLinea(),tablaSimbolos.getClaseActual());
             tablaSimbolos.insertarClase(clase.getLexema(),clase.getNroLinea(),tablaSimbolos.getClaseActual());
             Token ancestro = herenciaOpcional();
-
             tablaSimbolos.getClaseActual().setHerencia(ancestro);
+
             match("{");
             listaMiembros();
             match("}");
@@ -126,12 +126,18 @@ public class AnalizadorSintactico {
             return null;
         }
     }
-    private Token herenciaOpcional() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private Token herenciaOpcional() throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
         if(tokenActual.getId().equals("extends")){
             match("extends");
             Token nombreHerencia =  tokenActual;
             match("idClase");
-            return nombreHerencia;
+            if(tablaSimbolos.claseDeclarada(nombreHerencia.getLexema())){
+                return nombreHerencia;
+            }
+            else{
+                throw new ExcepcionSemantica(nombreHerencia.getLexema(), nombreHerencia.getNroLinea());
+            }
+
 
             //GENERICIDAD E2
             //tipoParametricoOpcional();
@@ -164,14 +170,23 @@ public class AnalizadorSintactico {
     }
     private void miembro() throws ExcepcionLexica, IOException, ExcepcionSintactica {
         if(primeros.estaEnPrimeros(NoTerminales.Tipo,tokenActual.getId())){
-            tipo();
+            Token tipo = tipo();
             tipoParametricoOpcional();
+            //me quiero guardar tambien el nombre del metodo o la variable
+            Token nombreIdMetVar = tokenActual;
             match("idMetVar");
             miembroResto();
+
+            //ts.algo.algo insertar en la tabla de simbolos y ahi paso el tipo como parametro
         }
         else if(tokenActual.getId().equals("void")){
             match("void");
+            Token metodo = tokenActual;
+            Metodo m = new Metodo();
+            tablaSimbolos.setMetodoActual(m);
+            //este metodo lo tengo que insertar en la clase, pero todavia no tengo los parametros
             match("idMetVar");
+            //si tiene args formales, los devuelve argsFormales para setearlos si no teien no lemeto nada
             argsFormales();
             bloqueOpcional();
         }
@@ -193,8 +208,10 @@ public class AnalizadorSintactico {
     private void miembroResto() throws ExcepcionLexica, IOException, ExcepcionSintactica {
         if(tokenActual.getId().equals(";")){
             match(";");
+            //si es ; aca ya se que se trata de un atributo
         }
         else if(primeros.estaEnPrimeros(NoTerminales.ArgsFormales, tokenActual.getId())){
+            //aca se que se trata de un metodo
             argsFormales();
             bloqueOpcional();
         }
@@ -225,26 +242,32 @@ public class AnalizadorSintactico {
             throw new ExcepcionSintactica(tokenActual,"un tipo | void");
         }
     }
-    private void tipo() throws ExcepcionSintactica, ExcepcionLexica, IOException {
+    private Token tipo() throws ExcepcionSintactica, ExcepcionLexica, IOException {
         if(primeros.estaEnPrimeros(NoTerminales.TipoPrimitivo, tokenActual.getId())){
-            tipoPrimitivo();
+            Token tipoPrimitivo = tipoPrimitivo();
+            return tipoPrimitivo; //new
         }
         else if(tokenActual.getId().equals("idClase")){
+            Token tipoClase = tokenActual; //new
             match("idClase");
+            return tipoClase; //new
         }
         else{
             throw new ExcepcionSintactica(tokenActual,  "TipoPrimitivo | idClase");
         }
     }
-    private void tipoPrimitivo() throws ExcepcionSintactica, ExcepcionLexica, IOException {
+    private Token tipoPrimitivo() throws ExcepcionSintactica, ExcepcionLexica, IOException {
         if(tokenActual.getId().equals("boolean")){
             match("boolean");
+            return new Token(tokenActual.getId(),"boolean",0); // new
         }
         else if(tokenActual.getId().equals("char")){
             match("char");
+            return new Token(tokenActual.getId(),"char",0); //new
         }
         else if(tokenActual.getId().equals("int")){
             match("int");
+            return new Token(tokenActual.getId(),"int",0); //new
         }
         else{
             throw new ExcepcionSintactica(tokenActual,"boolean | char | int");
@@ -645,5 +668,8 @@ public class AnalizadorSintactico {
         else{
            throw new ExcepcionSintactica(tokenActual, nombreToken);
         }
+    }
+    public TablaSimbolos getTablaSimbolos() {
+        return tablaSimbolos;
     }
 }

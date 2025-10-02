@@ -25,6 +25,8 @@ public class Main {
         abrirArchivo(args);
         try {
             analisisSintactico();
+            System.out.println("Clases de la TS: ");
+            analizadorSintactico.getTablaSimbolos().clases();
             System.out.println("[SinErrores]");
         } catch (ExcepcionLexica e) {
             System.out.println("Error Lexico: " + e.getMessage());

@@ -9,7 +9,8 @@ public class ExcepcionSemantica extends Exception {
         this.numLine = numLine;
     }
     public String getMessage(){
-        return ("Error semántico en línea "+numLine);
+        return ("Error semántico en línea "+numLine+"\n"+formatoCorto());
+
     }
     public String formatoCorto() {
         return "[Error:" + lexema + "|" + numLine + "]";

@@ -32,11 +32,16 @@ public class TablaSimbolos {
     public void setClaseActual(Clase claseActual){
         this.claseActual = claseActual;
     }
-    public void seMetodoActual(Metodo metodoActual){
+    public void setMetodoActual(Metodo metodoActual){
         this.metodoActual = metodoActual;
     }
     public boolean claseDeclarada(String nombreClase){
         return clases.containsKey(nombreClase);
+    }
+    public void clases(){
+        for(String s : clases.keySet()){
+            System.out.println(s);
+        }
     }
 
 
