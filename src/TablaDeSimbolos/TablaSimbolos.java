@@ -1,10 +1,7 @@
 package TablaDeSimbolos;
 
-import Utils.Token;
-
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Hashtable;
+
 
 public class TablaSimbolos {
     private HashMap<String,Clase> clases;
@@ -22,7 +19,7 @@ public class TablaSimbolos {
             throw new ExcepcionSemantica(lexema,numLine);
         }
     }
-    public Metodo metodoActual(){
+    public Metodo getMetodoActual(){
         return metodoActual;
     }
     public Clase getClaseActual(){
