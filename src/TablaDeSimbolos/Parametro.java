@@ -12,5 +12,10 @@ public class Parametro {
         this.nombre = nombre;
         this.posicion = posicion;
     }
-
+    public String toString() {
+        return ("("+tipo.toString()+", "+nombre.toString()+", "+posicion+")");
+    }
+    public void setPosicion(int posicion) {
+        this.posicion = posicion;
+    }
 }

@@ -10,4 +10,7 @@ public class Atributo {
         this.tipo = tipo;
         this.nombre = nombre;
     }
+    public String toString() {
+        return ("("+tipo.toString()+", "+nombre.toString()+")");
+    }
 }

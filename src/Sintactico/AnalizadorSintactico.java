@@ -56,7 +56,7 @@ public class AnalizadorSintactico {
 
             tablaSimbolos.insertarClase(clase.getLexema(),clase.getNroLinea(),tablaSimbolos.getClaseActual());
             Token ancestro = herenciaOpcional();
-            tablaSimbolos.getClaseActual().setHerencia(ancestro);
+            tablaSimbolos.getClaseActual().insertarHerencia(ancestro);
 
             match("{");
             listaMiembros();
@@ -172,16 +172,20 @@ public class AnalizadorSintactico {
             Token nombreIdMetVar = tokenActual;
             match("idMetVar");
             miembroResto(nombreIdMetVar, tipo);
+            tablaSimbolos.getClaseActual().getAtributos(); //
 
         }
         else if(tokenActual.getId().equals("void")){
             match("void");
             Token tokenMetodo = tokenActual;
-            Metodo m = new Metodo(null,tokenMetodo); //tipo retorno null
+            Token modificador = modificadorOpcional();
+            Token voidAux = new Token("void", "void", tokenMetodo.getNroLinea());
+            Metodo m = new Metodo(modificador,voidAux,tokenMetodo);
             tablaSimbolos.setMetodoActual(m);
             match("idMetVar");
             argsFormales(tokenMetodo);
             tablaSimbolos.getClaseActual().insertarMetodo(tokenMetodo,m);
+            tablaSimbolos.getClaseActual().getMetodos(); //
             bloqueOpcional();
         }
         else if(primeros.estaEnPrimeros(NoTerminales.ModificadorOpcional,tokenActual.getId())){
@@ -190,7 +194,8 @@ public class AnalizadorSintactico {
             Token tipo = tipoMetodo();
             Token tokenMetodo = tokenActual;
 
-            Metodo m = new Metodo(tipo,tokenMetodo,modificador);
+            //Metodo m = new Metodo(tipo,tokenMetodo,modificador);
+            Metodo m = new Metodo(modificador,tipo,tokenMetodo);
             tablaSimbolos.setMetodoActual(m);
             //GENERICIDAD E2
             tipoParametricoOpcional();
@@ -198,6 +203,7 @@ public class AnalizadorSintactico {
             match("idMetVar");
             argsFormales(tokenMetodo);
             tablaSimbolos.getClaseActual().insertarMetodo(tokenMetodo,m);
+            tablaSimbolos.getClaseActual().getMetodos(); //
             bloqueOpcional();
         }
         else if(primeros.estaEnPrimeros(NoTerminales.Constructor, tokenActual.getId())){
@@ -214,12 +220,14 @@ public class AnalizadorSintactico {
             tablaSimbolos.getClaseActual().insertarAtributo(nombreIdMetVar,a);
         }
         else if(primeros.estaEnPrimeros(NoTerminales.ArgsFormales, tokenActual.getId())){
-            //aca se que se trata de un metodo
+
             Token tokenMetodo = tokenActual;
-            Metodo m = new Metodo(tipo,tokenMetodo);
+            Token modificador = modificadorOpcional();
+            Metodo m = new Metodo(modificador,tipo,tokenMetodo);
             tablaSimbolos.setMetodoActual(m);
             argsFormales(tokenMetodo);
             tablaSimbolos.getClaseActual().insertarMetodo(tokenMetodo,m);
+            tablaSimbolos.getClaseActual().getMetodos(); //
             bloqueOpcional();
         }
         //ATRIBUTOS INICIALIZADOS
@@ -272,6 +280,7 @@ public class AnalizadorSintactico {
             match("boolean");
             return new Token(tokenActual.getId(),"boolean",0); // new
         }
+
         else if(tokenActual.getId().equals("char")){
             match("char");
             return new Token(tokenActual.getId(),"char",0); //new
@@ -320,9 +329,11 @@ public class AnalizadorSintactico {
             System.out.println("Se trata de un constructor");
             //es un constructor
             tablaSimbolos.getClaseActual().getConstructor().insertarParametro(nombreParametro.getLexema(), p, nombreParametro.getNroLinea());
+            tablaSimbolos.getClaseActual().getConstructor().getParametros(); //
         }
         else{ //es un metodo
             tablaSimbolos.getMetodoActual().insertarParametro(nombreParametro.getLexema(), p, nombreParametro.getNroLinea());
+            tablaSimbolos.getMetodoActual().getParametros(); //
         }
         match("idMetVar");
     }
@@ -693,5 +704,8 @@ public class AnalizadorSintactico {
     }
     public TablaSimbolos getTablaSimbolos() {
         return tablaSimbolos;
+    }
+    public void consolidarTS() throws ExcepcionSemantica {
+        tablaSimbolos.consolidacion();
     }
 }

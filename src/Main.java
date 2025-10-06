@@ -25,6 +25,7 @@ public class Main {
         abrirArchivo(args);
         try {
             analisisSintactico();
+            analizadorSintactico.consolidarTS();
             System.out.println("Clases de la TS: ");
             analizadorSintactico.getTablaSimbolos().clases();
             System.out.println("[SinErrores]");

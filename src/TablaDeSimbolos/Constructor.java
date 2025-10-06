@@ -15,6 +15,7 @@ public class Constructor {
     }
     public void insertarParametro(String lexema,Parametro p,int numLine) throws ExcepcionSemantica {
         if(!parametroDeclarado(lexema)){
+            p.setPosicion(parametros.size()+1);
             parametros.put(lexema,p);
         }
         else{
@@ -26,5 +27,15 @@ public class Constructor {
     }
     public Token getNombre(){
         return nombre;
+    }
+    public void getParametros(){
+        if(!parametros.isEmpty()){
+            for(String s : parametros.keySet()){
+                System.out.println(s+" : "+parametros.get(s).toString());
+            }
+        }
+    }
+    public String toString() {
+        return ("("+nombre.toString()+")");
     }
 }
