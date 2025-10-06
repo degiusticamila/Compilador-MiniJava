@@ -102,7 +102,7 @@ public class Clase {
         }
     }
     public String toString() {
-        return ("("+nombre.toString()+", "+modificador.toString()+")");
+        return modificador != null ? ("("+nombre.toString()+", "+modificador.toString()+")") : nombre.toString();
     }
     public void consolidarClase() throws ExcepcionSemantica {
         consolidarAtributos();
@@ -118,13 +118,18 @@ public class Clase {
         for(Atributo a :atributos.values()){
             Tipo tipoAtributo = a.getTipo();
             if(!tipoAtributo.esPrimitivo()){
+                System.out.println("atributo ");
+                System.out.println(tipoAtributo.getNombre());
                 if(!TablaSimbolos.getInstance().claseDeclarada(tipoAtributo.getNombre()) && !TablaSimbolos.getInstance().clasePredefinidaDeclarada(tipoAtributo.getNombre())){
                     //Atributo de clase no definida
-                    throw new ExcepcionSemantica(tipoAtributo.getNombre(), a.getNombre().getNroLinea());
+                   throw new ExcepcionSemantica(tipoAtributo.getNombre(), a.getNombre().getNroLinea());
                 }
             }
 
 
         }
+    }
+    public Token getNombre(){
+        return nombre;
     }
 }
