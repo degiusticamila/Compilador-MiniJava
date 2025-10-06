@@ -167,11 +167,11 @@ public class AnalizadorSintactico {
     }
     private void miembro() throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
         if(primeros.estaEnPrimeros(NoTerminales.Tipo,tokenActual.getId())){
-            Token tipo = tipo();
+            Token tokenTipo = tipo();
             tipoParametricoOpcional();
             Token nombreIdMetVar = tokenActual;
             match("idMetVar");
-            miembroResto(nombreIdMetVar, tipo);
+            miembroResto(nombreIdMetVar, tokenTipo);
             tablaSimbolos.getClaseActual().getAtributos(); //
 
         }
@@ -179,8 +179,8 @@ public class AnalizadorSintactico {
             match("void");
             Token tokenMetodo = tokenActual;
             Token modificador = modificadorOpcional();
-            Token voidAux = new Token("void", "void", tokenMetodo.getNroLinea());
-            Metodo m = new Metodo(modificador,voidAux,tokenMetodo);
+            //Token voidAux = new Token("void", "void", tokenMetodo.getNroLinea());
+            Metodo m = new Metodo(modificador,new TipoVoid(),tokenMetodo);
             tablaSimbolos.setMetodoActual(m);
             match("idMetVar");
             argsFormales(tokenMetodo);
@@ -191,10 +191,10 @@ public class AnalizadorSintactico {
         else if(primeros.estaEnPrimeros(NoTerminales.ModificadorOpcional,tokenActual.getId())){
 
             Token modificador = modificadorOpcional();
-            Token tipo = tipoMetodo();
+            Token tokenTipo = tipoMetodo();
+            Tipo tipo = construirTipoDesdeToken(tokenTipo);
             Token tokenMetodo = tokenActual;
 
-            //Metodo m = new Metodo(tipo,tokenMetodo,modificador);
             Metodo m = new Metodo(modificador,tipo,tokenMetodo);
             tablaSimbolos.setMetodoActual(m);
             //GENERICIDAD E2
@@ -211,8 +211,9 @@ public class AnalizadorSintactico {
         }
         else{ /* $  no hago nada pq modificadorOpcional tiene a e en sus primeros! */}
     }
-    private void miembroResto(Token nombreIdMetVar, Token tipo) throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
+    private void miembroResto(Token nombreIdMetVar, Token tokenTipo) throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
         if(tokenActual.getId().equals(";")){
+            Tipo tipo = construirTipoDesdeToken(tokenTipo);
             Atributo a = new Atributo(tipo, nombreIdMetVar);
 
             match(";");
@@ -223,6 +224,8 @@ public class AnalizadorSintactico {
 
             Token tokenMetodo = tokenActual;
             Token modificador = modificadorOpcional();
+
+            Tipo tipo = construirTipoDesdeToken(tokenTipo);
             Metodo m = new Metodo(modificador,tipo,tokenMetodo);
             tablaSimbolos.setMetodoActual(m);
             argsFormales(tokenMetodo);
@@ -321,7 +324,8 @@ public class AnalizadorSintactico {
         else{/* $ */}
     }
     private void argFormal(Token construtorOmetodo) throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
-        Token tipoParametro = tipo();
+        Token tokenTipoParametro = tipo();
+        Tipo tipoParametro = construirTipoDesdeToken(tokenTipoParametro);
         Token nombreParametro = tokenActual;
         Parametro p = new Parametro(tipoParametro,nombreParametro,1 );
 
@@ -707,5 +711,14 @@ public class AnalizadorSintactico {
     }
     public void consolidarTS() throws ExcepcionSemantica {
         tablaSimbolos.consolidacion();
+    }
+    private Tipo construirTipoDesdeToken(Token tokenTipo) {
+        String lexema = tokenTipo.getLexema();
+
+        if (lexema.equals("int") || lexema.equals("boolean") || lexema.equals("char")) {
+            return new TipoPrimitivo(lexema);
+        } else {
+            return new TipoReferencia(lexema);
+        }
     }
 }

@@ -3,11 +3,11 @@ package TablaDeSimbolos;
 import Utils.Token;
 
 public class Parametro {
-    private Token tipo;
+    private Tipo tipo;
     private Token nombre;
     private int posicion;
 
-    public Parametro(Token tipo, Token nombre, int posicion) {
+    public Parametro(Tipo tipo, Token nombre, int posicion) {
         this.tipo = tipo;
         this.nombre = nombre;
         this.posicion = posicion;

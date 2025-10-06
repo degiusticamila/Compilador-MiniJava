@@ -5,11 +5,11 @@ import Utils.Token;
 import java.util.HashMap;
 
 public class Metodo {
-    private Token tipoRetorno;  //y si es void?
+    private Tipo tipoRetorno;  //y si es void?
     private Token nombre;
     private HashMap<String, Parametro> parametros;
     private Token modificador;
-    public Metodo(Token modificador,Token tipoRetorno, Token nombreMetodo){
+    public Metodo(Token modificador,Tipo tipoRetorno, Token nombreMetodo){
         parametros = new HashMap<>();
         this.modificador = modificador;
         this.tipoRetorno = tipoRetorno;
@@ -39,9 +39,7 @@ public class Metodo {
     }
     @Override
     public String toString() {
-        String tipo = (tipoRetorno != null) ? tipoRetorno.getLexema() : "void";
-        String mod = (modificador != null) ? modificador.getLexema() : "sin modificador";
-        return "(" + tipo + ", " + nombre.getLexema() + ", " + mod + ")";
+        return "(" + tipoRetorno + ", " + nombre + ", " + modificador + ")";
     }
     public Token getModificador(){
         return modificador;
@@ -49,4 +47,5 @@ public class Metodo {
     public Token getNombreMetodo(){
         return nombre;
     }
+    public Tipo getTipoRetorno(){ return tipoRetorno;}
 }

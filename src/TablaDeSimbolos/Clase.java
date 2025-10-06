@@ -105,6 +105,7 @@ public class Clase {
         return ("("+nombre.toString()+", "+modificador.toString()+")");
     }
     public void consolidarClase() throws ExcepcionSemantica {
+        consolidarAtributos();
         if(!esClaseAbstracta()){
             for(Metodo m : metodos.values()){
                 if(m.esMetodoAbstracto()){
@@ -113,5 +114,17 @@ public class Clase {
             }
         }
     }
+    private void consolidarAtributos() throws ExcepcionSemantica {
+        for(Atributo a :atributos.values()){
+            Tipo tipoAtributo = a.getTipo();
+            if(!tipoAtributo.esPrimitivo()){
+                if(!TablaSimbolos.getInstance().claseDeclarada(tipoAtributo.getNombre()) && !TablaSimbolos.getInstance().clasePredefinidaDeclarada(tipoAtributo.getNombre())){
+                    //Atributo de clase no definida
+                    throw new ExcepcionSemantica(tipoAtributo.getNombre(), a.getNombre().getNroLinea());
+                }
+            }
 
+
+        }
+    }
 }

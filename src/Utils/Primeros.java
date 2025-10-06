@@ -5,7 +5,6 @@ import Sintactico.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 
 public final class Primeros extends HashMap<NoTerminales, ArrayList<String>>{
     HashMap<NoTerminales, ArrayList<String>> primeros;

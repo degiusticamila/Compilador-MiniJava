@@ -5,6 +5,7 @@ import Utils.Token;
 import java.util.HashMap;
 
 public class TablaSimbolos {
+    private static TablaSimbolos tablaSimbolos;
     private HashMap<String,Clase> clases;
     private HashMap<String,Clase> clasesPredefinidas;
     private Clase claseActual;
@@ -14,6 +15,12 @@ public class TablaSimbolos {
         clasesPredefinidas = new HashMap<>();
         insertarClasesPredefinidas();
         clases = new HashMap<String,Clase>();
+    }
+    public static TablaSimbolos getInstance(){
+        if(tablaSimbolos == null){
+            tablaSimbolos = new TablaSimbolos();
+        }
+        return tablaSimbolos;
     }
     public void insertarClase(String lexema, int numLine, Clase clase) throws ExcepcionSemantica {
         if(!claseDeclarada(lexema)){
@@ -37,8 +44,10 @@ public class TablaSimbolos {
         this.metodoActual = metodoActual;
     }
     public boolean claseDeclarada(String nombreClase){
+        System.out.println("Nombre clase: "+nombreClase);
         return clases.containsKey(nombreClase);
     }
+    public boolean clasePredefinidaDeclarada(String nombreClase){ return clases.containsKey(nombreClase);}
     public void clases(){
         for(String s : clases.keySet()){
             System.out.println(s);
