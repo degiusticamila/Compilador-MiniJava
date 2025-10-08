@@ -1,18 +1,13 @@
 ///[SinErrores]
 // Control simple herencia
 
-class A {
+class SD {
 
 }
 
-class B extends A{
+class Z extends SD{
 
 }
 
 
-
-class Init{
-    static void main()
-    { }
-}
 

@@ -15,7 +15,9 @@ public class AnalizadorSintactico {
     private TablaSimbolos tablaSimbolos;
     public AnalizadorSintactico(AnalizadorLexico analizadorLexico) throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
         primeros = new Primeros();
-        tablaSimbolos = new TablaSimbolos();
+        //tablaSimbolos = new TablaSimbolos();
+        TablaSimbolos.resetInstance();
+        tablaSimbolos = TablaSimbolos.getInstance();
         this.analizadorLexico = analizadorLexico;
         this.tokenActual = analizadorLexico.proximoToken();
         inicial();
@@ -23,6 +25,9 @@ public class AnalizadorSintactico {
     private void inicial() throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
         listaClases();
         match("EOF");
+
+        //debug
+        tablaSimbolos.imprimirClases();
     }
     private void listaClases() throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
 

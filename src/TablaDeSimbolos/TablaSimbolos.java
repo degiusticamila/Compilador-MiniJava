@@ -6,12 +6,13 @@ import java.util.HashMap;
 
 public class TablaSimbolos {
     private static TablaSimbolos tablaSimbolos;
+
     private HashMap<String,Clase> clases;
     private HashMap<String,Clase> clasesPredefinidas;
     private Clase claseActual;
     private Metodo metodoActual;
 
-    public TablaSimbolos() throws ExcepcionSemantica {
+    private TablaSimbolos() throws ExcepcionSemantica {
         clasesPredefinidas = new HashMap<>();
         insertarClasesPredefinidas();
         clases = new HashMap<String,Clase>();
@@ -22,7 +23,11 @@ public class TablaSimbolos {
         }
         return tablaSimbolos;
     }
+    public static void resetInstance() throws ExcepcionSemantica {
+        tablaSimbolos = new TablaSimbolos();
+    }
     public void insertarClase(String lexema, int numLine, Clase clase) throws ExcepcionSemantica {
+        lexema = lexema.trim(); //new
         if(!claseDeclarada(lexema)){
             clases.put(lexema,clase);
         }
@@ -44,19 +49,21 @@ public class TablaSimbolos {
         this.metodoActual = metodoActual;
     }
     public boolean claseDeclarada(String nombreClase){
-
+        nombreClase = nombreClase.trim();
         System.out.println("Nombre clase: "+nombreClase);
-        System.out.println("contiene :"+contiene(nombreClase));
        // System.out.println(clases.containsKey(nombreClase));
-        return contiene(nombreClase);
+        return clases.containsKey(nombreClase);
+        //return contiene(nombreClase);
     }
     public boolean clasePredefinidaDeclarada(String nombreClase){  System.out.println("Nombre clase: "+nombreClase);
         System.out.println( clases.containsKey(nombreClase));
         return clases.containsKey(nombreClase);}
-    public void clases(){
-        for(String s : clases.keySet()){
+    public HashMap<String, Clase> getClases(){
+       /* for(String s : clases.keySet()){
             System.out.println(s);
         }
+        */
+        return clases;
     }
     private void insertarClasesPredefinidas() throws ExcepcionSemantica {
         Token nombreClaseObject = new Token("idClase", "Object", -1);
@@ -247,8 +254,18 @@ public class TablaSimbolos {
 
     }
     public void consolidacion() throws ExcepcionSemantica {
-        for(String clase : clases.keySet()){
+       /* for(String clase : clases.keySet()){
             clases.get(clase).consolidarClase();
+        }
+        */
+        for(Clase c : clases.values()){
+            c.consolidarClase();
+        }
+    }
+    public void imprimirClases() {
+        System.out.println("Clases declaradas en TS:");
+        for (String s : clases.keySet()) {
+            System.out.println(" - " + s);
         }
     }
     public boolean contiene(String aux){

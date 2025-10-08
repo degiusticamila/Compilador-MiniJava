@@ -115,14 +115,25 @@ public class Clase {
         }
     }
     private void consolidarAtributos() throws ExcepcionSemantica {
+        TablaSimbolos ts = TablaSimbolos.getInstance();
         for(Atributo a :atributos.values()){
             Tipo tipoAtributo = a.getTipo();
             if(!tipoAtributo.esPrimitivo()){
-                System.out.println("atributo ");
-                System.out.println(tipoAtributo.getNombre());
+               /* System.out.println("Tipo atributo :"+tipoAtributo.getNombre());
+
                 if(!TablaSimbolos.getInstance().claseDeclarada(tipoAtributo.getNombre()) && !TablaSimbolos.getInstance().clasePredefinidaDeclarada(tipoAtributo.getNombre())){
                     //Atributo de clase no definida
+                    System.out.println("Comparando tipos:");
+                    for (String s : TablaSimbolos.getInstance().getClases().keySet()) {
+                        System.out.println("'" + s + "' == '" + tipoAtributo.getNombre() + "' → " + s.equals(tipoAtributo.getNombre()));
+                    }
                    throw new ExcepcionSemantica(tipoAtributo.getNombre(), a.getNombre().getNroLinea());
+                }
+
+                */
+                String nombreTipo = tipoAtributo.getNombre();
+                if (!ts.claseDeclarada(nombreTipo) && !ts.clasePredefinidaDeclarada(nombreTipo)) {
+                    throw new ExcepcionSemantica(tipoAtributo.getNombre(), a.getNombre().getNroLinea());
                 }
             }
 

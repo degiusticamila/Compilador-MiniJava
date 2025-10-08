@@ -5,14 +5,6 @@ class A  {
     B y;
 }
 class B extends A {
-   A z;
-}
-
-
-
-class Init{
-    static void main()
-    { }
 }
 
 
