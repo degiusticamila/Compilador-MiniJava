@@ -21,7 +21,7 @@ public class Metodo {
             parametros.put(lexema,p);
         }
         else{
-            throw new ExcepcionSemantica(lexema,numLine);
+            throw new ExcepcionSemantica(lexema,numLine, "Parametro ya declarado");
         }
     }
     public boolean parametroDeclarado(String lexema){
@@ -39,7 +39,7 @@ public class Metodo {
     }
     @Override
     public String toString() {
-        return "(" + tipoRetorno + ", " + nombre + ", " + modificador + ")";
+        return "(" + modificador +","+ tipoRetorno + ", " + nombre.getLexema() +")";
     }
     public Token getModificador(){
         return modificador;
@@ -48,4 +48,5 @@ public class Metodo {
         return nombre;
     }
     public Tipo getTipoRetorno(){ return tipoRetorno;}
+
 }

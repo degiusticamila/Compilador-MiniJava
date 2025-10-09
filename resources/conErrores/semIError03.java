@@ -1,4 +1,4 @@
-///[Error:m1|19]
+///[Error:m1|22]
 
 class A {
     void m1()
@@ -12,7 +12,10 @@ class A {
     
     void m4(int p3, boolean p4)
     {}
-    
+
+    int m33(){}
+    //boolean m34(){}
+    char m35(){}
 }
 
 class B extends A{

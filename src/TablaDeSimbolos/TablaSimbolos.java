@@ -27,12 +27,12 @@ public class TablaSimbolos {
         tablaSimbolos = new TablaSimbolos();
     }
     public void insertarClase(String lexema, int numLine, Clase clase) throws ExcepcionSemantica {
-        lexema = lexema.trim(); //new
-        if(!claseDeclarada(lexema)){
+        lexema = lexema.trim();
+        if(!clasePredefinidaDeclarada(lexema) && !claseDeclarada(lexema)){
             clases.put(lexema,clase);
         }
         else{
-            throw new ExcepcionSemantica(lexema,numLine);
+            throw new ExcepcionSemantica(lexema,numLine,"Clase ya declarada");
         }
     }
     public Metodo getMetodoActual(){
@@ -50,19 +50,12 @@ public class TablaSimbolos {
     }
     public boolean claseDeclarada(String nombreClase){
         nombreClase = nombreClase.trim();
-        System.out.println("Nombre clase: "+nombreClase);
-       // System.out.println(clases.containsKey(nombreClase));
         return clases.containsKey(nombreClase);
-        //return contiene(nombreClase);
     }
-    public boolean clasePredefinidaDeclarada(String nombreClase){  System.out.println("Nombre clase: "+nombreClase);
+    public boolean clasePredefinidaDeclarada(String nombreClase){
         System.out.println( clases.containsKey(nombreClase));
-        return clases.containsKey(nombreClase);}
+        return clasesPredefinidas.containsKey(nombreClase);}
     public HashMap<String, Clase> getClases(){
-       /* for(String s : clases.keySet()){
-            System.out.println(s);
-        }
-        */
         return clases;
     }
     private void insertarClasesPredefinidas() throws ExcepcionSemantica {
@@ -259,21 +252,67 @@ public class TablaSimbolos {
         }
         */
         for(Clase c : clases.values()){
+            /*if(tablaSimbolos.obtenerClase(c.getHerencia().getLexema()).esClaseFinal() || tablaSimbolos.obtenerClase(c.getHerencia().getLexema()).esClaseEstatica()){
+                throw new ExcepcionSemantica(tablaSimbolos.obtenerClase(c.getHerencia().getLexema()).getNombre().getLexema(),tablaSimbolos.obtenerClase(c.getHerencia().getLexema()).getNombre().getNroLinea(), "No se puede heredar de clases estaticas o final");
+            }
+
+             */
+            if(tablaSimbolos.obtenerClase(c.getHerencia().getLexema()).esClaseFinal() || tablaSimbolos.obtenerClase(c.getHerencia().getLexema()).esClaseEstatica()){
+                throw new ExcepcionSemantica(tablaSimbolos.obtenerClase(c.getHerencia().getLexema()).getNombre().getLexema(),c.getNombre().getNroLinea(), "No se puede heredar de clases estaticas o final");
+            }
+            consolidarHerencia();
             c.consolidarClase();
+
         }
+       // TablaSimbolos.getInstance().imprimirDetalleClases();
+
     }
-    public void imprimirClases() {
+    private void consolidarHerencia(){
+        for(Clase c : clases.values()){
+            if(c.getHerencia() == null){
+                c.setHerenciaObject();
+            }
+        }
+
+    }
+   /* public void imprimirClases() {
         System.out.println("Clases declaradas en TS:");
         for (String s : clases.keySet()) {
             System.out.println(" - " + s);
         }
-    }
-    public boolean contiene(String aux){
-        for(String s : clases.keySet()){
-            if(s.equals(aux)){
-                return true;
-            }
+        for (String s : clasesPredefinidas.keySet()) {
+            System.out.println(" - " + s);
         }
-        return false;
+    }
+
+    */
+    public Clase obtenerClaseDeclarada(String nombreClase){
+        return clases.get(nombreClase);
+    }
+    public Clase obtenerClasePredefinida(String nombreClase){
+        return clasesPredefinidas.get(nombreClase);
+    }
+    public Clase obtenerClase(String nombreClase){
+        Clase clase = clases.get(nombreClase);
+        if(clase == null){
+            clase =clasesPredefinidas.get(nombreClase);
+        }
+        return clase;
+    }
+    public void imprimirClases() {
+        System.out.println("=== Clases declaradas ===");
+        for (String nombreClase : clases.keySet()) {
+            System.out.println(" - " + nombreClase);
+        }
+
+        System.out.println("=========================\n");
+    }
+
+    public void imprimirDetalleClases() {
+        System.out.println("=== Detalle de todas las clases ===");
+        for (Clase c : clases.values()) {
+            c.imprimirResumen();
+        }
+        System.out.println("==================================\n");
     }
 }

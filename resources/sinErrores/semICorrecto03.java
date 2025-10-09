@@ -5,7 +5,7 @@ class A {
     {}  
 }
 class B extends A {
-    void m3(A p1, B p2, int c)
+    void m3(A p1, B p2)
     {}  
 }
 

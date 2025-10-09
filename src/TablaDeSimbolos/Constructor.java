@@ -19,13 +19,13 @@ public class Constructor {
             parametros.put(lexema,p);
         }
         else{
-            throw new ExcepcionSemantica(lexema,numLine);
+            throw new ExcepcionSemantica(lexema,numLine,"Parametro ya declarado");
         }
     }
     public boolean parametroDeclarado(String lexema){
         return parametros.containsKey(lexema);
     }
-    public Token getNombre(){
+    public Token getNombreConstructor(){
         return nombre;
     }
     public void getParametros(){

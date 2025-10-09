@@ -27,7 +27,7 @@ public class AnalizadorSintactico {
         match("EOF");
 
         //debug
-        tablaSimbolos.imprimirClases();
+       // tablaSimbolos.imprimirClases();
     }
     private void listaClases() throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
 
@@ -133,11 +133,11 @@ public class AnalizadorSintactico {
             match("extends");
             Token nombreHerencia =  tokenActual;
             match("idClase");
-            if(tablaSimbolos.claseDeclarada(nombreHerencia.getLexema())){
+            if(tablaSimbolos.claseDeclarada(nombreHerencia.getLexema()) || tablaSimbolos.clasePredefinidaDeclarada(nombreHerencia.getLexema())){
                 return nombreHerencia;
             }
             else{
-                throw new ExcepcionSemantica(nombreHerencia.getLexema(), nombreHerencia.getNroLinea());
+                throw new ExcepcionSemantica(nombreHerencia.getLexema(), nombreHerencia.getNroLinea(),"Clase no declarada");
             }
 
 
@@ -177,15 +177,15 @@ public class AnalizadorSintactico {
             Token nombreIdMetVar = tokenActual;
             match("idMetVar");
             miembroResto(nombreIdMetVar, tokenTipo);
-            tablaSimbolos.getClaseActual().getAtributos(); //
+
 
         }
         else if(tokenActual.getId().equals("void")){
             match("void");
             Token tokenMetodo = tokenActual;
-            Token modificador = modificadorOpcional();
-            //Token voidAux = new Token("void", "void", tokenMetodo.getNroLinea());
-            Metodo m = new Metodo(modificador,new TipoVoid(),tokenMetodo);
+            //Token modificador = modificadorOpcional();
+
+            Metodo m = new Metodo(null,new TipoVoid(),tokenMetodo);
             tablaSimbolos.setMetodoActual(m);
             match("idMetVar");
             argsFormales(tokenMetodo);
@@ -224,17 +224,17 @@ public class AnalizadorSintactico {
             match(";");
 
             tablaSimbolos.getClaseActual().insertarAtributo(nombreIdMetVar,a);
+            tablaSimbolos.getClaseActual().getAtributos(); //
         }
         else if(primeros.estaEnPrimeros(NoTerminales.ArgsFormales, tokenActual.getId())){
-
-            Token tokenMetodo = tokenActual;
+            
             Token modificador = modificadorOpcional();
-
+            Token tokenMetodo = tokenActual;
             Tipo tipo = construirTipoDesdeToken(tokenTipo);
-            Metodo m = new Metodo(modificador,tipo,tokenMetodo);
+            Metodo m = new Metodo(modificador,tipo,nombreIdMetVar);
             tablaSimbolos.setMetodoActual(m);
             argsFormales(tokenMetodo);
-            tablaSimbolos.getClaseActual().insertarMetodo(tokenMetodo,m);
+            tablaSimbolos.getClaseActual().insertarMetodo(nombreIdMetVar,m);
             tablaSimbolos.getClaseActual().getMetodos(); //
             bloqueOpcional();
         }
