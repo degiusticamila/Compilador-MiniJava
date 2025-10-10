@@ -133,12 +133,8 @@ public class AnalizadorSintactico {
             match("extends");
             Token nombreHerencia =  tokenActual;
             match("idClase");
-            if(tablaSimbolos.claseDeclarada(nombreHerencia.getLexema()) || tablaSimbolos.clasePredefinidaDeclarada(nombreHerencia.getLexema())){
-                return nombreHerencia;
-            }
-            else{
-                throw new ExcepcionSemantica(nombreHerencia.getLexema(), nombreHerencia.getNroLinea(),"Clase no declarada");
-            }
+            return nombreHerencia;
+
 
 
             //GENERICIDAD E2
@@ -184,20 +180,24 @@ public class AnalizadorSintactico {
             match("void");
             Token tokenMetodo = tokenActual;
             //Token modificador = modificadorOpcional();
-
-            Metodo m = new Metodo(null,new TipoVoid(),tokenMetodo);
+            System.out.println("Token metodo: "+tokenMetodo.toString());
+            Tipo tipoRetorno = new TipoVoid();
+            //Metodo m = new Metodo(null,new TipoVoid(),tokenMetodo);
+            Metodo m = new Metodo(null,tipoRetorno,tokenMetodo);
             tablaSimbolos.setMetodoActual(m);
             match("idMetVar");
             argsFormales(tokenMetodo);
             tablaSimbolos.getClaseActual().insertarMetodo(tokenMetodo,m);
             tablaSimbolos.getClaseActual().getMetodos(); //
-            bloqueOpcional();
+            bloqueOpcional(m);
         }
         else if(primeros.estaEnPrimeros(NoTerminales.ModificadorOpcional,tokenActual.getId())){
 
             Token modificador = modificadorOpcional();
             Token tokenTipo = tipoMetodo();
+
             Tipo tipo = construirTipoDesdeToken(tokenTipo);
+            System.out.println("Tipo metodo: "+tipo);
             Token tokenMetodo = tokenActual;
 
             Metodo m = new Metodo(modificador,tipo,tokenMetodo);
@@ -209,7 +209,7 @@ public class AnalizadorSintactico {
             argsFormales(tokenMetodo);
             tablaSimbolos.getClaseActual().insertarMetodo(tokenMetodo,m);
             tablaSimbolos.getClaseActual().getMetodos(); //
-            bloqueOpcional();
+            bloqueOpcional(m);
         }
         else if(primeros.estaEnPrimeros(NoTerminales.Constructor, tokenActual.getId())){
             constructor();
@@ -227,7 +227,7 @@ public class AnalizadorSintactico {
             tablaSimbolos.getClaseActual().getAtributos(); //
         }
         else if(primeros.estaEnPrimeros(NoTerminales.ArgsFormales, tokenActual.getId())){
-            
+
             Token modificador = modificadorOpcional();
             Token tokenMetodo = tokenActual;
             Tipo tipo = construirTipoDesdeToken(tokenTipo);
@@ -236,7 +236,7 @@ public class AnalizadorSintactico {
             argsFormales(tokenMetodo);
             tablaSimbolos.getClaseActual().insertarMetodo(nombreIdMetVar,m);
             tablaSimbolos.getClaseActual().getMetodos(); //
-            bloqueOpcional();
+            bloqueOpcional(m);
         }
         //ATRIBUTOS INICIALIZADOS
         else if (primeros.estaEnPrimeros(NoTerminales.OperadorAsignacion, tokenActual.getId())){
@@ -262,8 +262,9 @@ public class AnalizadorSintactico {
             return tipo();
         }
         else if (tokenActual.getId().equals("void")){
+            Token tokenTipoVoid = tokenActual;
             match("void");
-            return tokenActual;
+            return tokenTipoVoid;
         }
         else{
             throw new ExcepcionSintactica(tokenActual,"un tipo | void");
@@ -346,8 +347,11 @@ public class AnalizadorSintactico {
         }
         match("idMetVar");
     }
-    private void bloqueOpcional() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private void bloqueOpcional(Metodo m) throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
         if(primeros.estaEnPrimeros(NoTerminales.Bloque, tokenActual.getId())){
+            if(m.getModificador() != null && m.getModificador().getLexema().equals("abstract")){
+                throw new ExcepcionSemantica(m.getNombreMetodo().getLexema(),m.getNombreMetodo().getNroLinea(), "Método abstracto con cuerpo");
+            }
             bloque();
         }
         else if(tokenActual.getId().equals(";")){

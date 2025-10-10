@@ -18,4 +18,11 @@ public class Parametro {
     public void setPosicion(int posicion) {
         this.posicion = posicion;
     }
+    public Token  getNombre() {
+        return nombre;
+    }
+    public boolean equals(Parametro p){
+        return tipo.equals(p.tipo) && nombre.getLexema().equals(p.nombre.getLexema());
+    }
+
 }

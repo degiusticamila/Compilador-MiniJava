@@ -8,4 +8,8 @@ public class TipoVoid extends Tipo {
     public boolean esPrimitivo() { return true; }
     @Override
     public boolean esReferencia() { return false; }
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof TipoVoid;
+    }
 }

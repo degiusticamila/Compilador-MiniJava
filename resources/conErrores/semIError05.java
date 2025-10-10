@@ -1,4 +1,4 @@
-///[Error:abstract|5]
+///[Error:m1|5]
 //Tambien podria ser el token abstract
 
 class A{

@@ -16,4 +16,7 @@ public abstract class Tipo {
     public String toString() {
         return nombre;
     }
+    public boolean equals(Tipo o) {
+        return nombre.equals(o.nombre);
+    }
 }

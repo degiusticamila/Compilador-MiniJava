@@ -3,6 +3,7 @@ package TablaDeSimbolos;
 import Utils.Token;
 
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class TablaSimbolos {
     private static TablaSimbolos tablaSimbolos;
@@ -247,18 +248,18 @@ public class TablaSimbolos {
 
     }
     public void consolidacion() throws ExcepcionSemantica {
-       /* for(String clase : clases.keySet()){
-            clases.get(clase).consolidarClase();
-        }
-        */
+       chequearCircularidad();
         for(Clase c : clases.values()){
-            /*if(tablaSimbolos.obtenerClase(c.getHerencia().getLexema()).esClaseFinal() || tablaSimbolos.obtenerClase(c.getHerencia().getLexema()).esClaseEstatica()){
-                throw new ExcepcionSemantica(tablaSimbolos.obtenerClase(c.getHerencia().getLexema()).getNombre().getLexema(),tablaSimbolos.obtenerClase(c.getHerencia().getLexema()).getNombre().getNroLinea(), "No se puede heredar de clases estaticas o final");
+            if(claseDeclarada(c.getNombre().getLexema()) || clasePredefinidaDeclarada( c.getNombre().getLexema() )){
+                if(tablaSimbolos.obtenerClase(c.getHerencia().getLexema()) != null && tablaSimbolos.obtenerClase(c.getHerencia().getLexema()).esClaseFinal()){
+                    throw new ExcepcionSemantica(tablaSimbolos.obtenerClase(c.getHerencia().getLexema()).getNombre().getLexema(),c.getNombre().getNroLinea(), "Padre final");
+                }
+                if(tablaSimbolos.obtenerClase(c.getHerencia().getLexema()) != null && tablaSimbolos.obtenerClase(c.getHerencia().getLexema()).esClaseEstatica()){
+                    throw new ExcepcionSemantica(tablaSimbolos.obtenerClase(c.getHerencia().getLexema()).getNombre().getLexema(),c.getNombre().getNroLinea(), "Clase padre static");
+                }
             }
-
-             */
-            if(tablaSimbolos.obtenerClase(c.getHerencia().getLexema()).esClaseFinal() || tablaSimbolos.obtenerClase(c.getHerencia().getLexema()).esClaseEstatica()){
-                throw new ExcepcionSemantica(tablaSimbolos.obtenerClase(c.getHerencia().getLexema()).getNombre().getLexema(),c.getNombre().getNroLinea(), "No se puede heredar de clases estaticas o final");
+            else{
+                throw new ExcepcionSemantica(tablaSimbolos.obtenerClase(c.getHerencia().getLexema()).getNombre().getLexema(),c.getNombre().getNroLinea(), "Clase no declarada");
             }
             consolidarHerencia();
             c.consolidarClase();
@@ -274,6 +275,37 @@ public class TablaSimbolos {
             }
         }
 
+    }
+    private void chequearCircularidad() throws ExcepcionSemantica {
+        for(Clase c : clases.values()){
+            HashSet<String> clasesVisitadas = new HashSet<>();
+            chequearCircularidadClase(c,clasesVisitadas, new StringBuilder());
+        }
+    }
+    private void chequearCircularidadClase(Clase clase, HashSet<String> clasesVisitadas, StringBuilder diagramaClases) throws ExcepcionSemantica {
+        if(clase.getHerencia() == null) return;
+
+        String nombreClase = clase.getNombre().getLexema();
+        String nombrePadre = clase.getHerencia().getLexema();
+        System.out.println("Visitando: " + nombreClase + " -> " + nombrePadre);
+       /*if(!clases.containsKey(nombrePadre)){
+            throw new ExcepcionSemantica(nombreClase, clase.getHerencia().getNroLinea(), "Clase no definida");
+        }
+        */
+        if (!clases.containsKey(nombrePadre)) return;
+        if(clasesVisitadas.contains(nombreClase)){
+            diagramaClases.append(nombreClase);
+            throw new ExcepcionSemantica(nombreClase,clase.getNombre().getNroLinea(),"Herencia circular detectada: "+diagramaClases);
+        }
+
+        clasesVisitadas.add(nombreClase);
+        diagramaClases.append(nombreClase).append(" -> ");
+
+        Clase padre = clases.get(nombrePadre);
+        if(padre != null){
+            chequearCircularidadClase(padre, clasesVisitadas, diagramaClases);
+        }
+        clasesVisitadas.remove(nombreClase);
     }
    /* public void imprimirClases() {
         System.out.println("Clases declaradas en TS:");
@@ -295,7 +327,7 @@ public class TablaSimbolos {
     public Clase obtenerClase(String nombreClase){
         Clase clase = clases.get(nombreClase);
         if(clase == null){
-            clase =clasesPredefinidas.get(nombreClase);
+            clase = clasesPredefinidas.get(nombreClase);
         }
         return clase;
     }
