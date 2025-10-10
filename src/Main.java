@@ -3,6 +3,7 @@ import Lexico.ExcepcionLexica;
 import Sintactico.AnalizadorSintactico;
 import Sintactico.ExcepcionSintactica;
 import TablaDeSimbolos.ExcepcionSemantica;
+import TablaDeSimbolos.TablaSimbolos;
 import Utils.SourceManager;
 import Utils.SourceManagerImpl;
 import Utils.Token;
@@ -28,6 +29,7 @@ public class Main {
             System.out.println("Clases de la TS: ");
             //analizadorSintactico.getTablaSimbolos().clases();
             analizadorSintactico.consolidarTS();
+            TablaSimbolos.getInstance().imprimirDetalleClases();
             System.out.println("[SinErrores]");
         } catch (ExcepcionLexica e) {
             System.out.println("Error Lexico: " + e.getMessage());

@@ -182,7 +182,7 @@ public class AnalizadorSintactico {
             //Token modificador = modificadorOpcional();
             System.out.println("Token metodo: "+tokenMetodo.toString());
             Tipo tipoRetorno = new TipoVoid();
-            //Metodo m = new Metodo(null,new TipoVoid(),tokenMetodo);
+
             Metodo m = new Metodo(null,tipoRetorno,tokenMetodo);
             tablaSimbolos.setMetodoActual(m);
             match("idMetVar");
@@ -356,6 +356,9 @@ public class AnalizadorSintactico {
         }
         else if(tokenActual.getId().equals(";")){
             match(";");
+            if((m.getModificador() == null) || !m.getModificador().getLexema().equals("abstract")){
+                throw new ExcepcionSemantica(m.getNombreMetodo().getLexema(), m.getNombreMetodo().getNroLinea(),"Metodo sin cuerpo");
+            }
         }
         else{
             throw new ExcepcionSintactica(tokenActual,"Bloque | ;");

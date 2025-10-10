@@ -72,12 +72,14 @@ public class TablaSimbolos {
         clasesPredefinidas.put("System",claseSystem);
         clasesPredefinidas.put("String",claseString);
 
-        claseSystem.insertarHerencia(claseObject.getNombre());
-        claseString.insertarHerencia(claseObject.getNombre());
+
 
         insertarMetodosPredefinidosObject(claseObject);
         insertarMetodosPredefinidosSystem(claseSystem);
         insertarMetodosPredefinidosString(claseString);
+
+        claseSystem.insertarHerencia(claseObject.getNombre());
+        claseString.insertarHerencia(claseObject.getNombre());
     }
     public void insertarMetodosPredefinidosObject(Clase claseObject) throws ExcepcionSemantica {
         //static void debugPrint(int i)
@@ -249,6 +251,11 @@ public class TablaSimbolos {
     }
     public void consolidacion() throws ExcepcionSemantica {
        chequearCircularidad();
+        for(Clase c :clasesPredefinidas.values()){
+            if(c.getHerencia() != null){
+                c.consolidarClase();
+            }
+        }
         for(Clase c : clases.values()){
             if(claseDeclarada(c.getNombre().getLexema()) || clasePredefinidaDeclarada( c.getNombre().getLexema() )){
                 if(tablaSimbolos.obtenerClase(c.getHerencia().getLexema()) != null && tablaSimbolos.obtenerClase(c.getHerencia().getLexema()).esClaseFinal()){
@@ -265,7 +272,8 @@ public class TablaSimbolos {
             c.consolidarClase();
 
         }
-       // TablaSimbolos.getInstance().imprimirDetalleClases();
+
+        //TablaSimbolos.getInstance().imprimirDetalleClases();
 
     }
     private void consolidarHerencia(){
@@ -274,7 +282,6 @@ public class TablaSimbolos {
                 c.setHerenciaObject();
             }
         }
-
     }
     private void chequearCircularidad() throws ExcepcionSemantica {
         for(Clase c : clases.values()){
@@ -342,6 +349,9 @@ public class TablaSimbolos {
 
     public void imprimirDetalleClases() {
         System.out.println("=== Detalle de todas las clases ===");
+        for (Clase c : clasesPredefinidas.values()) {
+            c.imprimirResumen();
+        }
         for (Clase c : clases.values()) {
             c.imprimirResumen();
         }

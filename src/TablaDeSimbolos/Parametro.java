@@ -22,7 +22,12 @@ public class Parametro {
         return nombre;
     }
     public boolean equals(Parametro p){
+        System.out.println("tipo1"+tipo);
+        System.out.println("tipo2"+p);
         return tipo.equals(p.tipo) && nombre.getLexema().equals(p.nombre.getLexema());
     }
 
+    public Tipo getTipo() {
+        return tipo;
+    }
 }

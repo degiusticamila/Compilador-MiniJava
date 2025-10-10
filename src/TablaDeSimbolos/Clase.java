@@ -177,8 +177,10 @@ public class Clase {
         }
 
          */
-        chequearTipoRetornoMetodo();
 
+        chequearTipoRetornoMetodo();
+        chequearTipoParametroMetodo();
+        chequearRedefinicionMetodosAbstractos();
         for(Metodo m : metodos.values()){
 
             Metodo metodoPadre = padre.metodos.get(m.getNombreMetodo().getLexema());
@@ -194,9 +196,11 @@ public class Clase {
                     if(!metodoPadre.getParametros().isEmpty()) {
                         Parametro primeroHijo = m.getParametros().getFirst();
                         Parametro primeroPadre = metodoPadre.getParametros().getFirst();
-                        for (int i = 1; i < m.getParametros().size(); i++) {
+                        System.out.println("parametro hijo"+primeroHijo);
+                        System.out.println("parametro padre"+primeroPadre);
+                        for (int i = 0; i < m.getParametros().size(); i++) {
                             if (!primeroHijo.equals(primeroPadre)) {
-                                throw new ExcepcionSemantica(primeroHijo.getNombre().getLexema(), primeroHijo.getNombre().getNroLinea(), "Parametros incompatible");
+                                throw new ExcepcionSemantica(m.getNombreMetodo().getLexema(), primeroHijo.getNombre().getNroLinea(), "Parametros incompatible");
                             }
                             primeroHijo = m.getParametros().get(i);
                             primeroPadre = metodoPadre.getParametros().get(i);
@@ -219,7 +223,36 @@ public class Clase {
                 }
             }
         }
+        for(Metodo metodoPadre : padre.metodos.values()){
+            String nombreMetodoPadre = metodoPadre.getNombreMetodo().getLexema();
+            if(!this.metodos.containsKey(metodoPadre)){
+                //si no esta redefinido
+                this.metodos.put(nombreMetodoPadre, metodoPadre);
+                System.out.println("→ Heredado método '" + nombreMetodoPadre + "' de " + padre.getNombre().getLexema() + " en " + this.nombre.getLexema());
+            }
+            else{
+                System.out.println("→ Método '" + nombreMetodoPadre + "' redefinido en " + this.nombre.getLexema());
+            }
 
+        }
+
+    }
+    public void chequearRedefinicionMetodosAbstractos() throws ExcepcionSemantica {
+        Clase padre = TablaSimbolos.getInstance().obtenerClase(this.getHerencia().getLexema());
+        if(padre != null && padre.esClaseAbstracta()){
+            for(Metodo metodoPadre : padre.metodos.values()){
+                if(metodoPadre.esMetodoAbstracto()){
+                    Metodo metodoImplementado = this.metodos.get(metodoPadre.getNombreMetodo().getLexema());
+                    boolean estaImplementado = false;
+                    if(metodoImplementado != null && !metodoImplementado.esMetodoAbstracto()){
+                        estaImplementado = true;
+                    }
+                    if(!estaImplementado && !this.esClaseAbstracta()){
+                        throw new ExcepcionSemantica(this.getNombre().getLexema(),this.getNombre().getNroLinea(),"Metodo "+metodoPadre.getNombreMetodo().getLexema()+" no implementado en clase "+this.nombre.getLexema());
+                    }
+                }
+            }
+        }
     }
     private void consolidarHerencia(){
         //primero chequeo circularidad
@@ -237,6 +270,22 @@ public class Clase {
             if(!tipoRetorno.getNombre().equals("void") && !tipoRetorno.esPrimitivo()){
                 if(!TablaSimbolos.getInstance().clasePredefinidaDeclarada(tipoRetorno.getNombre()) && !TablaSimbolos.getInstance().claseDeclarada(tipoRetorno.getNombre())){
                     throw new ExcepcionSemantica(tipoRetorno.getNombre(),m.getNombreMetodo().getNroLinea(),"Tipo retorno incompatible");
+                }
+            }
+        }
+    }
+    private void chequearTipoParametroMetodo() throws ExcepcionSemantica {
+        for(Metodo m : metodos.values()){
+            if(!m.getParametros().isEmpty()){
+                for(Parametro p : m.getParametros()) {
+                    if(!p.getTipo().esPrimitivo()){
+                        Tipo tipoParametro = p.getTipo();
+                        if(tipoParametro != null){
+                            if(!TablaSimbolos.getInstance().claseDeclarada(tipoParametro.getNombre()) && !TablaSimbolos.getInstance().clasePredefinidaDeclarada(tipoParametro.getNombre())){
+                                throw new ExcepcionSemantica(tipoParametro.getNombre(), m.getNombreMetodo().getNroLinea(), "Tipo de Parametro incompatible");
+                            }
+                        }
+                    }
                 }
             }
         }

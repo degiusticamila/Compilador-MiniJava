@@ -38,6 +38,7 @@ public class Metodo {
         }
         return false;
     }
+
     public boolean esMetodoAbstracto(){
         return modificador != null && modificador.getLexema().equals("abstract");
     }
