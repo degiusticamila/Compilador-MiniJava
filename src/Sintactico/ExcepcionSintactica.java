@@ -18,7 +18,7 @@ public class ExcepcionSintactica extends Exception{
     }
     public String getMessage() {
         return "Se esperaba '" + nombreToken + "' pero se encontró '"
-                + token.getId() + "' (" + token.getLexema() + ") "
+                + token.getLexema() + "' (" + token.getLexema() + ") "
                 + "en línea " + token.getNroLinea();
     }
     public String formatoCorto() {

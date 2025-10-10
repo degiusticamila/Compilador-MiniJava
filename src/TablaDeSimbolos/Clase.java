@@ -10,7 +10,6 @@ public class Clase {
     private HashMap<String, Atributo> atributos;
     private HashMap<String, Metodo> metodos;
     private Constructor constructor;
-
     private Token modificador;
     private Token nombre;
     private Token herencia;
@@ -20,12 +19,9 @@ public class Clase {
         metodos = new HashMap<>();
         this.nombre = nombre;
         this.modificador = modificador;
-        //setHerenciaObject();
     }
     public void insertarHerencia(Token herencia) throws ExcepcionSemantica {
-
         if(nombre.getLexema().equals(herencia.getLexema())){
-            // FALTA esClaseEstatica() || esClaseFinal()
             throw new ExcepcionSemantica(nombre.getLexema(),nombre.getNroLinea(), "No es posible heredar de la misma clase");
         }
         else{
@@ -35,14 +31,6 @@ public class Clase {
     public void insertarMetodo(Token nombreMetodo,Metodo m) throws ExcepcionSemantica {
         if(!metodoDeclarado(nombreMetodo.getLexema())){
             metodos.put(nombreMetodo.getLexema(), m);
-            /*if(m.esMetodoAbstracto() && !esClaseAbstracta()){
-                throw new ExcepcionSemantica(nombre.getLexema(), nombre.getNroLinea());
-            }
-            else{
-                metodos.put(nombreMetodo.getLexema(), m);
-            }
-
-             */
         }
         else{
             throw new ExcepcionSemantica(nombreMetodo.getLexema(), nombreMetodo.getNroLinea(), "Metodo ya declarado");
@@ -134,8 +122,6 @@ public class Clase {
         for(Atributo a :atributos.values()){
             Tipo tipoAtributo = a.getTipo();
             Token nombreAtributo = a.getNombre();
-
-            System.out.println("Clase: "+ts.obtenerClase(this.nombre.getLexema()).nombre.getLexema()+" Padre: "+this.herencia.getLexema());
             if(!tipoAtributo.esPrimitivo()){
                 String nombreTipo = tipoAtributo.getNombre();
                 if (!ts.claseDeclarada(nombreTipo) && !ts.clasePredefinidaDeclarada(nombreTipo)) {
@@ -163,32 +149,16 @@ public class Clase {
             setHerenciaObject();
             return;
         }
-        // Verificar que el padre exista
         Clase padre = TablaSimbolos.getInstance().obtenerClase(herencia.getLexema());
         if (padre == null) {
             throw new ExcepcionSemantica(herencia.getLexema(),nombre.getNroLinea(),"Clase sin padre");
         }
-        /*for(Metodo m : padre.metodos.values()){
-            if(this.metodos.containsKey(m.getNombreMetodo().getLexema()) && (!m.getTipoRetorno().equals(this.metodos.get(m.getNombreMetodo().getLexema()).getTipoRetorno())) || compararParametros(m.getParametros(),m.getParametros())){
-                int linea = this.metodos.get(m.getNombreMetodo().getLexema()).getNombreMetodo().getNroLinea();
-                throw new ExcepcionSemantica(m.getNombreMetodo().getLexema(),linea,"metodos con el mismo nombre");
-            }
-            this.insertarMetodo(m.getNombreMetodo(),m);
-        }
-
-         */
-
         chequearTipoRetornoMetodo();
         chequearTipoParametroMetodo();
         chequearRedefinicionMetodosAbstractos();
         for(Metodo m : metodos.values()){
-
             Metodo metodoPadre = padre.metodos.get(m.getNombreMetodo().getLexema());
             if(metodoPadre != null){
-                //que se llamen igual
-                //que tengan el mismo tipo de retorno
-                //chequeo el modificador, si el de mi papa es abstracto, yo lo tengo que hacer concreto si yo soy concreto xd
-                //mismos parametros
                 if(!metodoPadre.getTipoRetorno().getNombre().equals(m.getTipoRetorno().getNombre())){
                     throw new ExcepcionSemantica(m.getNombreMetodo().getLexema(), m.getNombreMetodo().getNroLinea(),"Tipos incompatible");
                 }
@@ -196,8 +166,6 @@ public class Clase {
                     if(!metodoPadre.getParametros().isEmpty()) {
                         Parametro primeroHijo = m.getParametros().getFirst();
                         Parametro primeroPadre = metodoPadre.getParametros().getFirst();
-                        System.out.println("parametro hijo"+primeroHijo);
-                        System.out.println("parametro padre"+primeroPadre);
                         for (int i = 0; i < m.getParametros().size(); i++) {
                             if (!primeroHijo.equals(primeroPadre)) {
                                 throw new ExcepcionSemantica(m.getNombreMetodo().getLexema(), primeroHijo.getNombre().getNroLinea(), "Parametros incompatible");
@@ -226,16 +194,13 @@ public class Clase {
         for(Metodo metodoPadre : padre.metodos.values()){
             String nombreMetodoPadre = metodoPadre.getNombreMetodo().getLexema();
             if(!this.metodos.containsKey(metodoPadre)){
-                //si no esta redefinido
                 this.metodos.put(nombreMetodoPadre, metodoPadre);
-                System.out.println("→ Heredado método '" + nombreMetodoPadre + "' de " + padre.getNombre().getLexema() + " en " + this.nombre.getLexema());
+                //System.out.println("→ Heredado método '" + nombreMetodoPadre + "' de " + padre.getNombre().getLexema() + " en " + this.nombre.getLexema());
             }
             else{
-                System.out.println("→ Método '" + nombreMetodoPadre + "' redefinido en " + this.nombre.getLexema());
+               // System.out.println("→ Método '" + nombreMetodoPadre + "' redefinido en " + this.nombre.getLexema());
             }
-
         }
-
     }
     public void chequearRedefinicionMetodosAbstractos() throws ExcepcionSemantica {
         Clase padre = TablaSimbolos.getInstance().obtenerClase(this.getHerencia().getLexema());
@@ -254,19 +219,10 @@ public class Clase {
             }
         }
     }
-    private void consolidarHerencia(){
-        //primero chequeo circularidad
-        //aca voy a agregarle a la clase de la que hereda todos sus metodos
-
-    }
     private void chequearTipoRetornoMetodo() throws ExcepcionSemantica {
         for(Metodo m : metodos.values()){
-            System.out.println("Método: " + m.getNombreMetodo().getLexema() +
-                    " | Tipo retorno: " + m.getTipoRetorno());
             Tipo tipoRetorno = m.getTipoRetorno();
-
             if(tipoRetorno == null) continue;
-
             if(!tipoRetorno.getNombre().equals("void") && !tipoRetorno.esPrimitivo()){
                 if(!TablaSimbolos.getInstance().clasePredefinidaDeclarada(tipoRetorno.getNombre()) && !TablaSimbolos.getInstance().claseDeclarada(tipoRetorno.getNombre())){
                     throw new ExcepcionSemantica(tipoRetorno.getNombre(),m.getNombreMetodo().getNroLinea(),"Tipo retorno incompatible");
@@ -315,7 +271,6 @@ public class Clase {
                 System.out.println("  - " + a.getNombre().getLexema() + " : " + a.getTipo().getNombre());
             }
         }
-
         System.out.println("\nMétodos:");
         if (metodos.isEmpty()) {
             System.out.println("  (ninguno)");
@@ -324,15 +279,29 @@ public class Clase {
                 String tipo = (m.getTipoRetorno() != null) ? m.getTipoRetorno().getNombre() : "void";
                 String mod = (m.getModificador() != null) ? m.getModificador().getLexema() : "(sin modificador)";
                 System.out.println("  - " + m.getNombreMetodo().getLexema() + " : " + tipo + " [" + mod + "]");
+
+                //  Mostrar parámetros si tiene
+                if (m.getParametros() != null && !m.getParametros().isEmpty()) {
+                    for (Parametro p : m.getParametros()) {
+                        System.out.println("       ▹ Param: " + p.getNombre().getLexema() + " : " + p.getTipo().getNombre());
+                    }
+                } else {
+                    System.out.println("       ▹ (sin parámetros)");
+                }
             }
         }
-
-        System.out.println("\nConstructor:");
-        if (constructor != null)
+        if (constructor != null) {
             System.out.println("  - " + constructor.getNombreConstructor().getLexema());
-        else
+            if (constructor.getParametros() != null && !constructor.getParametros().isEmpty()) {
+                for (Parametro p : constructor.getParametros()) {
+                    System.out.println("       ▹ Param: " + p.getNombre().getLexema() + " : " + p.getTipo().getNombre());
+                }
+            } else {
+                System.out.println("       ▹ (sin parámetros)");
+            }
+        } else {
             System.out.println("  (ninguno)");
-
+        }
         System.out.println("=====================================\n");
     }
     public Token getModificador(){

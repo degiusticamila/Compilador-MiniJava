@@ -2,12 +2,14 @@ package TablaDeSimbolos;
 
 import Utils.Token;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 public class TablaSimbolos {
     private static TablaSimbolos tablaSimbolos;
-
+    private List<ExcepcionSemantica> erroresSemanticos = new ArrayList<>();
     private HashMap<String,Clase> clases;
     private HashMap<String,Clase> clasesPredefinidas;
     private Clase claseActual;
@@ -54,7 +56,6 @@ public class TablaSimbolos {
         return clases.containsKey(nombreClase);
     }
     public boolean clasePredefinidaDeclarada(String nombreClase){
-        System.out.println( clases.containsKey(nombreClase));
         return clasesPredefinidas.containsKey(nombreClase);}
     public HashMap<String, Clase> getClases(){
         return clases;
@@ -294,7 +295,6 @@ public class TablaSimbolos {
 
         String nombreClase = clase.getNombre().getLexema();
         String nombrePadre = clase.getHerencia().getLexema();
-        System.out.println("Visitando: " + nombreClase + " -> " + nombrePadre);
        /*if(!clases.containsKey(nombrePadre)){
             throw new ExcepcionSemantica(nombreClase, clase.getHerencia().getNroLinea(), "Clase no definida");
         }
@@ -314,17 +314,6 @@ public class TablaSimbolos {
         }
         clasesVisitadas.remove(nombreClase);
     }
-   /* public void imprimirClases() {
-        System.out.println("Clases declaradas en TS:");
-        for (String s : clases.keySet()) {
-            System.out.println(" - " + s);
-        }
-        for (String s : clasesPredefinidas.keySet()) {
-            System.out.println(" - " + s);
-        }
-    }
-
-    */
     public Clase obtenerClaseDeclarada(String nombreClase){
         return clases.get(nombreClase);
     }
@@ -356,5 +345,15 @@ public class TablaSimbolos {
             c.imprimirResumen();
         }
         System.out.println("==================================\n");
+    }
+    public void mostrarErroresSemanticos(){
+        if(!erroresSemanticos.isEmpty()){
+            for(ExcepcionSemantica e : erroresSemanticos){
+                System.out.println("-"+e.getMessage());
+            }
+        }
+    }
+    public void reportarError(ExcepcionSemantica e) {
+        erroresSemanticos.add(e);
     }
 }

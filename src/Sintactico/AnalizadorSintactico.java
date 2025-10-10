@@ -47,7 +47,7 @@ public class AnalizadorSintactico {
             interfaz();
         }
         else{
-            throw new ExcepcionSintactica(tokenActual,"idClase o interface");
+            throw new ExcepcionSintactica(tokenActual,"identificador de clase o interface");
         }
     }
     private void clase() throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
@@ -180,7 +180,7 @@ public class AnalizadorSintactico {
             match("void");
             Token tokenMetodo = tokenActual;
             //Token modificador = modificadorOpcional();
-            System.out.println("Token metodo: "+tokenMetodo.toString());
+
             Tipo tipoRetorno = new TipoVoid();
 
             Metodo m = new Metodo(null,tipoRetorno,tokenMetodo);
@@ -188,7 +188,6 @@ public class AnalizadorSintactico {
             match("idMetVar");
             argsFormales(tokenMetodo);
             tablaSimbolos.getClaseActual().insertarMetodo(tokenMetodo,m);
-            tablaSimbolos.getClaseActual().getMetodos(); //
             bloqueOpcional(m);
         }
         else if(primeros.estaEnPrimeros(NoTerminales.ModificadorOpcional,tokenActual.getId())){
@@ -197,7 +196,7 @@ public class AnalizadorSintactico {
             Token tokenTipo = tipoMetodo();
 
             Tipo tipo = construirTipoDesdeToken(tokenTipo);
-            System.out.println("Tipo metodo: "+tipo);
+
             Token tokenMetodo = tokenActual;
 
             Metodo m = new Metodo(modificador,tipo,tokenMetodo);
@@ -208,7 +207,6 @@ public class AnalizadorSintactico {
             match("idMetVar");
             argsFormales(tokenMetodo);
             tablaSimbolos.getClaseActual().insertarMetodo(tokenMetodo,m);
-            tablaSimbolos.getClaseActual().getMetodos(); //
             bloqueOpcional(m);
         }
         else if(primeros.estaEnPrimeros(NoTerminales.Constructor, tokenActual.getId())){
@@ -220,11 +218,8 @@ public class AnalizadorSintactico {
         if(tokenActual.getId().equals(";")){
             Tipo tipo = construirTipoDesdeToken(tokenTipo);
             Atributo a = new Atributo(tipo, nombreIdMetVar);
-
             match(";");
-
             tablaSimbolos.getClaseActual().insertarAtributo(nombreIdMetVar,a);
-            tablaSimbolos.getClaseActual().getAtributos(); //
         }
         else if(primeros.estaEnPrimeros(NoTerminales.ArgsFormales, tokenActual.getId())){
 
@@ -235,7 +230,6 @@ public class AnalizadorSintactico {
             tablaSimbolos.setMetodoActual(m);
             argsFormales(tokenMetodo);
             tablaSimbolos.getClaseActual().insertarMetodo(nombreIdMetVar,m);
-            tablaSimbolos.getClaseActual().getMetodos(); //
             bloqueOpcional(m);
         }
         //ATRIBUTOS INICIALIZADOS
@@ -245,7 +239,7 @@ public class AnalizadorSintactico {
             match(";");
         }
         else{
-            throw new ExcepcionSintactica(tokenActual,"; | argFormal | =");
+            throw new ExcepcionSintactica(tokenActual,"; | Argumento formal | =");
         }
     }
     private void constructor() throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
@@ -281,7 +275,7 @@ public class AnalizadorSintactico {
             return tipoClase; //new
         }
         else{
-            throw new ExcepcionSintactica(tokenActual,  "TipoPrimitivo | idClase");
+            throw new ExcepcionSintactica(tokenActual,  "TipoPrimitivo | identificador de clase");
         }
     }
     private Token tipoPrimitivo() throws ExcepcionSintactica, ExcepcionLexica, IOException {
@@ -336,7 +330,6 @@ public class AnalizadorSintactico {
         Parametro p = new Parametro(tipoParametro,nombreParametro,1 );
 
         if(construtorOmetodo.getId().equals("idClase")){
-            System.out.println("Se trata de un constructor");
             //es un constructor
             tablaSimbolos.getClaseActual().getConstructor().insertarParametro(nombreParametro.getLexema(), p, nombreParametro.getNroLinea());
             tablaSimbolos.getClaseActual().getConstructor().getParametros(); //
@@ -402,7 +395,7 @@ public class AnalizadorSintactico {
             bloque();
         }
         else{
-            throw new ExcepcionSintactica(tokenActual, "; | Expresion | varLocal | return | if | while | bloque");
+            throw new ExcepcionSintactica(tokenActual, "; | Expresion | Variable local| return | if | while | bloque");
         }
     }
     private void varLocal() throws ExcepcionLexica, IOException, ExcepcionSintactica {
@@ -617,7 +610,7 @@ public class AnalizadorSintactico {
             expresionParentizada();
         }
         else{
-            throw new ExcepcionSintactica(tokenActual, "this | stringLiteral | idMetVar | llamadaConstructor | LlamadaMetodoEstatico | expParentizada ");
+            throw new ExcepcionSintactica(tokenActual, "identificador metodo variable | constructor | llamada metodo estatico | expresion parentizada");
         }
     }
     private void llamadaMetodoResto() throws ExcepcionLexica, IOException, ExcepcionSintactica {
@@ -662,7 +655,7 @@ public class AnalizadorSintactico {
             match(">");
         }
         else{
-            throw new ExcepcionSintactica(tokenActual,  "> | idClase");
+            throw new ExcepcionSintactica(tokenActual,  "> | identificador de clase");
         }
     }
     private void expresionParentizada() throws ExcepcionLexica, IOException, ExcepcionSintactica {
@@ -718,11 +711,9 @@ public class AnalizadorSintactico {
            throw new ExcepcionSintactica(tokenActual, nombreToken);
         }
     }
-    public TablaSimbolos getTablaSimbolos() {
-        return tablaSimbolos;
-    }
     public void consolidarTS() throws ExcepcionSemantica {
         tablaSimbolos.consolidacion();
+        tablaSimbolos.mostrarErroresSemanticos();
     }
     private Tipo construirTipoDesdeToken(Token tokenTipo) {
         String lexema = tokenTipo.getLexema();
