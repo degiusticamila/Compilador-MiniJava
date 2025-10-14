@@ -363,8 +363,6 @@ public class AnalizadorSintactico {
         NodoBloque bloque = new NodoBloque();
         tablaSimbolos.getMetodoActual().insertarBloque(bloque);
         listaSentencias(bloque);
-      //  System.out.println("==== AST del método ====");
-       // bloque.imprimir(" ");
         match("}");
     }
     private void listaSentencias(NodoBloque bloque) throws ExcepcionLexica, IOException, ExcepcionSintactica {
@@ -385,8 +383,9 @@ public class AnalizadorSintactico {
             return nodoSentencia;
         }
         else if(primeros.estaEnPrimeros(NoTerminales.VarLocal, tokenActual.getId())){
-            varLocal();
+            NodoSentencia nodoSentencia = varLocal();
             match(";");
+            return nodoSentencia;
         }
         else if(primeros.estaEnPrimeros(NoTerminales.Return, tokenActual.getId())){
             Return();
@@ -406,15 +405,23 @@ public class AnalizadorSintactico {
         }
         return null;
     }
-    private void varLocal() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private NodoSentencia varLocal() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+
         match("var");
 
         //OPCIONAL GENERICIDAD
         tipoParametricoOpcional();
-
+        NodoOperando nodoVar = new NodoVar(tokenActual);
         match("idMetVar");
+        NodoAsignacion nodoAsignacion = new NodoAsignacion();
+        NodoExpresion nodoExpresionAsignacion = new NodoExpAsignacion();
+        nodoAsignacion.setNodoExpAsignacion(nodoExpresionAsignacion);
+
+        nodoExpresionAsignacion.setOperador(tokenActual);
+        nodoExpresionAsignacion.setLadoIzquierdo(nodoVar);
         match("=");
-        expresionCompuesta();
+        nodoExpresionAsignacion.setLadoDerecho(expresionCompuesta());
+        return nodoAsignacion;
     }
     private void Return() throws ExcepcionLexica, IOException, ExcepcionSintactica {
         match("return");

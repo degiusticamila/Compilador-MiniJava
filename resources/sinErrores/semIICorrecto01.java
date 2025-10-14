@@ -6,7 +6,7 @@ class A {
     
      void m1(){
         a1 = 4;
-        
+        var a2 = 5;
     }
     
 }    
