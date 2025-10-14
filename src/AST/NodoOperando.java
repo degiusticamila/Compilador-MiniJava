@@ -1,4 +1,5 @@
 package AST;
 
-public class NodoOperando {
+public abstract class NodoOperando extends NodoExpresionCompuesta{
+
 }

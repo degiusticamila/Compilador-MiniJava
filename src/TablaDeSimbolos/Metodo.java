@@ -1,5 +1,6 @@
 package TablaDeSimbolos;
 
+import AST.NodoBloque;
 import Utils.Token;
 
 import java.util.HashMap;
@@ -10,6 +11,7 @@ public class Metodo {
     private Token nombre;
     private LinkedList<Parametro> parametros;
     private Token modificador;
+    private NodoBloque bloque;
     public Metodo(Token modificador,Tipo tipoRetorno, Token nombreMetodo){
         //parametros = new HashMap<>();
         parametros = new LinkedList<>();
@@ -52,5 +54,10 @@ public class Metodo {
         return nombre;
     }
     public Tipo getTipoRetorno(){ return tipoRetorno;}
-
+    public void insertarBloque(NodoBloque bloque){
+        this.bloque = bloque;
+    }
+    public NodoBloque getBloque(){
+        return bloque;
+    }
 }

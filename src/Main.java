@@ -26,7 +26,7 @@ public class Main {
         try {
             analisisSintactico();
             analizadorSintactico.consolidarTS();
-           // TablaSimbolos.getInstance().imprimirDetalleClases();
+           TablaSimbolos.getInstance().imprimirDetalleClases();
             System.out.println("[SinErrores]");
         } catch (ExcepcionLexica e) {
             System.out.println("Error Lexico: " + e.getMessage());

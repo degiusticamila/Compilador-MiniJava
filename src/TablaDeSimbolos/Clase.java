@@ -288,6 +288,9 @@ public class Clase {
                 } else {
                     System.out.println("       ▹ (sin parámetros)");
                 }
+                if(m.getBloque() != null){
+                    m.getBloque().imprimir(" ");
+                }
             }
         }
         if (constructor != null) {

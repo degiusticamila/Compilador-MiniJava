@@ -1,4 +1,8 @@
 package AST;
 
-public class NodoIfSolo {
+public class NodoIfSolo extends NodoSentencia{
+    @Override
+    public void imprimir(String prefijo) {
+
+    }
 }

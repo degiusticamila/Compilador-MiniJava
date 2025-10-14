@@ -1,4 +1,4 @@
 package AST;
 
-abstract class NodoExpCompuesta extends NodoExpresion{
+public abstract class NodoExpresionCompuesta extends NodoExpresion{
 }

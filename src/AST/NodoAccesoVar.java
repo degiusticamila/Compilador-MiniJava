@@ -2,9 +2,10 @@ package AST;
 
 import Utils.Token;
 
-public class NodoIntLiteral extends NodoOperando{
+public class NodoAccesoVar extends NodoOperando{
     Token nombre;
-    public NodoIntLiteral(Token nombre){
+
+    public NodoAccesoVar(Token nombre){
         this.nombre = nombre;
     }
 
@@ -22,9 +23,7 @@ public class NodoIntLiteral extends NodoOperando{
     public void setLadoDerecho(NodoExpresion nodoExpresion) {
 
     }
-
-    @Override
     public void imprimir(String prefijo) {
-            System.out.println(prefijo + "IntLiteral: " + nombre.getLexema());
+        System.out.println(prefijo + "Var: " + nombre.getLexema());
     }
 }

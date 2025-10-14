@@ -1,4 +1,5 @@
 package AST;
 
-public class NodoSentencia {
+public abstract class NodoSentencia {
+    public abstract void imprimir(String prefijo);
 }

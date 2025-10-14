@@ -1,4 +1,25 @@
 package AST;
 
-public class NodoExpUnaria {
+import Utils.Token;
+
+public class NodoExpUnaria extends NodoExpresion{
+    @Override
+    public void setOperador(Token operador) {
+
+    }
+
+    @Override
+    public void setLadoIzquierdo(NodoExpresion nodoExpresion) {
+
+    }
+
+    @Override
+    public void setLadoDerecho(NodoExpresion nodoExpresion) {
+
+    }
+
+    @Override
+    public void imprimir(String prefijo) {
+
+    }
 }

@@ -1,4 +1,8 @@
 package AST;
 
-public class NodoReturn {
+public class NodoReturn extends NodoSentencia{
+    @Override
+    public void imprimir(String prefijo) {
+
+    }
 }
