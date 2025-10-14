@@ -388,8 +388,9 @@ public class AnalizadorSintactico {
             return nodoSentencia;
         }
         else if(primeros.estaEnPrimeros(NoTerminales.Return, tokenActual.getId())){
-            Return();
+            NodoSentencia nodoSentencia = Return();
             match(";");
+            return nodoSentencia;
         }
         else if(primeros.estaEnPrimeros(NoTerminales.If, tokenActual.getId())){
             If();
@@ -423,9 +424,11 @@ public class AnalizadorSintactico {
         nodoExpresionAsignacion.setLadoDerecho(expresionCompuesta());
         return nodoAsignacion;
     }
-    private void Return() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private NodoSentencia Return() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+        NodoSentencia nodoReturn = new NodoReturn(tokenActual);
         match("return");
-        expresionOpcional();
+        expresionOpcional(); //de momento return vacio.
+        return nodoReturn;
     }
     private void expresionOpcional() throws ExcepcionLexica, IOException, ExcepcionSintactica {
         if(primeros.estaEnPrimeros(NoTerminales.Expresion, tokenActual.getId())){
