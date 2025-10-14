@@ -595,12 +595,14 @@ public class AnalizadorSintactico {
     }
     private NodoOperando primitivo() throws ExcepcionSintactica, ExcepcionLexica, IOException {
         if(tokenActual.getId().equals("true")){
+            NodoBoolean nodoBooleanTrue = new NodoBoolean(tokenActual);
             match("true");
-            return null;
+            return nodoBooleanTrue;
         }
         else if(tokenActual.getId().equals("false")){
+            NodoBoolean nodoBooleanFalse = new NodoBoolean(tokenActual);
             match("false");
-            return null;
+            return nodoBooleanFalse;
         }
         else if(tokenActual.getId().equals("intLiteral")){
             NodoIntLiteral nodoIntLiteral = new NodoIntLiteral(tokenActual);
@@ -608,12 +610,14 @@ public class AnalizadorSintactico {
             return nodoIntLiteral;
         }
         else if(tokenActual.getId().equals("charLiteral")){
+            NodoCharLiteral nodoCharLiteral = new NodoCharLiteral(tokenActual);
             match("charLiteral");
-            return null;
+            return nodoCharLiteral;
         }
         else if(tokenActual.getId().equals("null")){
+            NodoNull nodoNull = new NodoNull(tokenActual);
             match("null");
-            return null;
+            return nodoNull;
         }
         else {
             throw new ExcepcionSintactica(tokenActual,"primitivo");

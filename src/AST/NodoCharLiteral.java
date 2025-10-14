@@ -3,6 +3,11 @@ package AST;
 import Utils.Token;
 
 public class NodoCharLiteral extends NodoOperando{
+    private Token nombre;
+
+    public NodoCharLiteral(Token nombre){
+        this.nombre = nombre;
+    }
     @Override
     public void setOperador(Token operador) {
 
@@ -20,6 +25,6 @@ public class NodoCharLiteral extends NodoOperando{
 
     @Override
     public void imprimir(String prefijo) {
-
+        System.out.println(prefijo + "CharLiteral: " + nombre.getLexema());
     }
 }
