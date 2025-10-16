@@ -1,9 +1,8 @@
 package TablaDeSimbolos;
 
-import AST.NodoBloque;
+import AST.NodosSentencia.NodoBloque;
 import Utils.Token;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 
 public class Metodo {

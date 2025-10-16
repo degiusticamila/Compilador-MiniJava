@@ -1,5 +1,6 @@
 package TablaDeSimbolos;
 
+import AST.NodosSentencia.NodoBloque;
 import Utils.Token;
 
 import java.util.HashMap;
@@ -9,6 +10,7 @@ import java.util.LinkedList;
 public class Constructor {
     private Token nombre;
     private LinkedList<Parametro> parametros;
+    private NodoBloque bloque;
     public Constructor(Token nombre){
         parametros = new LinkedList<>();
         this.nombre = nombre;
@@ -40,5 +42,9 @@ public class Constructor {
     }
     public String toString() {
         return ("("+nombre.toString()+")");
+    }
+
+    public void insertarBloque(NodoBloque bloque) {
+        this.bloque = bloque;
     }
 }

@@ -1,6 +1,8 @@
 package Sintactico;
-
 import AST.*;
+import AST.NodosOperando.*;
+import AST.NodosExpresion.*;
+import AST.NodosSentencia.*;
 import Lexico.AnalizadorLexico;
 import Lexico.ExcepcionLexica;
 import TablaDeSimbolos.*;
@@ -16,7 +18,6 @@ public class AnalizadorSintactico {
     private TablaSimbolos tablaSimbolos;
     public AnalizadorSintactico(AnalizadorLexico analizadorLexico) throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
         primeros = new Primeros();
-        //tablaSimbolos = new TablaSimbolos();
         TablaSimbolos.resetInstance();
         tablaSimbolos = TablaSimbolos.getInstance();
         this.analizadorLexico = analizadorLexico;
@@ -70,7 +71,6 @@ public class AnalizadorSintactico {
     }
     private void interfaz() throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
             //modificadorOpcionalInterfaz();
-
             match("interface");
             match("idClase");
             tipoParametricoOpcional();
@@ -78,7 +78,6 @@ public class AnalizadorSintactico {
             match("{");
             listaMiembrosInterfaz();
             match("}");
-
     }
     private void modificadorOpcionalInterfaz() throws ExcepcionLexica, IOException, ExcepcionSintactica {
         if(tokenActual.getId().equals("public")){
@@ -136,8 +135,6 @@ public class AnalizadorSintactico {
             match("idClase");
             return nombreHerencia;
 
-
-
             //GENERICIDAD E2
             //tipoParametricoOpcional();
         }
@@ -175,7 +172,6 @@ public class AnalizadorSintactico {
             match("idMetVar");
             miembroResto(nombreIdMetVar, tokenTipo);
 
-
         }
         else if(tokenActual.getId().equals("void")){
             match("void");
@@ -189,7 +185,8 @@ public class AnalizadorSintactico {
             match("idMetVar");
             argsFormales(tokenMetodo);
             tablaSimbolos.getClaseActual().insertarMetodo(tokenMetodo,m);
-            bloqueOpcional(m);
+            NodoBloque bloque = bloqueOpcional(m);
+            tablaSimbolos.getMetodoActual().insertarBloque(bloque);
         }
         else if(primeros.estaEnPrimeros(NoTerminales.ModificadorOpcional,tokenActual.getId())){
 
@@ -199,7 +196,6 @@ public class AnalizadorSintactico {
             Tipo tipo = construirTipoDesdeToken(tokenTipo);
 
             Token tokenMetodo = tokenActual;
-
             Metodo m = new Metodo(modificador,tipo,tokenMetodo);
             tablaSimbolos.setMetodoActual(m);
             //GENERICIDAD E2
@@ -208,7 +204,8 @@ public class AnalizadorSintactico {
             match("idMetVar");
             argsFormales(tokenMetodo);
             tablaSimbolos.getClaseActual().insertarMetodo(tokenMetodo,m);
-            bloqueOpcional(m);
+            NodoBloque bloque = bloqueOpcional(m);
+            tablaSimbolos.getMetodoActual().insertarBloque(bloque);
         }
         else if(primeros.estaEnPrimeros(NoTerminales.Constructor, tokenActual.getId())){
             constructor();
@@ -228,10 +225,12 @@ public class AnalizadorSintactico {
             Token tokenMetodo = tokenActual;
             Tipo tipo = construirTipoDesdeToken(tokenTipo);
             Metodo m = new Metodo(modificador,tipo,nombreIdMetVar);
+
             tablaSimbolos.setMetodoActual(m);
             argsFormales(tokenMetodo);
             tablaSimbolos.getClaseActual().insertarMetodo(nombreIdMetVar,m);
-            bloqueOpcional(m);
+            NodoBloque bloque = bloqueOpcional(m);
+            tablaSimbolos.getMetodoActual().insertarBloque(bloque);
         }
         //ATRIBUTOS INICIALIZADOS
         else if (primeros.estaEnPrimeros(NoTerminales.OperadorAsignacion, tokenActual.getId())){
@@ -250,7 +249,8 @@ public class AnalizadorSintactico {
         match("idClase");
         tablaSimbolos.getClaseActual().insertarConstructor(tokenConstructor,c);
         argsFormales(tokenConstructor);
-        bloque();
+        NodoBloque bloque = bloque();
+        tablaSimbolos.getClaseActual().getConstructor().insertarBloque(bloque);
     }
     private Token tipoMetodo() throws ExcepcionLexica, IOException, ExcepcionSintactica {
         if(primeros.estaEnPrimeros(NoTerminales.Tipo,tokenActual.getId())){
@@ -268,12 +268,12 @@ public class AnalizadorSintactico {
     private Token tipo() throws ExcepcionSintactica, ExcepcionLexica, IOException {
         if(primeros.estaEnPrimeros(NoTerminales.TipoPrimitivo, tokenActual.getId())){
             Token tipoPrimitivo = tipoPrimitivo();
-            return tipoPrimitivo; //new
+            return tipoPrimitivo;
         }
         else if(tokenActual.getId().equals("idClase")){
-            Token tipoClase = tokenActual; //new
+            Token tipoClase = tokenActual;
             match("idClase");
-            return tipoClase; //new
+            return tipoClase;
         }
         else{
             throw new ExcepcionSintactica(tokenActual,  "TipoPrimitivo | identificador de clase");
@@ -282,16 +282,15 @@ public class AnalizadorSintactico {
     private Token tipoPrimitivo() throws ExcepcionSintactica, ExcepcionLexica, IOException {
         if(tokenActual.getId().equals("boolean")){
             match("boolean");
-            return new Token(tokenActual.getId(),"boolean",0); // new
+            return new Token(tokenActual.getId(),"boolean",0);
         }
-
         else if(tokenActual.getId().equals("char")){
             match("char");
-            return new Token(tokenActual.getId(),"char",0); //new
+            return new Token(tokenActual.getId(),"char",0);
         }
         else if(tokenActual.getId().equals("int")){
             match("int");
-            return new Token(tokenActual.getId(),"int",0); //new
+            return new Token(tokenActual.getId(),"int",0);
         }
         else{
             throw new ExcepcionSintactica(tokenActual,"boolean | char | int");
@@ -313,7 +312,7 @@ public class AnalizadorSintactico {
             argFormal(construtorOmetodo);
             listaArgsFormalesResto(construtorOmetodo);
         }
-        else{ /* $ dado que listaArgsFormalesResto tiene e */}
+        else{ /* $ */}
     }
 
     private void listaArgsFormalesResto(Token construtorOmetodo) throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
@@ -333,78 +332,84 @@ public class AnalizadorSintactico {
         if(construtorOmetodo.getId().equals("idClase")){
             //es un constructor
             tablaSimbolos.getClaseActual().getConstructor().insertarParametro(nombreParametro.getLexema(), p, nombreParametro.getNroLinea());
-            tablaSimbolos.getClaseActual().getConstructor().getParametros(); //
         }
         else{ //es un metodo
             tablaSimbolos.getMetodoActual().insertarParametro(nombreParametro.getLexema(), p, nombreParametro.getNroLinea());
-            tablaSimbolos.getMetodoActual().getParametros(); //
         }
         match("idMetVar");
     }
-    private void bloqueOpcional(Metodo m) throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
+    private NodoBloque bloqueOpcional(Metodo m) throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
         if(primeros.estaEnPrimeros(NoTerminales.Bloque, tokenActual.getId())){
             if(m.getModificador() != null && m.getModificador().getLexema().equals("abstract")){
                 throw new ExcepcionSemantica(m.getNombreMetodo().getLexema(),m.getNombreMetodo().getNroLinea(), "Método abstracto con cuerpo");
             }
-            bloque();
+            NodoBloque bloque = bloque();
+            return bloque;
         }
         else if(tokenActual.getId().equals(";")){
             match(";");
             if((m.getModificador() == null) || !m.getModificador().getLexema().equals("abstract")){
                 throw new ExcepcionSemantica(m.getNombreMetodo().getLexema(), m.getNombreMetodo().getNroLinea(),"Metodo sin cuerpo");
             }
+            return new NodoBloqueVacio();
         }
         else{
             throw new ExcepcionSintactica(tokenActual,"Bloque | ;");
         }
     }
-    private void bloque() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private NodoBloque bloque() throws ExcepcionLexica, IOException, ExcepcionSintactica {
         match("{");
         NodoBloque bloque = new NodoBloque();
-        tablaSimbolos.getMetodoActual().insertarBloque(bloque);
         listaSentencias(bloque);
         match("}");
+        return bloque;
     }
-    private void listaSentencias(NodoBloque bloque) throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private NodoSentencia listaSentencias(NodoBloque bloque) throws ExcepcionLexica, IOException, ExcepcionSintactica {
         if(primeros.estaEnPrimeros(NoTerminales.Sentencia, tokenActual.getId())){
-            bloque.getSentencias().add(sentencia());
+            NodoSentencia sentencia = sentencia();
+            bloque.getSentencias().add(sentencia);
             listaSentencias(bloque);
+            return sentencia;
         }
         else{/* $ */}
+        return new NodoSentenciaVacia();
     }
     private NodoSentencia sentencia() throws ExcepcionLexica, IOException, ExcepcionSintactica {
 
         if(tokenActual.getId().equals(";")){
             match(";");
+            return new NodoSentenciaVacia();
         }
         else if(primeros.estaEnPrimeros(NoTerminales.Expresion, tokenActual.getId())){
-            NodoSentencia nodoSentencia = expresion();
+            expresion();
             match(";");
-            return nodoSentencia;
+            return new NodoSentenciaVacia();
         }
         else if(primeros.estaEnPrimeros(NoTerminales.VarLocal, tokenActual.getId())){
-            NodoSentencia nodoSentencia = varLocal();
+            varLocal();
             match(";");
-            return nodoSentencia;
+            return new NodoSentenciaVacia();
         }
         else if(primeros.estaEnPrimeros(NoTerminales.Return, tokenActual.getId())){
-            NodoSentencia nodoSentencia = Return();
+            NodoSentencia nodoSentenciaReturn = Return();
             match(";");
-            return nodoSentencia;
+            return nodoSentenciaReturn;
         }
         else if(primeros.estaEnPrimeros(NoTerminales.If, tokenActual.getId())){
-            If();
+            NodoSentencia nodoSentenciaIf = If();
+            return nodoSentenciaIf;
         }
         else if(primeros.estaEnPrimeros(NoTerminales.While, tokenActual.getId())){
-            While();
+            NodoSentencia nodoSentenciaWhile = While();
+            return nodoSentenciaWhile;
         }
         else if(primeros.estaEnPrimeros(NoTerminales.Bloque, tokenActual.getId())){
-            bloque();
+            NodoBloque bloque = bloque();
+            return bloque;
         }
         else{
             throw new ExcepcionSintactica(tokenActual, "; | Expresion | Variable local| return | if | while | bloque");
         }
-        return null;
     }
     private NodoSentencia varLocal() throws ExcepcionLexica, IOException, ExcepcionSintactica {
 
@@ -412,14 +417,15 @@ public class AnalizadorSintactico {
 
         //OPCIONAL GENERICIDAD
         tipoParametricoOpcional();
-        NodoOperando nodoVar = new NodoVar(tokenActual);
+        NodoSentencia nodoVar = new NodoVarLocal(tokenActual);
         match("idMetVar");
+
         NodoAsignacion nodoAsignacion = new NodoAsignacion();
         NodoExpresion nodoExpresionAsignacion = new NodoExpAsignacion();
         nodoAsignacion.setNodoExpAsignacion(nodoExpresionAsignacion);
 
         nodoExpresionAsignacion.setOperador(tokenActual);
-        nodoExpresionAsignacion.setLadoIzquierdo(nodoVar);
+        //nodoExpresionAsignacion.setLadoIzquierdo(nodoVar);
         match("=");
         nodoExpresionAsignacion.setLadoDerecho(expresionCompuesta());
         return nodoAsignacion;
@@ -427,55 +433,64 @@ public class AnalizadorSintactico {
     private NodoSentencia Return() throws ExcepcionLexica, IOException, ExcepcionSintactica {
         NodoSentencia nodoReturn = new NodoReturn(tokenActual);
         match("return");
-        expresionOpcional(); //de momento return vacio.
-        return nodoReturn;
+        expresionOpcional();
+        return nodoReturn; //de momento return vacio, manejar los demas.
     }
-    private void expresionOpcional() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private NodoExpresion expresionOpcional() throws ExcepcionLexica, IOException, ExcepcionSintactica {
         if(primeros.estaEnPrimeros(NoTerminales.Expresion, tokenActual.getId())){
-            expresion();
+            NodoExpresion nodoExpresion = expresion();
+            return nodoExpresion;
         }
-        else{/* $ */}
+        else{
+            return new NodoExpresionVacia();
+        }
     }
-    private void If() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private NodoSentencia If() throws ExcepcionLexica, IOException, ExcepcionSintactica {
         match("if");
         match("(");
-        expresion();
+        NodoExpresion nodoExpresionIf = expresion();
         match(")");
-        sentencia();
-        IfResto();
+        NodoSentencia nodoSentenciaIf = sentencia();
+        NodoSentencia nodoSentenciaElse = IfResto();
+        NodoSentencia nodoIf = new NodoIfSolo(nodoExpresionIf, nodoSentenciaIf, nodoSentenciaElse);
+        return nodoIf;
     }
-    private void IfResto() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private NodoSentencia IfResto() throws ExcepcionLexica, IOException, ExcepcionSintactica {
         if(tokenActual.getId().equals("else")){
             match("else");
-            sentencia();
+            NodoSentencia nodoSentenciaElse = sentencia();
+            return nodoSentenciaElse;
         }
-        else{/* $ */}
+        else{
+            return new NodoSentenciaVacia();
+        }
     }
-    private void While() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private NodoSentencia While() throws ExcepcionLexica, IOException, ExcepcionSintactica {
         match("while");
         match("(");
-        expresion();
+        NodoExpresion expresionWhile = expresion();
         match(")");
-        sentencia();
+        NodoSentencia sentenciaWhile = sentencia();
+        NodoSentencia nodoWhile = new NodoWhile(expresionWhile, sentenciaWhile);
+        return nodoWhile;
     }
-    private NodoSentencia expresion() throws ExcepcionLexica, IOException, ExcepcionSintactica {
-        NodoAsignacion nodoAsignacion = new NodoAsignacion();
+    private NodoExpresion expresion() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+       // NodoAsignacion nodoAsignacion = new NodoAsignacion();
         NodoExpresion nodoExpresionAsignacion = new NodoExpAsignacion();
 
-        nodoExpresionAsignacion.setLadoIzquierdo(expresionCompuesta());
-        //expresionCompuesta(); //Es de mi gramatica,se hace en la liena de arriba
-        //LADO IZQUIEROD CREO QUE VA POR ACA
+        //nodoExpresionAsignacion.setLadoIzquierdo(expresionCompuesta());
+        expresionCompuesta();
         expresionResto(nodoExpresionAsignacion);
-        nodoAsignacion.setNodoExpAsignacion(nodoExpresionAsignacion);
-        return nodoAsignacion;
+       // nodoAsignacion.setNodoExpAsignacion(nodoExpresionAsignacion);
+      //  return nodoAsignacion;
+
+        return new NodoExpresionVacia();
     }
     private NodoExpresion expresionResto(NodoExpresion nodoExpresionAsignacion) throws ExcepcionLexica, IOException, ExcepcionSintactica {
-
         if(primeros.estaEnPrimeros(NoTerminales.OperadorAsignacion, tokenActual.getId())){
             Token operador = operadorAsignacion();
             nodoExpresionAsignacion.setOperador(operador);
             NodoExpresion nodoExpresionCompuesta = expresionCompuesta();
-            System.out.println("Nodo del lado derecho"+nodoExpresionCompuesta);
             nodoExpresionAsignacion.setLadoDerecho(nodoExpresionCompuesta);
         }
         else{/* $ */}
@@ -549,11 +564,17 @@ public class AnalizadorSintactico {
             throw new ExcepcionSintactica(tokenActual, "Operador Binario");
         }
     }
-    private NodoExpresion expresionBasica() throws ExcepcionSintactica, ExcepcionLexica, IOException {
+    private NodoExpresionCompuesta expresionBasica() throws ExcepcionSintactica, ExcepcionLexica, IOException {
         if(primeros.estaEnPrimeros(NoTerminales.OperadorUnario, tokenActual.getId())){
-            operadorUnario();
-            operando();
-            return null;
+            Token operadorUnario = operadorUnario();
+            NodoOperando nodoOperando = operando();
+            NodoExpUnaria nodoExpresionUnaria = new NodoExpUnaria();
+            nodoExpresionUnaria.setOperador(operadorUnario);
+            nodoExpresionUnaria.setOperando(nodoOperando);
+           // NodoOperadorUnario nodoOperadorUnario = new NodoOperadorUnario(nodoExpresionUnaria);
+            //return nodoOperadorUnario;
+            return nodoExpresionUnaria;
+
         }
         else if(primeros.estaEnPrimeros(NoTerminales.Operando, tokenActual.getId())){
             NodoExpresionCompuesta nodoExpresionCompuesta = operando();
@@ -563,21 +584,31 @@ public class AnalizadorSintactico {
             throw new ExcepcionSintactica(tokenActual,  "operador unario | operando");
         }
     }
-    private void operadorUnario() throws ExcepcionSintactica, ExcepcionLexica, IOException {
+    private Token operadorUnario() throws ExcepcionSintactica, ExcepcionLexica, IOException {
         if(tokenActual.getId().equals("+")){
+            Token operadorMas = tokenActual;
             match("+");
+            return operadorMas;
         }
         else if(tokenActual.getId().equals("++")){
+            Token operadorMasMas = tokenActual;
             match("++");
+            return operadorMasMas;
         }
         else if(tokenActual.getId().equals("-")){
+            Token operadorMenos = tokenActual;
             match("-");
+            return operadorMenos;
         }
         else if(tokenActual.getId().equals("--")){
+            Token operadorMenosMenos = tokenActual;
             match("--");
+            return operadorMenosMenos;
         }
         else if(tokenActual.getId().equals("!")){
+            Token operadorNegacion =  tokenActual;
             match("!");
+            return operadorNegacion;
         }
         else{
             throw new ExcepcionSintactica(tokenActual,  "operador unario");
