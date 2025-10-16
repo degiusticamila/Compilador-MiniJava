@@ -95,7 +95,6 @@ public class AnalizadorSintactico {
        }
     }
     private void miembrosInterfaz() throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
-        //Para el logro de visibilidad agregar mod interfaz
         modificadorOpcional();
         tipoMetodo();
         tipoParametricoOpcional();
@@ -109,7 +108,7 @@ public class AnalizadorSintactico {
             match("idClase");
             tipoParametricoOpcional();
         }
-        else{/* $*/}
+        else{/* $ */}
     }
     private Token modificadorOpcional() throws ExcepcionLexica, IOException, ExcepcionSintactica {
         if(tokenActual.getId().equals("abstract")){
@@ -189,12 +188,9 @@ public class AnalizadorSintactico {
             tablaSimbolos.getMetodoActual().insertarBloque(bloque);
         }
         else if(primeros.estaEnPrimeros(NoTerminales.ModificadorOpcional,tokenActual.getId())){
-
             Token modificador = modificadorOpcional();
             Token tokenTipo = tipoMetodo();
-
             Tipo tipo = construirTipoDesdeToken(tokenTipo);
-
             Token tokenMetodo = tokenActual;
             Metodo m = new Metodo(modificador,tipo,tokenMetodo);
             tablaSimbolos.setMetodoActual(m);
@@ -210,7 +206,7 @@ public class AnalizadorSintactico {
         else if(primeros.estaEnPrimeros(NoTerminales.Constructor, tokenActual.getId())){
             constructor();
         }
-        else{ /* $  no hago nada pq modificadorOpcional tiene a e en sus primeros! */}
+        else{ /* $ */}
     }
     private void miembroResto(Token nombreIdMetVar, Token tokenTipo) throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
         if(tokenActual.getId().equals(";")){
@@ -414,8 +410,6 @@ public class AnalizadorSintactico {
     private NodoSentencia varLocal() throws ExcepcionLexica, IOException, ExcepcionSintactica {
 
         match("var");
-
-        //OPCIONAL GENERICIDAD
         tipoParametricoOpcional();
         NodoSentencia nodoVar = new NodoVarLocal(tokenActual);
         match("idMetVar");
@@ -431,10 +425,11 @@ public class AnalizadorSintactico {
         return nodoAsignacion;
     }
     private NodoSentencia Return() throws ExcepcionLexica, IOException, ExcepcionSintactica {
-        NodoSentencia nodoReturn = new NodoReturn(tokenActual);
+        NodoReturn nodoReturn = new NodoReturn(tokenActual);
         match("return");
-        expresionOpcional();
-        return nodoReturn; //de momento return vacio, manejar los demas.
+        NodoExpresion expresionReturn = expresionOpcional();
+        nodoReturn.setExpresionOpcional(expresionReturn);
+        return nodoReturn; 
     }
     private NodoExpresion expresionOpcional() throws ExcepcionLexica, IOException, ExcepcionSintactica {
         if(primeros.estaEnPrimeros(NoTerminales.Expresion, tokenActual.getId())){
