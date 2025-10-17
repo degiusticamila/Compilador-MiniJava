@@ -1,5 +1,4 @@
 package Sintactico;
-import AST.*;
 import AST.NodosOperando.*;
 import AST.NodosExpresion.*;
 import AST.NodosSentencia.*;
@@ -377,9 +376,10 @@ public class AnalizadorSintactico {
             return new NodoSentenciaVacia();
         }
         else if(primeros.estaEnPrimeros(NoTerminales.Expresion, tokenActual.getId())){
-            expresion();
+            NodoExpresion nodoExpresion = expresion();
+            NodoSentenciaExpresion nodoSentenciaExpresion = new NodoSentenciaExpresion(nodoExpresion);
             match(";");
-            return new NodoSentenciaVacia();
+            return nodoSentenciaExpresion;
         }
         else if(primeros.estaEnPrimeros(NoTerminales.VarLocal, tokenActual.getId())){
             varLocal();
@@ -429,7 +429,7 @@ public class AnalizadorSintactico {
         match("return");
         NodoExpresion expresionReturn = expresionOpcional();
         nodoReturn.setExpresionOpcional(expresionReturn);
-        return nodoReturn; 
+        return nodoReturn;
     }
     private NodoExpresion expresionOpcional() throws ExcepcionLexica, IOException, ExcepcionSintactica {
         if(primeros.estaEnPrimeros(NoTerminales.Expresion, tokenActual.getId())){
@@ -447,7 +447,7 @@ public class AnalizadorSintactico {
         match(")");
         NodoSentencia nodoSentenciaIf = sentencia();
         NodoSentencia nodoSentenciaElse = IfResto();
-        NodoSentencia nodoIf = new NodoIfSolo(nodoExpresionIf, nodoSentenciaIf, nodoSentenciaElse);
+        NodoSentencia nodoIf = new NodoIf(nodoExpresionIf, nodoSentenciaIf, nodoSentenciaElse);
         return nodoIf;
     }
     private NodoSentencia IfResto() throws ExcepcionLexica, IOException, ExcepcionSintactica {
@@ -474,12 +474,12 @@ public class AnalizadorSintactico {
         NodoExpresion nodoExpresionAsignacion = new NodoExpAsignacion();
 
         //nodoExpresionAsignacion.setLadoIzquierdo(expresionCompuesta());
-        expresionCompuesta();
+        NodoExpresion nodoExpresionCompuesta = expresionCompuesta();
         expresionResto(nodoExpresionAsignacion);
        // nodoAsignacion.setNodoExpAsignacion(nodoExpresionAsignacion);
       //  return nodoAsignacion;
 
-        return new NodoExpresionVacia();
+        return nodoExpresionCompuesta;
     }
     private NodoExpresion expresionResto(NodoExpresion nodoExpresionAsignacion) throws ExcepcionLexica, IOException, ExcepcionSintactica {
         if(primeros.estaEnPrimeros(NoTerminales.OperadorAsignacion, tokenActual.getId())){
@@ -559,49 +559,45 @@ public class AnalizadorSintactico {
             throw new ExcepcionSintactica(tokenActual, "Operador Binario");
         }
     }
-    private NodoExpresionCompuesta expresionBasica() throws ExcepcionSintactica, ExcepcionLexica, IOException {
+    private NodoExpresion expresionBasica() throws ExcepcionSintactica, ExcepcionLexica, IOException {
         if(primeros.estaEnPrimeros(NoTerminales.OperadorUnario, tokenActual.getId())){
-            Token operadorUnario = operadorUnario();
-            NodoOperando nodoOperando = operando();
-            NodoExpUnaria nodoExpresionUnaria = new NodoExpUnaria();
-            nodoExpresionUnaria.setOperador(operadorUnario);
-            nodoExpresionUnaria.setOperando(nodoOperando);
-           // NodoOperadorUnario nodoOperadorUnario = new NodoOperadorUnario(nodoExpresionUnaria);
-            //return nodoOperadorUnario;
-            return nodoExpresionUnaria;
-
+            NodoOperadorUnario operadorUnario = operadorUnario();
+            NodoOperando operando = operando();
+            operadorUnario.setLadoDerecho(operando);
+            //NodoExpresionBasica nodoExpresionBasica = new NodoExpresionBasica(operadorUnario,operando);
+            return operadorUnario;
         }
         else if(primeros.estaEnPrimeros(NoTerminales.Operando, tokenActual.getId())){
-            NodoExpresionCompuesta nodoExpresionCompuesta = operando();
-            return nodoExpresionCompuesta;
+            NodoOperando nodoOperando = operando();
+            return nodoOperando;
         }
         else{
             throw new ExcepcionSintactica(tokenActual,  "operador unario | operando");
         }
     }
-    private Token operadorUnario() throws ExcepcionSintactica, ExcepcionLexica, IOException {
+    private NodoOperadorUnario operadorUnario() throws ExcepcionSintactica, ExcepcionLexica, IOException {
         if(tokenActual.getId().equals("+")){
-            Token operadorMas = tokenActual;
+            NodoOperadorUnario operadorMas = new NodoOperadorUnario(tokenActual,new NodoExpresionVacia());
             match("+");
             return operadorMas;
         }
         else if(tokenActual.getId().equals("++")){
-            Token operadorMasMas = tokenActual;
+            NodoOperadorUnario operadorMasMas = new NodoOperadorUnario(tokenActual,new NodoExpresionVacia());
             match("++");
             return operadorMasMas;
         }
         else if(tokenActual.getId().equals("-")){
-            Token operadorMenos = tokenActual;
+            NodoOperadorUnario operadorMenos = new NodoOperadorUnario(tokenActual,new NodoExpresionVacia());
             match("-");
             return operadorMenos;
         }
         else if(tokenActual.getId().equals("--")){
-            Token operadorMenosMenos = tokenActual;
+            NodoOperadorUnario operadorMenosMenos = new NodoOperadorUnario(tokenActual,new NodoExpresionVacia());
             match("--");
             return operadorMenosMenos;
         }
         else if(tokenActual.getId().equals("!")){
-            Token operadorNegacion =  tokenActual;
+            NodoOperadorUnario operadorNegacion = new NodoOperadorUnario(tokenActual,new NodoExpresionVacia());
             match("!");
             return operadorNegacion;
         }
@@ -668,11 +664,11 @@ public class AnalizadorSintactico {
         NodoOperando nodoOperando;
         if(tokenActual.getId().equals("this")){
             match("this");
-            return null;
+            return new NodoOperandoVacio();
         }
         else if(tokenActual.getId().equals("stringLiteral")){
             match("stringLiteral");
-            return null;
+            return new NodoOperandoVacio();
         }
         else if(tokenActual.getId().equals("idMetVar")){
             nodoOperando = new NodoAccesoVar(tokenActual);
@@ -682,15 +678,15 @@ public class AnalizadorSintactico {
         }
         else if(primeros.estaEnPrimeros(NoTerminales.LlamadaConstructor, tokenActual.getId())){
             llamadaConstructor();
-            return null;
+            return new NodoOperandoVacio();
         }
         else if(primeros.estaEnPrimeros(NoTerminales.LlamadaMetodoEstatico, tokenActual.getId())){
             llamadaMetodoEstatico();
-            return null;
+            return new NodoOperandoVacio();
         }
         else if(primeros.estaEnPrimeros(NoTerminales.ExpresionParentizada, tokenActual.getId())){
             expresionParentizada();
-            return null;
+            return new NodoOperandoVacio();
         }
         else{
             throw new ExcepcionSintactica(tokenActual, "identificador metodo variable | constructor | llamada metodo estatico | expresion parentizada");

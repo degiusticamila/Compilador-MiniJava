@@ -12,6 +12,14 @@ public class NodoWhile extends NodoSentencia {
     }
     @Override
     public void imprimir(String prefijo) {
-        System.out.println(prefijo+"while");
+        System.out.println(prefijo+"While:");
+        if(expresion != null){
+            System.out.println(prefijo+ " Condicion:");
+            expresion.imprimir(prefijo);
+        }
+        if(sentencia != null){
+            System.out.println(prefijo+ " Cuerpo:");
+            sentencia.imprimir(prefijo);
+        }
     }
 }

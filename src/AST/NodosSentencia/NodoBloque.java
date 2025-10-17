@@ -15,8 +15,8 @@ public class NodoBloque extends NodoSentencia {
     public void imprimir(String prefijo){
         System.out.println(prefijo+ "Bloque {");
         for(NodoSentencia nodo: sentencias){
-            nodo.imprimir(prefijo +"}");
+            nodo.imprimir(prefijo +" ");
         }
+        System.out.println(prefijo+ "}");
     }
-
 }

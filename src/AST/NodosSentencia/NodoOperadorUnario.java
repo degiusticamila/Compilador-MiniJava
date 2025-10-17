@@ -1,15 +1,38 @@
 package AST.NodosSentencia;
 
-import AST.NodosExpresion.NodoExpUnaria;
+import AST.NodosExpresion.NodoExpresion;
+import Utils.Token;
 
-public class NodoOperadorUnario extends NodoSentencia {
-    private NodoExpUnaria nodoExpresionUnaria;
+public class NodoOperadorUnario extends NodoExpresion{
+    private NodoExpresion ladoDerecho;
+    private Token nombre;
 
-    public NodoOperadorUnario(NodoExpUnaria nodoExpresion) {
-        this.nodoExpresionUnaria = nodoExpresion;
+    public NodoOperadorUnario(Token nombre, NodoExpresion ladoDerecho) {
+        this.nombre = nombre;
+        this.ladoDerecho = ladoDerecho;
     }
-    @Override
-    public void imprimir(String prefijo) {
 
+    public void imprimir(String prefijo) {
+        System.out.println(prefijo+ nombre.getLexema());
+        if(ladoDerecho != null){
+            ladoDerecho.imprimir(prefijo+ " ");
+        }
+    }
+    public Token getNombre(){
+        return nombre;
+    }
+
+    @Override
+    public void setOperador(Token operador) {
+
+    }
+
+    @Override
+    public void setLadoIzquierdo(NodoExpresion nodoExpresion) {
+
+    }
+
+    public void setLadoDerecho(NodoExpresion ladoDerecho){
+        this.ladoDerecho = ladoDerecho;
     }
 }
