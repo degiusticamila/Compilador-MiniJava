@@ -382,9 +382,9 @@ public class AnalizadorSintactico {
             return nodoSentenciaExpresion;
         }
         else if(primeros.estaEnPrimeros(NoTerminales.VarLocal, tokenActual.getId())){
-            varLocal();
+            NodoSentencia nodoVarLocal = varLocal();
             match(";");
-            return new NodoSentenciaVacia();
+            return nodoVarLocal;
         }
         else if(primeros.estaEnPrimeros(NoTerminales.Return, tokenActual.getId())){
             NodoSentencia nodoSentenciaReturn = Return();
@@ -411,18 +411,19 @@ public class AnalizadorSintactico {
 
         match("var");
         tipoParametricoOpcional();
-        NodoSentencia nodoVar = new NodoVarLocal(tokenActual);
+        NodoVarLocal nodoVar = new NodoVarLocal(tokenActual);
         match("idMetVar");
 
-        NodoAsignacion nodoAsignacion = new NodoAsignacion();
-        NodoExpresion nodoExpresionAsignacion = new NodoExpAsignacion();
-        nodoAsignacion.setNodoExpAsignacion(nodoExpresionAsignacion);
 
-        nodoExpresionAsignacion.setOperador(tokenActual);
-        //nodoExpresionAsignacion.setLadoIzquierdo(nodoVar);
+        nodoVar.setOperador(tokenActual);
         match("=");
-        nodoExpresionAsignacion.setLadoDerecho(expresionCompuesta());
-        return nodoAsignacion;
+
+        NodoExpresion ladoDerecho = expresionCompuesta();
+        nodoVar.setLadoDerecho(ladoDerecho);
+
+       // NodoExpresion nodoExpresionAsignacion = new NodoExpAsignacion(tokenActual,nodoVar,ladoDerecho);
+      //  NodoAsignacion nodoAsignacion = new NodoAsignacion(nodoExpresionAsignacion);
+        return nodoVar;
     }
     private NodoSentencia Return() throws ExcepcionLexica, IOException, ExcepcionSintactica {
         NodoReturn nodoReturn = new NodoReturn(tokenActual);
@@ -471,11 +472,12 @@ public class AnalizadorSintactico {
     }
     private NodoExpresion expresion() throws ExcepcionLexica, IOException, ExcepcionSintactica {
        // NodoAsignacion nodoAsignacion = new NodoAsignacion();
-        NodoExpresion nodoExpresionAsignacion = new NodoExpAsignacion();
+       // NodoExpresion nodoExpresionAsignacion = new NodoExpAsignacion();
 
         //nodoExpresionAsignacion.setLadoIzquierdo(expresionCompuesta());
         NodoExpresion nodoExpresionCompuesta = expresionCompuesta();
-        expresionResto(nodoExpresionAsignacion);
+       // expresionResto(nodoExpresionAsignacion);
+        expresionResto(nodoExpresionCompuesta);
        // nodoAsignacion.setNodoExpAsignacion(nodoExpresionAsignacion);
       //  return nodoAsignacion;
 

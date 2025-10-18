@@ -9,7 +9,10 @@ public class NodoExpAsignacion extends NodoExpresion {
   private NodoExpresion ladoDerecho;
   private Token operador;
 
-   public NodoExpAsignacion(){
+   public NodoExpAsignacion(Token operador, NodoExpresion ladoIzquierdo, NodoExpresion ladoDerecho) {
+       this.operador = operador;
+       this.ladoIzquierdo = ladoIzquierdo;
+       this.ladoDerecho = ladoDerecho;
 
    }
    public void setOperador(Token operador){

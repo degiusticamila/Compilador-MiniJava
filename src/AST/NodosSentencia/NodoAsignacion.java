@@ -5,8 +5,8 @@ import AST.NodosExpresion.NodoExpresion;
 public class NodoAsignacion extends NodoSentencia {
     NodoExpresion nodoExpAsignacion;
 
-    public NodoAsignacion(){
-
+    public NodoAsignacion(NodoExpresion nodoExpresionAsignacion){
+        nodoExpAsignacion = nodoExpresionAsignacion;
     }
 
     public void setNodoExpAsignacion(NodoExpresion nodoExpAsignacion) {
