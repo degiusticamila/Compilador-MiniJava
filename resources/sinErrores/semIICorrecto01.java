@@ -2,10 +2,10 @@
 
 class A {
     int a1;
-   
+   int a2;
     
      void m1(){
-       var a1 = 4;
+
         ++a1;
          if(3){}
          while(1){}
@@ -14,6 +14,9 @@ class A {
          var a4 = true;
          var a5 = false;
          var a6 = null;
+
+         a1 = 5;
+         a1 = ++a2 + 5;
     }
     
 }    

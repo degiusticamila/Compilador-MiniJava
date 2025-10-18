@@ -26,6 +26,6 @@ public class NodoIntLiteral extends NodoOperando {
 
     @Override
     public void imprimir(String prefijo) {
-            System.out.println(prefijo+ nombre.getLexema());
+            System.out.print(prefijo+ nombre.getLexema());
     }
 }

@@ -1,4 +1,5 @@
 package Sintactico;
+import AST.NodoOperadorBinario;
 import AST.NodosOperando.*;
 import AST.NodosExpresion.*;
 import AST.NodosSentencia.*;
@@ -471,27 +472,20 @@ public class AnalizadorSintactico {
         return nodoWhile;
     }
     private NodoExpresion expresion() throws ExcepcionLexica, IOException, ExcepcionSintactica {
-       // NodoAsignacion nodoAsignacion = new NodoAsignacion();
-       // NodoExpresion nodoExpresionAsignacion = new NodoExpAsignacion();
-
-        //nodoExpresionAsignacion.setLadoIzquierdo(expresionCompuesta());
         NodoExpresion nodoExpresionCompuesta = expresionCompuesta();
-       // expresionResto(nodoExpresionAsignacion);
-        expresionResto(nodoExpresionCompuesta);
-       // nodoAsignacion.setNodoExpAsignacion(nodoExpresionAsignacion);
-      //  return nodoAsignacion;
-
+        nodoExpresionCompuesta = expresionResto(nodoExpresionCompuesta);
         return nodoExpresionCompuesta;
     }
-    private NodoExpresion expresionResto(NodoExpresion nodoExpresionAsignacion) throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private NodoExpresion expresionResto(NodoExpresion ladoIzquierdo) throws ExcepcionLexica, IOException, ExcepcionSintactica {
+        NodoExpresion expresion = ladoIzquierdo;
         if(primeros.estaEnPrimeros(NoTerminales.OperadorAsignacion, tokenActual.getId())){
             Token operador = operadorAsignacion();
-            nodoExpresionAsignacion.setOperador(operador);
-            NodoExpresion nodoExpresionCompuesta = expresionCompuesta();
-            nodoExpresionAsignacion.setLadoDerecho(nodoExpresionCompuesta);
+            NodoExpresion ladoDerecho = expresionCompuesta();
+            expresion = new NodoExpAsignacion(operador,ladoIzquierdo,ladoDerecho);
+            return expresion;
         }
         else{/* $ */}
-        return nodoExpresionAsignacion;
+        return expresion;
     }
     private Token operadorAsignacion() throws ExcepcionSintactica, ExcepcionLexica, IOException {
         if(tokenActual.getId().equals("=")){
@@ -504,58 +498,88 @@ public class AnalizadorSintactico {
         }
     }
     private NodoExpresion expresionCompuesta() throws ExcepcionLexica, IOException, ExcepcionSintactica {
-        NodoExpresion nodoExpresion;
-        nodoExpresion = expresionBasica();
-        expresionCompuestaResto();
+        NodoExpresion nodoExpresion = expresionBasica();
+        nodoExpresion = expresionCompuestaResto(nodoExpresion);
         return nodoExpresion;
     }
-    private void expresionCompuestaResto() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private NodoExpresion expresionCompuestaResto(NodoExpresion ladoIzquierdo) throws ExcepcionLexica, IOException, ExcepcionSintactica {
+        NodoExpresion expresion = ladoIzquierdo;
         if(primeros.estaEnPrimeros(NoTerminales.OperadorBinario, tokenActual.getId())){
-            operadorBinario();
-            expresionBasica();
-            expresionCompuestaResto();
+            Token operadorBinario = operadorBinario();
+            NodoExpresion ladoDerecho = expresionBasica();
+            ladoDerecho = expresionCompuestaResto(ladoDerecho);
+            expresion = new NodoExpresionBinaria(operadorBinario,ladoIzquierdo,ladoDerecho);
+            return expresion;
         }
-        else{/* $ */}
+        else{
+            return expresion;
+        }
     }
-    private void operadorBinario() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private Token operadorBinario() throws ExcepcionLexica, IOException, ExcepcionSintactica {
         if(tokenActual.getId().equals("||")){
+            Token operadorOr = tokenActual;
             match("||");
+            return operadorOr;
         }
         else if(tokenActual.getId().equals("&&")){
+            Token operadorAnd = tokenActual;
             match("&&");
+            return operadorAnd;
         }
         else if(tokenActual.getId().equals("==")){
+            Token operador = tokenActual;
             match("==");
+            return operador;
         }
         else if(tokenActual.getId().equals("!=")){
+            Token operadorDesigual  = tokenActual;
             match("!=");
+            return tokenActual;
         }
         else if(tokenActual.getId().equals("<")){
+            Token operadorMenor = tokenActual;
             match("<");
+            return operadorMenor;
         }
         else if(tokenActual.getId().equals(">")){
+            Token operadorMayor = tokenActual;
             match(">");
+            return operadorMayor;
         }
         else if(tokenActual.getId().equals("<=")){
+            Token menorIgual = tokenActual;
             match("<=");
+            return menorIgual;
         }
         else if(tokenActual.getId().equals(">=")){
+            Token mayorIgual = tokenActual;
             match(">=");
+            return mayorIgual;
         }
         else if(tokenActual.getId().equals("+")){
+            Token operadorMas = tokenActual;
             match("+");
+            return operadorMas;
         }
         else if(tokenActual.getId().equals("-")){
+            Token operadorMenos = tokenActual;
             match("-");
+            return operadorMenos;
         }
         else if(tokenActual.getId().equals("*")){
+            Token operadorMult = tokenActual;
             match("*");
+            return operadorMult;
         }
         else if(tokenActual.getId().equals("/")){
+            Token operadorDiv = tokenActual;
             match("/");
+            return operadorDiv;
         }
         else if(tokenActual.getId().equals("%")){
+            Token operadorPorc = tokenActual;
             match("%");
+            return operadorPorc;
         }
         else{
             throw new ExcepcionSintactica(tokenActual, "Operador Binario");

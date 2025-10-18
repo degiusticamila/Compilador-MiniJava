@@ -31,7 +31,7 @@ public class NodoExpUnaria extends NodoExpresionCompuesta {
     @Override
     public void imprimir(String prefijo) {
         System.out.println(prefijo + "ExpUnaria(" + operador.getLexema() + ")");
-        if (operador != null) System.out.println(operador.getLexema());;
+        if (operador != null) System.out.print(operador.getLexema());;
         if (nodoOperando != null) nodoOperando.imprimir(prefijo + "  R-> ");
     }
 }

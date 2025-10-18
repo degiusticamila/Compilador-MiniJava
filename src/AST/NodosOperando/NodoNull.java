@@ -26,6 +26,6 @@ public class NodoNull extends NodoOperando {
 
     @Override
     public void imprimir(String prefijo) {
-        System.out.println(prefijo + " null "+ nombre.getLexema());
+        System.out.print(prefijo + " null "+ nombre.getLexema());
     }
 }

@@ -26,6 +26,6 @@ public class NodoCharLiteral extends NodoOperando {
 
     @Override
     public void imprimir(String prefijo) {
-        System.out.println(prefijo + "CharLiteral: " + nombre.getLexema());
+        System.out.print(prefijo+nombre.getLexema());
     }
 }

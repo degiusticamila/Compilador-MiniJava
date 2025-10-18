@@ -3,8 +3,6 @@ package AST.NodosExpresion;
 import Utils.Token;
 
 public class NodoExpAsignacion extends NodoExpresion {
-  // private NodoExpresionCompuesta ladoIzquierdo;
-   //private NodoExpresionCompuesta ladoDerecho;
   private NodoExpresion ladoIzquierdo;
   private NodoExpresion ladoDerecho;
   private Token operador;

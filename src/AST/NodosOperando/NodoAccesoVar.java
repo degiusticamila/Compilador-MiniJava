@@ -25,6 +25,6 @@ public class NodoAccesoVar extends NodoOperando {
 
     }
     public void imprimir(String prefijo) {
-        System.out.println(prefijo + nombre.getLexema());
+        System.out.print(prefijo + nombre.getLexema());
     }
 }
