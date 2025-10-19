@@ -10,6 +10,8 @@ import Utils.Primeros;
 import Utils.Token;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AnalizadorSintactico {
     private AnalizadorLexico analizadorLexico;
@@ -415,15 +417,12 @@ public class AnalizadorSintactico {
         NodoVarLocal nodoVar = new NodoVarLocal(tokenActual);
         match("idMetVar");
 
-
         nodoVar.setOperador(tokenActual);
         match("=");
 
         NodoExpresion ladoDerecho = expresionCompuesta();
         nodoVar.setLadoDerecho(ladoDerecho);
 
-       // NodoExpresion nodoExpresionAsignacion = new NodoExpAsignacion(tokenActual,nodoVar,ladoDerecho);
-      //  NodoAsignacion nodoAsignacion = new NodoAsignacion(nodoExpresionAsignacion);
         return nodoVar;
     }
     private NodoSentencia Return() throws ExcepcionLexica, IOException, ExcepcionSintactica {
@@ -590,7 +589,6 @@ public class AnalizadorSintactico {
             NodoOperadorUnario operadorUnario = operadorUnario();
             NodoOperando operando = operando();
             operadorUnario.setLadoDerecho(operando);
-            //NodoExpresionBasica nodoExpresionBasica = new NodoExpresionBasica(operadorUnario,operando);
             return operadorUnario;
         }
         else if(primeros.estaEnPrimeros(NoTerminales.Operando, tokenActual.getId())){
@@ -689,12 +687,14 @@ public class AnalizadorSintactico {
     private NodoOperando primario() throws ExcepcionLexica, IOException, ExcepcionSintactica {
         NodoOperando nodoOperando;
         if(tokenActual.getId().equals("this")){
+            NodoOperando nodoOp = new NodoThis(tokenActual);
             match("this");
-            return new NodoOperandoVacio();
+            return nodoOp;
         }
         else if(tokenActual.getId().equals("stringLiteral")){
+            NodoOperando nodoStringLiteral = new NodoString(tokenActual);
             match("stringLiteral");
-            return new NodoOperandoVacio();
+            return nodoStringLiteral;
         }
         else if(tokenActual.getId().equals("idMetVar")){
             nodoOperando = new NodoAccesoVar(tokenActual);
@@ -763,10 +763,11 @@ public class AnalizadorSintactico {
             throw new ExcepcionSintactica(tokenActual,  "> | identificador de clase");
         }
     }
-    private void expresionParentizada() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private NodoExpresion expresionParentizada() throws ExcepcionLexica, IOException, ExcepcionSintactica {
         match("(");
-        expresion();
+        NodoExpresion expresion = expresion();
         match(")");
+        return expresion;
     }
     private void llamadaMetodoEstatico() throws ExcepcionLexica, IOException, ExcepcionSintactica {
         match("idClase");
@@ -774,27 +775,35 @@ public class AnalizadorSintactico {
         match("idMetVar");
         argsActuales();
     }
-    private void argsActuales() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private List<NodoExpresion> argsActuales() throws ExcepcionLexica, IOException, ExcepcionSintactica {
         match("(");
-        listaExpsOpcional();
+        List<NodoExpresion> lista = listaExpsOpcional();
         match(")");
+        return lista;
     }
-    private void listaExpsOpcional() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private List<NodoExpresion> listaExpsOpcional() throws ExcepcionLexica, IOException, ExcepcionSintactica {
         if(primeros.estaEnPrimeros(NoTerminales.ListaExps, tokenActual.getId())){
-            listaExps();
+            List<NodoExpresion> lista = new ArrayList<>();
+            lista = listaExps(lista);
+            return lista;
         }
-        else{/* $ */}
+        else{
+            return new ArrayList<>();
+        }
     }
-    private void listaExps() throws ExcepcionLexica, IOException, ExcepcionSintactica {
-        expresion();
-        listaExpsResto();
+    private List<NodoExpresion> listaExps(List<NodoExpresion> lista) throws ExcepcionLexica, IOException, ExcepcionSintactica {
+        NodoExpresion expresion = expresion();
+        lista.add(expresion);
+        listaExpsResto(lista);
+        return lista;
     }
-    private void listaExpsResto() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private void listaExpsResto(List<NodoExpresion> lista) throws ExcepcionLexica, IOException, ExcepcionSintactica {
         if(tokenActual.getId().equals(",")){
             match(",");
-            listaExps();
+            listaExps(lista);
+
         }
-        else{/* $ */}
+        else{/*$*/}
     }
     private void encadenado() throws ExcepcionLexica, IOException, ExcepcionSintactica {
         match(".");
