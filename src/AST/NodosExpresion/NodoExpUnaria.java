@@ -2,6 +2,7 @@ package AST.NodosExpresion;
 
 import AST.NodosOperando.NodoOperando;
 import TablaDeSimbolos.Tipo;
+import TablaDeSimbolos.TipoUniversal;
 import Utils.Token;
 
 public class NodoExpUnaria extends NodoExpresionCompuesta {
@@ -34,17 +35,15 @@ public class NodoExpUnaria extends NodoExpresionCompuesta {
     }
     @Override
     public void imprimir(String prefijo) {
-
         System.out.println(prefijo + "ExpUnaria (" + operador.getLexema() + ")");
         if (ladoDerecho != null) {
             ladoDerecho.imprimir(prefijo + "  ");
         }
 
     }
-
     @Override
     public Tipo chequear() {
-        return null;
+        return new TipoUniversal("tipo universal");
     }
 
     /*public void imprimir(String prefijo) {

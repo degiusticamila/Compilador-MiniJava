@@ -44,12 +44,15 @@ public class NodoVarLocal extends NodoSentencia {
         if(b.variableLocalDeclarada(nombre.getLexema())){
             throw new ExcepcionSemantica(this.nombre.getLexema(), this.nombre.getNroLinea(), "La variable tiene el mismo nombre que una del bloque");
         }
+        TablaSimbolos.getInstance().getBloqueActual().insertarVariable(this);
         tipo = ladoDerecho.chequear();
         System.out.println("Tipo de la Variable local "+tipo+"con nombre "+nombre.getLexema());
         if(tipo.equals(TipoPrimitivo.NULL)){
             throw new ExcepcionSemantica(nombre.getLexema(), nombre.getNroLinea(), "Tipo var nula");
         }
-        TablaSimbolos.getInstance().getBloqueActual().insertarVariable(this);
+
+        System.out.println( b.getVariablesLocales().getLast());
+
         //FALTA CHEQUEAR UNA DEL BLOQUE DE MAS ARRIBA, como escalo?
 
         // var id = e1

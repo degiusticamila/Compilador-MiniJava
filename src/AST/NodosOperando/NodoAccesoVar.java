@@ -45,13 +45,29 @@ public class NodoAccesoVar extends NodoOperando {
         Metodo m = ts.getMetodoActual();
         NodoBloque b = ts.getBloqueActual();
 
-        //es variable local todavia no se inserta bien
+        //es variable local
         if(b.variableLocalDeclarada(nombre.getLexema())){
             System.out.println("LA VARIABLE ESTA DECLARADA");
             System.out.println(b.getTipoVariableLocalDeclarada(nombre.getLexema()));
             return b.getTipoVariableLocalDeclarada(nombre.getLexema());
         }
         //falta ver en caso de que sean bloques anidados
+        /*if (buscarEnBloques(nombre.getLexema())) { //NEW
+            return b.getTipoVariableLocalDeclarada(nombre.getLexema());
+        }
+        if(b.variableDeclaradaEnAlgunBloque(nombre.getLexema())){
+            System.out.println("La variable esta declarada en un bloque de AFUERA");
+            System.out.println(b.getTipoVariableLocalDeclarada(nombre.getLexema()));
+            return b.getTipoVariableLocalDeclarada(nombre.getLexema());
+        }
+
+         */
+        Tipo tipo = b.buscarTipoVariableEnBloques(nombre.getLexema());
+        if (tipo != null) {
+            System.out.println("Variable encontrada en algún bloque. Tipo = " + tipo);
+            return tipo;
+        }
+
         //es parametro
         else if(m.parametroDeclarado(nombre.getLexema())){
             System.out.println(m.getTipoParametro(nombre.getLexema()));
@@ -65,5 +81,15 @@ public class NodoAccesoVar extends NodoOperando {
         else{
             throw new ExcepcionSemantica(nombre.getLexema(),nombre.getNroLinea(),"variable no declarada");
         }
+    }
+    private boolean buscarEnBloques(String nombre) throws ExcepcionSemantica {
+        NodoBloque bloque = TablaSimbolos.getInstance().getBloqueActual();
+        while (bloque != null) {
+            if (bloque.variableLocalDeclarada(nombre)) {
+                return true;
+            }
+            bloque = bloque.getNodoBloquePadre();
+        }
+        return false;
     }
 }

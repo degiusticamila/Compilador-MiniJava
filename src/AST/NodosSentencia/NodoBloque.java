@@ -4,6 +4,7 @@ import AST.NodosOperando.NodoOperando;
 import TablaDeSimbolos.ExcepcionSemantica;
 import TablaDeSimbolos.TablaSimbolos;
 import TablaDeSimbolos.Tipo;
+import TablaDeSimbolos.TipoUniversal;
 import Utils.Token;
 
 import java.util.ArrayList;
@@ -13,9 +14,11 @@ import java.util.List;
 public class NodoBloque extends NodoSentencia {
     private List<NodoSentencia> sentencias;
     private List<NodoVarLocal> variablesLocales;
+    private NodoBloque nodoBloquePadre;
     public NodoBloque() {
         sentencias = new ArrayList<>();
         variablesLocales = new LinkedList<>();
+       // nodoBloquePadre = new NodoBloqueVacio();
     }
     public void insertarVariable(NodoVarLocal nodo){
 
@@ -44,12 +47,7 @@ public class NodoBloque extends NodoSentencia {
 
         ts.setBloqueActual(this);
         for(NodoSentencia s: sentencias){
-           /* System.out.println("Recorro mis sentencias");
-            if(s instanceof NodoBloque){
-                TablaSimbolos.getInstance().setBloqueActual((NodoBloque) s);
-            }
 
-            */
             s.chequear();
         }
         ts.setBloqueActual(bloqueAnterior);
@@ -57,9 +55,24 @@ public class NodoBloque extends NodoSentencia {
     public List<NodoVarLocal> getVariablesLocales() {
         return variablesLocales;
     }
+    public boolean variableDeclaradaEnAlgunBloque(String nombre) throws ExcepcionSemantica {
+        NodoBloque bloqueActual = TablaSimbolos.getInstance().getBloqueActual();
+        if(bloqueActual.variableLocalDeclarada(nombre)){
+            return true;
+        }
+        else{
+            if(!(bloqueActual.getNodoBloquePadre() instanceof NodoBloqueVacio)){
+                bloqueActual = bloqueActual.getNodoBloquePadre();
+                return bloqueActual.variableLocalDeclarada(nombre);
+            }
+           // return bloqueActual.variableLocalDeclarada(nombre);
+        }
+        return false;
+    }
     public boolean variableLocalDeclarada(String nombre){;
         System.out.println();
         System.out.println("¿Buscando variable local? -> " + nombre);
+        System.out.println(this.variablesLocales.toString());
         for(NodoVarLocal nodoVarLocal: variablesLocales){
             System.out.println("Tengo declarada: " + nodoVarLocal.getNombreVarLocal());
             System.out.println(nodoVarLocal.getNombreVarLocal());
@@ -76,5 +89,23 @@ public class NodoBloque extends NodoSentencia {
             }
         }
         return null;
+    }
+    public Tipo buscarTipoVariableEnBloques(String nombre) {
+        NodoBloque bloque = this; // empezamos desde el actual
+        while (bloque != null) {
+            for (NodoVarLocal var : bloque.variablesLocales) {
+                if (var.getNombreVarLocal().equals(nombre)) {
+                    return var.getTipoVarLocal();
+                }
+            }
+            bloque = bloque.getNodoBloquePadre(); // subimos
+        }
+        return null; // no se encontró
+    }
+    public void setNodoBloquePadre(NodoBloque nodoBloquePadre){
+        this.nodoBloquePadre = nodoBloquePadre;
+    }
+    public NodoBloque getNodoBloquePadre(){
+        return nodoBloquePadre;
     }
 }

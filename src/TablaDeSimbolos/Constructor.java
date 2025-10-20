@@ -44,7 +44,8 @@ public class Constructor {
         return ("("+nombre.toString()+")");
     }
 
-    public void insertarBloque(NodoBloque bloque) {
+    public void insertarBloque(NodoBloque bloque, NodoBloque nodoBloquePadre) {
         this.bloque = bloque;
+        bloque.setNodoBloquePadre(nodoBloquePadre);
     }
 }

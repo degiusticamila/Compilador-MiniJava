@@ -1,6 +1,7 @@
 package AST.NodosExpresion;
 
 import TablaDeSimbolos.Tipo;
+import TablaDeSimbolos.TipoUniversal;
 import Utils.Token;
 
 public class NodoExpresionBinaria extends NodoExpresionCompuesta {
@@ -64,6 +65,6 @@ public class NodoExpresionBinaria extends NodoExpresionCompuesta {
 
     @Override
     public Tipo chequear() {
-        return null;
+        return new TipoUniversal("tipo universal");
     }
 }

@@ -4,6 +4,7 @@ import AST.NodosExpresion.NodoExpresion;
 import TablaDeSimbolos.ExcepcionSemantica;
 import TablaDeSimbolos.Tipo;
 import TablaDeSimbolos.TipoPrimitivo;
+import TablaDeSimbolos.TipoUniversal;
 import Utils.Token;
 
 public class NodoOperadorUnario extends NodoExpresion{
@@ -25,7 +26,24 @@ public class NodoOperadorUnario extends NodoExpresion{
         System.out.println("chequear de NodoOperadorUnario");
 
         Tipo tipoOperando = ladoDerecho.chequear();
-        if(!nombre.getLexema().equals("!")){
+        if(tipoOperando != null){
+            if(!nombre.getLexema().equals("!")){
+                //si se usa una variable tiene que estar, pero cómo obtengo que a1 es alcanzable?
+
+                //el tipo de lado derecho debe ser entero
+                if(!tipoOperando.esCompatible(new TipoPrimitivo("int"))){
+                    throw new ExcepcionSemantica(nombre.getLexema(), nombre.getNroLinea(), "Tipos incompatibles");
+                }
+                return new TipoPrimitivo("int");
+            }
+            else{
+                if(!tipoOperando.esCompatible(new TipoPrimitivo("boolean"))){
+                    throw new ExcepcionSemantica(nombre.getLexema(), nombre.getNroLinea(), "Tipos incompatibles");
+                }
+                return new TipoPrimitivo("boolean");
+            }
+        }
+        /*if(!nombre.getLexema().equals("!")){
             //si se usa una variable tiene que estar, pero cómo obtengo que a1 es alcanzable?
 
             //el tipo de lado derecho debe ser entero
@@ -40,6 +58,8 @@ public class NodoOperadorUnario extends NodoExpresion{
             }
             return new TipoPrimitivo("boolean");
         }
+         */
+        return new TipoUniversal("tipo universal");
     }
 
     @Override

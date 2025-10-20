@@ -54,8 +54,9 @@ public class Metodo {
         return nombre;
     }
     public Tipo getTipoRetorno(){ return tipoRetorno;}
-    public void insertarBloque(NodoBloque bloque){
+    public void insertarBloque(NodoBloque bloque, NodoBloque nodoBloquePadre){
         this.bloque = bloque;
+        bloque.setNodoBloquePadre(nodoBloquePadre);
     }
 
     public NodoBloque getBloque(){

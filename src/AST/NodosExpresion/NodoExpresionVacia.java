@@ -1,6 +1,7 @@
 package AST.NodosExpresion;
 
 import TablaDeSimbolos.Tipo;
+import TablaDeSimbolos.TipoUniversal;
 import Utils.Token;
 
 public class NodoExpresionVacia extends NodoExpresion {
@@ -31,6 +32,6 @@ public class NodoExpresionVacia extends NodoExpresion {
 
     @Override
     public Tipo chequear() {
-        return null;
+        return new TipoUniversal("tipo universal");
     }
 }

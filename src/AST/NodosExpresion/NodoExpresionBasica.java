@@ -3,6 +3,7 @@ package AST.NodosExpresion;
 import AST.NodosOperando.NodoOperando;
 import AST.NodosSentencia.NodoOperadorUnario;
 import TablaDeSimbolos.Tipo;
+import TablaDeSimbolos.TipoUniversal;
 import Utils.Token;
 
 public class NodoExpresionBasica extends NodoExpresionCompuesta{
@@ -42,6 +43,6 @@ public class NodoExpresionBasica extends NodoExpresionCompuesta{
 
     @Override
     public Tipo chequear() {
-        return null;
+        return new TipoUniversal("tipo universal");
     }
 }

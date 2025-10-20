@@ -186,7 +186,7 @@ public class AnalizadorSintactico {
             argsFormales(tokenMetodo);
             tablaSimbolos.getClaseActual().insertarMetodo(tokenMetodo,m);
             NodoBloque bloque = bloqueOpcional(m);
-            tablaSimbolos.getMetodoActual().insertarBloque(bloque);
+            tablaSimbolos.getMetodoActual().insertarBloque(bloque,new NodoBloqueVacio());
             tablaSimbolos.setBloqueActual(bloque);
         }
         else if(primeros.estaEnPrimeros(NoTerminales.ModificadorOpcional,tokenActual.getId())){
@@ -203,7 +203,7 @@ public class AnalizadorSintactico {
             argsFormales(tokenMetodo);
             tablaSimbolos.getClaseActual().insertarMetodo(tokenMetodo,m);
             NodoBloque bloque = bloqueOpcional(m);
-            tablaSimbolos.getMetodoActual().insertarBloque(bloque);
+            tablaSimbolos.getMetodoActual().insertarBloque(bloque,new NodoBloqueVacio());
             tablaSimbolos.setBloqueActual(bloque);
         }
         else if(primeros.estaEnPrimeros(NoTerminales.Constructor, tokenActual.getId())){
@@ -229,7 +229,7 @@ public class AnalizadorSintactico {
             argsFormales(tokenMetodo);
             tablaSimbolos.getClaseActual().insertarMetodo(nombreIdMetVar,m);
             NodoBloque bloque = bloqueOpcional(m);
-            tablaSimbolos.getMetodoActual().insertarBloque(bloque);
+            tablaSimbolos.getMetodoActual().insertarBloque(bloque,new NodoBloqueVacio());
             tablaSimbolos.setBloqueActual(bloque);
         }
         //ATRIBUTOS INICIALIZADOS
@@ -250,7 +250,7 @@ public class AnalizadorSintactico {
         tablaSimbolos.getClaseActual().insertarConstructor(tokenConstructor,c);
         argsFormales(tokenConstructor);
         NodoBloque bloque = bloque();
-        tablaSimbolos.getClaseActual().getConstructor().insertarBloque(bloque);
+        tablaSimbolos.getClaseActual().getConstructor().insertarBloque(bloque, new NodoBloqueVacio());
         tablaSimbolos.setBloqueActual(bloque);
     }
     private Token tipoMetodo() throws ExcepcionLexica, IOException, ExcepcionSintactica {
@@ -358,14 +358,18 @@ public class AnalizadorSintactico {
             throw new ExcepcionSintactica(tokenActual,"Bloque | ;");
         }
     }
-    private NodoBloque bloque() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private NodoBloque bloque() throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
         match("{");
         NodoBloque bloque = new NodoBloque();
+        //El bloque padre es el bloque actual de la TS
+        bloque.setNodoBloquePadre(TablaSimbolos.getInstance().getBloqueActual());
+        tablaSimbolos.setBloqueActual(bloque);
         listaSentencias(bloque);
+        tablaSimbolos.setBloqueActual(bloque.getNodoBloquePadre());
         match("}");
         return bloque;
     }
-    private NodoSentencia listaSentencias(NodoBloque bloque) throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private NodoSentencia listaSentencias(NodoBloque bloque) throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
         if(primeros.estaEnPrimeros(NoTerminales.Sentencia, tokenActual.getId())){
             NodoSentencia sentencia = sentencia();
             bloque.getSentencias().add(sentencia);
@@ -375,7 +379,7 @@ public class AnalizadorSintactico {
         else{/* $ */}
         return new NodoSentenciaVacia();
     }
-    private NodoSentencia sentencia() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private NodoSentencia sentencia() throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
 
         if(tokenActual.getId().equals(";")){
             match(";");
@@ -452,7 +456,7 @@ public class AnalizadorSintactico {
             return new NodoExpresionVacia();
         }
     }
-    private NodoSentencia If() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private NodoSentencia If() throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
         match("if");
         match("(");
         NodoExpresion nodoExpresionIf = expresion();
@@ -462,7 +466,7 @@ public class AnalizadorSintactico {
         NodoSentencia nodoIf = new NodoIf(nodoExpresionIf, nodoSentenciaIf, nodoSentenciaElse);
         return nodoIf;
     }
-    private NodoSentencia IfResto() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private NodoSentencia IfResto() throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
         if(tokenActual.getId().equals("else")){
             match("else");
             NodoSentencia nodoSentenciaElse = sentencia();
@@ -472,7 +476,7 @@ public class AnalizadorSintactico {
             return new NodoSentenciaVacia();
         }
     }
-    private NodoSentencia While() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private NodoSentencia While() throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
         match("while");
         match("(");
         NodoExpresion expresionWhile = expresion();
