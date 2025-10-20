@@ -1,6 +1,7 @@
 package AST.NodosOperando;
 
 import AST.NodosExpresion.NodoExpresion;
+import TablaDeSimbolos.Tipo;
 import Utils.Token;
 
 public class NodoString extends NodoOperando{
@@ -22,5 +23,15 @@ public class NodoString extends NodoOperando{
     @Override
     public void setLadoDerecho(NodoExpresion nodoExpresion) {
 
+    }
+
+    @Override
+    public String formatear() {
+        return "";
+    }
+
+    @Override
+    public Tipo chequear() {
+        return null;
     }
 }

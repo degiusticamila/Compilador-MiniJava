@@ -1,5 +1,6 @@
 package AST.NodosExpresion;
 
+import TablaDeSimbolos.Tipo;
 import Utils.Token;
 
 public class NodoExpresionBinaria extends NodoExpresionCompuesta {
@@ -26,11 +27,43 @@ public class NodoExpresionBinaria extends NodoExpresionCompuesta {
     public void setLadoDerecho(NodoExpresion nodoExpresion) {
 
     }
+    @Override
+    public String formatear() {
+        /*return "(" + ladoIzquierdo.formatear() + " " + operador.getLexema() + " " + ladoDerecho.formatear() + ")";
+         */
+
+            String izq = ladoIzquierdo.formatear();
+            String der = ladoDerecho.formatear();
+
+            // Si los hijos ya son una operación completa, devolvemos sin duplicar paréntesis externos
+            if (ladoIzquierdo instanceof NodoExpresionBinaria) {
+                izq = "(" + izq + ")";
+            }
+            if (ladoDerecho instanceof NodoExpresionBinaria) {
+                der = "(" + der + ")";
+            }
+            return izq + " " + operador.getLexema() + " " + der;
+    }
 
     @Override
     public void imprimir(String prefijo) {
-        ladoIzquierdo.imprimir("");
-        System.out.print(operador.getLexema()+" ");
-        ladoDerecho.imprimir("");
+       /* System.out.println(prefijo + "ExpBinaria (" + operador.getLexema() + ")");
+        if (ladoIzquierdo != null) {
+            System.out.println(prefijo + "  L ->");
+            ladoIzquierdo.imprimir(prefijo + "    ");
+        }
+        if (ladoDerecho != null) {
+            System.out.println(prefijo + "  R ->");
+            ladoDerecho.imprimir(prefijo + "    ");
+        }
+        */
+        System.out.println(prefijo + "ExpBinaria (" + operador.getLexema() + ")");
+        System.out.println(prefijo + "  L -> " + ladoIzquierdo.formatear());
+        System.out.println(prefijo + "  R -> " + ladoDerecho.formatear());
+    }
+
+    @Override
+    public Tipo chequear() {
+        return null;
     }
 }

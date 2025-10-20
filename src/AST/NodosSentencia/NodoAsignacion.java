@@ -1,6 +1,7 @@
 package AST.NodosSentencia;
 
 import AST.NodosExpresion.NodoExpresion;
+import TablaDeSimbolos.Tipo;
 
 public class NodoAsignacion extends NodoSentencia {
     NodoExpresion nodoExpAsignacion;
@@ -19,5 +20,10 @@ public class NodoAsignacion extends NodoSentencia {
         if(nodoExpAsignacion!=null){
             nodoExpAsignacion.imprimir(prefijo + "  ");
         }
+    }
+
+    @Override
+    public void chequear() {
+
     }
 }

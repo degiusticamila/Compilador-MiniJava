@@ -1,6 +1,8 @@
 package TablaDeSimbolos;
 
 import AST.NodosSentencia.NodoBloque;
+import AST.NodosSentencia.NodoBloqueVacio;
+import AST.NodosSentencia.NodoSentencia;
 import Utils.Token;
 
 import java.util.LinkedList;
@@ -17,6 +19,7 @@ public class Metodo {
         this.modificador = modificador;
         this.tipoRetorno = tipoRetorno;
         this.nombre = nombreMetodo;
+        this.bloque = new NodoBloqueVacio();
     }
     public void insertarParametro(String lexema,Parametro p,int numLine) throws ExcepcionSemantica {
         if(!parametroDeclarado(lexema)){
@@ -56,7 +59,18 @@ public class Metodo {
     public void insertarBloque(NodoBloque bloque){
         this.bloque = bloque;
     }
-    public NodoBloque getBloque(){
-        return bloque;
+    public void resolverNombres(){
+        if (!(bloque instanceof NodoBloqueVacio)){
+            for(NodoSentencia sentencia : bloque.getSentencias()){
+
+            }
+        }
     }
+    public NodoBloque getBloque(){
+        if(!(bloque instanceof NodoBloqueVacio)){
+            return bloque;
+        }
+        return new NodoBloqueVacio();
+    }
+
 }

@@ -1,5 +1,4 @@
 package Sintactico;
-import AST.NodoOperadorBinario;
 import AST.NodosOperando.*;
 import AST.NodosExpresion.*;
 import AST.NodosSentencia.*;
@@ -188,6 +187,7 @@ public class AnalizadorSintactico {
             tablaSimbolos.getClaseActual().insertarMetodo(tokenMetodo,m);
             NodoBloque bloque = bloqueOpcional(m);
             tablaSimbolos.getMetodoActual().insertarBloque(bloque);
+            tablaSimbolos.setBloqueActual(bloque);
         }
         else if(primeros.estaEnPrimeros(NoTerminales.ModificadorOpcional,tokenActual.getId())){
             Token modificador = modificadorOpcional();
@@ -204,6 +204,7 @@ public class AnalizadorSintactico {
             tablaSimbolos.getClaseActual().insertarMetodo(tokenMetodo,m);
             NodoBloque bloque = bloqueOpcional(m);
             tablaSimbolos.getMetodoActual().insertarBloque(bloque);
+            tablaSimbolos.setBloqueActual(bloque);
         }
         else if(primeros.estaEnPrimeros(NoTerminales.Constructor, tokenActual.getId())){
             constructor();
@@ -229,6 +230,7 @@ public class AnalizadorSintactico {
             tablaSimbolos.getClaseActual().insertarMetodo(nombreIdMetVar,m);
             NodoBloque bloque = bloqueOpcional(m);
             tablaSimbolos.getMetodoActual().insertarBloque(bloque);
+            tablaSimbolos.setBloqueActual(bloque);
         }
         //ATRIBUTOS INICIALIZADOS
         else if (primeros.estaEnPrimeros(NoTerminales.OperadorAsignacion, tokenActual.getId())){
@@ -249,6 +251,7 @@ public class AnalizadorSintactico {
         argsFormales(tokenConstructor);
         NodoBloque bloque = bloque();
         tablaSimbolos.getClaseActual().getConstructor().insertarBloque(bloque);
+        tablaSimbolos.setBloqueActual(bloque);
     }
     private Token tipoMetodo() throws ExcepcionLexica, IOException, ExcepcionSintactica {
         if(primeros.estaEnPrimeros(NoTerminales.Tipo,tokenActual.getId())){
@@ -422,6 +425,7 @@ public class AnalizadorSintactico {
 
         NodoExpresion ladoDerecho = expresionCompuesta();
         nodoVar.setLadoDerecho(ladoDerecho);
+        //tablaSimbolos.getBloqueActual().insertarVariable(nodoVar);
 
         return nodoVar;
     }
@@ -502,16 +506,22 @@ public class AnalizadorSintactico {
         return nodoExpresion;
     }
     private NodoExpresion expresionCompuestaResto(NodoExpresion ladoIzquierdo) throws ExcepcionLexica, IOException, ExcepcionSintactica {
-        NodoExpresion expresion = ladoIzquierdo;
         if(primeros.estaEnPrimeros(NoTerminales.OperadorBinario, tokenActual.getId())){
-            Token operadorBinario = operadorBinario();
+            Token operador = operadorBinario();
             NodoExpresion ladoDerecho = expresionBasica();
-            ladoDerecho = expresionCompuestaResto(ladoDerecho);
+            /*ladoDerecho = expresionCompuestaResto(ladoDerecho);
+            System.out.println("Lado izquierdo de mi expresion binaria");
+            ladoIzquierdo.imprimir("");
             expresion = new NodoExpresionBinaria(operadorBinario,ladoIzquierdo,ladoDerecho);
             return expresion;
+
+             */
+
+            NodoExpresion nueva = new NodoExpresionBinaria(operador,ladoIzquierdo,ladoDerecho);
+            return expresionCompuestaResto(nueva);
         }
         else{
-            return expresion;
+            return ladoIzquierdo;
         }
     }
     private Token operadorBinario() throws ExcepcionLexica, IOException, ExcepcionSintactica {
@@ -533,7 +543,7 @@ public class AnalizadorSintactico {
         else if(tokenActual.getId().equals("!=")){
             Token operadorDesigual  = tokenActual;
             match("!=");
-            return tokenActual;
+            return operadorDesigual;
         }
         else if(tokenActual.getId().equals("<")){
             Token operadorMenor = tokenActual;
@@ -587,12 +597,12 @@ public class AnalizadorSintactico {
     private NodoExpresion expresionBasica() throws ExcepcionSintactica, ExcepcionLexica, IOException {
         if(primeros.estaEnPrimeros(NoTerminales.OperadorUnario, tokenActual.getId())){
             NodoOperadorUnario operadorUnario = operadorUnario();
-            NodoOperando operando = operando();
+            NodoExpresion operando = operando();
             operadorUnario.setLadoDerecho(operando);
             return operadorUnario;
         }
         else if(primeros.estaEnPrimeros(NoTerminales.Operando, tokenActual.getId())){
-            NodoOperando nodoOperando = operando();
+            NodoExpresion nodoOperando = operando();
             return nodoOperando;
         }
         else{
@@ -629,13 +639,13 @@ public class AnalizadorSintactico {
             throw new ExcepcionSintactica(tokenActual,  "operador unario");
         }
     }
-    private NodoOperando operando() throws ExcepcionSintactica, ExcepcionLexica, IOException {
+    private NodoExpresion operando() throws ExcepcionSintactica, ExcepcionLexica, IOException {
         if(primeros.estaEnPrimeros(NoTerminales.Primitivo, tokenActual.getId())){
             NodoOperando nodoOperando = primitivo();
             return nodoOperando;
         }
         else if(primeros.estaEnPrimeros(NoTerminales.Referencia, tokenActual.getId())){
-            NodoOperando nodoOperando = referencia();
+            NodoExpresion nodoOperando = referencia();
             return nodoOperando;
         }
         else{
@@ -672,8 +682,8 @@ public class AnalizadorSintactico {
             throw new ExcepcionSintactica(tokenActual,"primitivo");
         }
     }
-    private NodoOperando referencia() throws ExcepcionLexica, IOException, ExcepcionSintactica {
-        NodoOperando nodoOperando = primario();
+    private NodoExpresion referencia() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+        NodoExpresion nodoOperando = primario();
         referenciaResto();
         return nodoOperando;
     }
@@ -684,7 +694,7 @@ public class AnalizadorSintactico {
         }
         else{/* $ */}
     }
-    private NodoOperando primario() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private NodoExpresion primario() throws ExcepcionLexica, IOException, ExcepcionSintactica {
         NodoOperando nodoOperando;
         if(tokenActual.getId().equals("this")){
             NodoOperando nodoOp = new NodoThis(tokenActual);
@@ -711,8 +721,8 @@ public class AnalizadorSintactico {
             return new NodoOperandoVacio();
         }
         else if(primeros.estaEnPrimeros(NoTerminales.ExpresionParentizada, tokenActual.getId())){
-            expresionParentizada();
-            return new NodoOperandoVacio();
+            NodoExpresion expresion = expresionParentizada();
+            return expresion;
         }
         else{
             throw new ExcepcionSintactica(tokenActual, "identificador metodo variable | constructor | llamada metodo estatico | expresion parentizada");
@@ -829,6 +839,9 @@ public class AnalizadorSintactico {
         tablaSimbolos.consolidacion();
         tablaSimbolos.mostrarErroresSemanticos();
     }
+    public void resolucionDeNombres(){
+        tablaSimbolos.resolverNombres();
+    }
     private Tipo construirTipoDesdeToken(Token tokenTipo) {
         String lexema = tokenTipo.getLexema();
 
@@ -836,6 +849,22 @@ public class AnalizadorSintactico {
             return new TipoPrimitivo(lexema);
         } else {
             return new TipoReferencia(lexema);
+        }
+    }
+    public void chequeoSemantico() throws ExcepcionSemantica{
+        System.out.println("Entro a metodo chequeo semantico");
+        for(Clase c : tablaSimbolos.getClases().values()){
+            tablaSimbolos.setClaseActual(c);
+            System.out.println("clase Actual "+c.getNombre().getLexema());
+            for(Metodo m : c.metodos().values()){
+                tablaSimbolos.setMetodoActual(m);
+                System.out.println("metodo Actual"+m.getNombreMetodo().getLexema());
+                tablaSimbolos.setBloqueActual(m.getBloque());
+                if(!(m.getBloque() instanceof  NodoBloqueVacio)){
+                    System.out.println("bloque del metodo "+m.getNombreMetodo().getLexema());
+                    m.getBloque().chequear();
+                }
+            }
         }
     }
 }

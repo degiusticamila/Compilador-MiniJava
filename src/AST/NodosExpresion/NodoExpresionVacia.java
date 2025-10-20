@@ -1,5 +1,6 @@
 package AST.NodosExpresion;
 
+import TablaDeSimbolos.Tipo;
 import Utils.Token;
 
 public class NodoExpresionVacia extends NodoExpresion {
@@ -21,5 +22,15 @@ public class NodoExpresionVacia extends NodoExpresion {
     @Override
     public void imprimir(String prefijo) {
         System.out.println("exp vacia");
+    }
+
+    @Override
+    public String formatear() {
+        return "";
+    }
+
+    @Override
+    public Tipo chequear() {
+        return null;
     }
 }

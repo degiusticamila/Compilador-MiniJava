@@ -28,4 +28,9 @@ public class NodoIf extends NodoSentencia {
 
         }
     }
+
+    @Override
+    public void chequear() {
+
+    }
 }

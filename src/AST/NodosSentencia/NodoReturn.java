@@ -16,4 +16,9 @@ public class NodoReturn extends NodoSentencia {
     public void imprimir(String prefijo) {
         System.out.println(prefijo + "Return: " + nombre.getLexema());
     }
+
+    @Override
+    public void chequear() {
+
+    }
 }

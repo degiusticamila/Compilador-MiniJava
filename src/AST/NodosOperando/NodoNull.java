@@ -1,6 +1,8 @@
 package AST.NodosOperando;
 
 import AST.NodosExpresion.NodoExpresion;
+import TablaDeSimbolos.Tipo;
+import TablaDeSimbolos.TipoPrimitivo;
 import Utils.Token;
 
 public class NodoNull extends NodoOperando {
@@ -27,5 +29,15 @@ public class NodoNull extends NodoOperando {
     @Override
     public void imprimir(String prefijo) {
         System.out.print(prefijo + " null "+ nombre.getLexema());
+    }
+
+    @Override
+    public String formatear() {
+        return nombre.getLexema();
+    }
+
+    @Override
+    public Tipo chequear() {
+        return TipoPrimitivo.NULL;
     }
 }

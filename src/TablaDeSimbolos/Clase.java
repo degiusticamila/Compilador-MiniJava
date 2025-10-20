@@ -75,6 +75,9 @@ public class Clase {
     public boolean atributoDeclarado(String atributo){
         return atributos.containsKey(atributo);
     }
+    public Tipo getTipoAtributo(String atributo){
+        return atributos.get(atributo).getTipo();
+    }
     public Constructor getConstructor(){
         return constructor;
     }
@@ -309,5 +312,8 @@ public class Clase {
     }
     public Token getModificador(){
         return modificador;
+    }
+    public HashMap<String, Metodo> metodos(){
+        return metodos;
     }
 }

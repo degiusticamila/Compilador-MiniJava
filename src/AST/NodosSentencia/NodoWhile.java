@@ -22,4 +22,9 @@ public class NodoWhile extends NodoSentencia {
             sentencia.imprimir(prefijo);
         }
     }
+
+    @Override
+    public void chequear() {
+
+    }
 }

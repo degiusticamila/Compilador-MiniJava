@@ -1,17 +1,18 @@
 package AST.NodosExpresion;
 
 import AST.NodosOperando.NodoOperando;
+import TablaDeSimbolos.Tipo;
 import Utils.Token;
 
 public class NodoExpUnaria extends NodoExpresionCompuesta {
     private Token operador;
-    private NodoOperando nodoOperando;
+    private NodoOperando ladoDerecho;
 
     public NodoExpUnaria(){
 
     }
     public void setOperando(NodoOperando nodoOperando) {
-        this.nodoOperando = nodoOperando;
+        this.ladoDerecho = nodoOperando;
     }
     @Override
     public void setOperador(Token operador) {
@@ -27,11 +28,29 @@ public class NodoExpUnaria extends NodoExpresionCompuesta {
     public void setLadoDerecho(NodoExpresion nodoExpresion) {
 
     }
-
+    @Override
+    public String formatear() {
+        return operador.getLexema() + ladoDerecho.formatear();
+    }
     @Override
     public void imprimir(String prefijo) {
+
+        System.out.println(prefijo + "ExpUnaria (" + operador.getLexema() + ")");
+        if (ladoDerecho != null) {
+            ladoDerecho.imprimir(prefijo + "  ");
+        }
+
+    }
+
+    @Override
+    public Tipo chequear() {
+        return null;
+    }
+
+    /*public void imprimir(String prefijo) {
         System.out.println(prefijo + "ExpUnaria(" + operador.getLexema() + ")");
         if (operador != null) System.out.print(operador.getLexema());;
         if (nodoOperando != null) nodoOperando.imprimir(prefijo + "  R-> ");
     }
+     */
 }

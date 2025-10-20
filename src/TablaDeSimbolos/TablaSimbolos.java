@@ -1,5 +1,6 @@
 package TablaDeSimbolos;
 
+import AST.NodosSentencia.NodoBloque;
 import Utils.Token;
 
 import java.util.ArrayList;
@@ -8,13 +9,14 @@ import java.util.HashSet;
 import java.util.List;
 
 public class TablaSimbolos {
+
     private static TablaSimbolos tablaSimbolos;
     private List<ExcepcionSemantica> erroresSemanticos = new ArrayList<>();
     private HashMap<String,Clase> clases;
     private HashMap<String,Clase> clasesPredefinidas;
     private Clase claseActual;
     private Metodo metodoActual;
-
+    private NodoBloque bloqueActual;
     private TablaSimbolos() throws ExcepcionSemantica {
         clasesPredefinidas = new HashMap<>();
         insertarClasesPredefinidas();
@@ -44,19 +46,25 @@ public class TablaSimbolos {
     public Clase getClaseActual(){
         return claseActual;
     }
-
+    public NodoBloque getBloqueActual(){
+        return bloqueActual;
+    }
     public void setClaseActual(Clase claseActual){
         this.claseActual = claseActual;
     }
     public void setMetodoActual(Metodo metodoActual){
         this.metodoActual = metodoActual;
     }
+    public void setBloqueActual(NodoBloque  bloqueActual){
+        this.bloqueActual = bloqueActual;
+    }
     public boolean claseDeclarada(String nombreClase){
         nombreClase = nombreClase.trim();
         return clases.containsKey(nombreClase);
     }
     public boolean clasePredefinidaDeclarada(String nombreClase){
-        return clasesPredefinidas.containsKey(nombreClase);}
+        return clasesPredefinidas.containsKey(nombreClase);
+    }
     public HashMap<String, Clase> getClases(){
         return clases;
     }
@@ -72,8 +80,6 @@ public class TablaSimbolos {
         clasesPredefinidas.put("Object",claseObject);
         clasesPredefinidas.put("System",claseSystem);
         clasesPredefinidas.put("String",claseString);
-
-
 
         insertarMetodosPredefinidosObject(claseObject);
         insertarMetodosPredefinidosSystem(claseSystem);
@@ -350,6 +356,13 @@ public class TablaSimbolos {
         if(!erroresSemanticos.isEmpty()){
             for(ExcepcionSemantica e : erroresSemanticos){
                 System.out.println("-"+e.getMessage());
+            }
+        }
+    }
+    public void resolverNombres(){
+        for(Clase c : clases.values()){
+            for(Metodo m : c.metodos().values()){
+                m.resolverNombres();  //los propios, no los heredados acordate
             }
         }
     }

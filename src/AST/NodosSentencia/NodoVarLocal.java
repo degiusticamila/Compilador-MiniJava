@@ -25,4 +25,9 @@ public class NodoVarLocal extends NodoSentencia {
         System.out.print(operador.getLexema());
         ladoDerecho.imprimir(" ");
     }
+
+    @Override
+    public void chequear() {
+
+    }
 }

@@ -9,6 +9,7 @@ public abstract class Tipo {
     public String getNombre() {
         return nombre;
     }
+    public abstract boolean esCompatible(Tipo t);
     public abstract boolean esPrimitivo();
     public abstract boolean esReferencia();
 

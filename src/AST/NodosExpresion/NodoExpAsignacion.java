@@ -1,5 +1,6 @@
 package AST.NodosExpresion;
 
+import TablaDeSimbolos.Tipo;
 import Utils.Token;
 
 public class NodoExpAsignacion extends NodoExpresion {
@@ -26,11 +27,32 @@ public class NodoExpAsignacion extends NodoExpresion {
    public void setLadoDerecho(NodoExpresion ladoDerecho) {
        this.ladoDerecho = ladoDerecho;
    }
-
-   public void imprimir(String prefijo) {
-       System.out.println(prefijo + "ExpAsignacion (" + operador.getLexema() + ")");
-       if (ladoIzquierdo != null) ladoIzquierdo.imprimir(prefijo + "  L-> ");
-       if (ladoDerecho != null) ladoDerecho.imprimir(prefijo + "  R-> ");
+   @Override
+   public String formatear() {
+        return ladoIzquierdo.formatear() + " " + operador.getLexema() + " " + ladoDerecho.formatear();
    }
+
+    @Override
+    public Tipo chequear() {
+        return null;
+    }
+
+    @Override
+   public void imprimir(String prefijo) {
+       /*System.out.println(prefijo + "ExpAsignacion (=)");
+       if (ladoIzquierdo != null) {
+           System.out.println(prefijo + "  L ->");
+           ladoIzquierdo.imprimir(prefijo + "    ");
+       }
+       if (ladoDerecho != null) {
+           System.out.println(prefijo + "  R ->");
+           ladoDerecho.imprimir(prefijo + "    ");
+       }
+        */
+       System.out.println(prefijo + "ExpAsignacion (" + operador.getLexema() + ")");
+       System.out.println(prefijo + "  L -> " + ladoIzquierdo.formatear());
+       System.out.println(prefijo + "  R -> " + ladoDerecho.formatear());
+   }
+
 
 }

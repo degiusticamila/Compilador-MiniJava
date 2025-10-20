@@ -5,4 +5,9 @@ public class NodoSentenciaVacia extends NodoSentencia {
     public void imprimir(String prefijo) {
         System.out.println("Sentencia vacia");
     }
+
+    @Override
+    public void chequear() {
+
+    }
 }

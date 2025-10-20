@@ -2,6 +2,7 @@ package AST.NodosExpresion;
 
 import AST.NodosOperando.NodoOperando;
 import AST.NodosSentencia.NodoOperadorUnario;
+import TablaDeSimbolos.Tipo;
 import Utils.Token;
 
 public class NodoExpresionBasica extends NodoExpresionCompuesta{
@@ -32,5 +33,15 @@ public class NodoExpresionBasica extends NodoExpresionCompuesta{
     @Override
     public void imprimir(String prefijo) {
 
+    }
+
+    @Override
+    public String formatear() {
+        return "";
+    }
+
+    @Override
+    public Tipo chequear() {
+        return null;
     }
 }

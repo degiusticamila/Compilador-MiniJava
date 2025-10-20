@@ -7,6 +7,11 @@ public class TipoReferencia extends Tipo {
     }
 
     @Override
+    public boolean esCompatible(Tipo t) {
+        return false;
+    }
+
+    @Override
     public boolean esPrimitivo(){return false;}
     public boolean esReferencia(){return true;}
 
