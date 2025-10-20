@@ -388,7 +388,14 @@ public class AnalizadorSintactico {
             return nodoSentenciaExpresion;
         }
         else if(primeros.estaEnPrimeros(NoTerminales.VarLocal, tokenActual.getId())){
-            NodoSentencia nodoVarLocal = varLocal();
+            NodoVarLocal nodoVarLocal = varLocal();
+            if(!tablaSimbolos.getBloqueActual().equals(new NodoBloqueVacio())){
+               /* tablaSimbolos.getBloqueActual().insertarVariable(nodoVarLocal);
+                tablaSimbolos.getBloqueActual().getSentencias().add(nodoVarLocal);
+                System.out.println("inserto variable"+tablaSimbolos.getBloqueActual().getVariablesLocales().getLast());
+                System.out.println(tablaSimbolos.getBloqueActual().getVariablesLocales());
+                */
+            }
             match(";");
             return nodoVarLocal;
         }
@@ -413,7 +420,7 @@ public class AnalizadorSintactico {
             throw new ExcepcionSintactica(tokenActual, "; | Expresion | Variable local| return | if | while | bloque");
         }
     }
-    private NodoSentencia varLocal() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private NodoVarLocal varLocal() throws ExcepcionLexica, IOException, ExcepcionSintactica {
 
         match("var");
         tipoParametricoOpcional();
@@ -839,9 +846,7 @@ public class AnalizadorSintactico {
         tablaSimbolos.consolidacion();
         tablaSimbolos.mostrarErroresSemanticos();
     }
-    public void resolucionDeNombres(){
-        tablaSimbolos.resolverNombres();
-    }
+
     private Tipo construirTipoDesdeToken(Token tokenTipo) {
         String lexema = tokenTipo.getLexema();
 

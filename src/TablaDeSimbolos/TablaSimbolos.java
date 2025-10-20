@@ -1,6 +1,7 @@
 package TablaDeSimbolos;
 
 import AST.NodosSentencia.NodoBloque;
+import AST.NodosSentencia.NodoBloqueVacio;
 import Utils.Token;
 
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ public class TablaSimbolos {
         clasesPredefinidas = new HashMap<>();
         insertarClasesPredefinidas();
         clases = new HashMap<String,Clase>();
+        bloqueActual = new NodoBloqueVacio();
     }
     public static TablaSimbolos getInstance() throws ExcepcionSemantica {
         if(tablaSimbolos == null){
@@ -359,13 +361,7 @@ public class TablaSimbolos {
             }
         }
     }
-    public void resolverNombres(){
-        for(Clase c : clases.values()){
-            for(Metodo m : c.metodos().values()){
-                m.resolverNombres();  //los propios, no los heredados acordate
-            }
-        }
-    }
+
     public void reportarError(ExcepcionSemantica e) {
         erroresSemanticos.add(e);
     }

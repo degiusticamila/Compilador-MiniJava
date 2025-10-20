@@ -23,6 +23,7 @@ public class NodoOperadorUnario extends NodoExpresion{
     @Override
     public Tipo chequear() throws ExcepcionSemantica {
         System.out.println("chequear de NodoOperadorUnario");
+
         Tipo tipoOperando = ladoDerecho.chequear();
         if(!nombre.getLexema().equals("!")){
             //si se usa una variable tiene que estar, pero cómo obtengo que a1 es alcanzable?

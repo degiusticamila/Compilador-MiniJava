@@ -37,23 +37,33 @@ public class NodoAccesoVar extends NodoOperando {
 
     @Override
     public Tipo chequear() throws ExcepcionSemantica {
-        System.out.println("entro a chequear de acceso var");
-        //me fijo si
-        //es atributo
-        //lo que se usa es parametro se posterga porque todavia no se
-        //es variable local se posterga porque todavia no se inserta bien
+        System.out.println("entro a chequear de acceso var "+nombre.getLexema());
+
+
         TablaSimbolos ts = TablaSimbolos.getInstance();
         Clase claseActual = ts.getClaseActual();
         Metodo m = ts.getMetodoActual();
         NodoBloque b = ts.getBloqueActual();
 
-        if(m.parametroDeclarado(nombre.getLexema())){
-
+        //es variable local todavia no se inserta bien
+        if(b.variableLocalDeclarada(nombre.getLexema())){
+            System.out.println("LA VARIABLE ESTA DECLARADA");
+            System.out.println(b.getTipoVariableLocalDeclarada(nombre.getLexema()));
+            return b.getTipoVariableLocalDeclarada(nombre.getLexema());
         }
-        if(claseActual.atributoDeclarado(nombre.getLexema())){
+        //falta ver en caso de que sean bloques anidados
+        //es parametro
+        else if(m.parametroDeclarado(nombre.getLexema())){
+            System.out.println(m.getTipoParametro(nombre.getLexema()));
+            return m.getTipoParametro(nombre.getLexema());
+        }
+        //es atributo
+        else if(claseActual.atributoDeclarado(nombre.getLexema())){
             System.out.println(claseActual.getTipoAtributo(nombre.getLexema()));
-           return claseActual.getTipoAtributo(nombre.getLexema());
+            return claseActual.getTipoAtributo(nombre.getLexema());
         }
-        throw new ExcepcionSemantica(nombre.getLexema(),nombre.getNroLinea(),"variable no declarada");
+        else{
+            throw new ExcepcionSemantica(nombre.getLexema(),nombre.getNroLinea(),"variable no declarada");
+        }
     }
 }

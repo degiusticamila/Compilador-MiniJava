@@ -14,7 +14,6 @@ public class Metodo {
     private Token modificador;
     private NodoBloque bloque;
     public Metodo(Token modificador,Tipo tipoRetorno, Token nombreMetodo){
-        //parametros = new HashMap<>();
         parametros = new LinkedList<>();
         this.modificador = modificador;
         this.tipoRetorno = tipoRetorno;
@@ -31,7 +30,6 @@ public class Metodo {
         }
     }
     public boolean parametroDeclarado(String lexema){
-
         for(Parametro p : parametros){
             if(p.getNombre().getLexema().equals(lexema)){
                 return true;
@@ -59,18 +57,20 @@ public class Metodo {
     public void insertarBloque(NodoBloque bloque){
         this.bloque = bloque;
     }
-    public void resolverNombres(){
-        if (!(bloque instanceof NodoBloqueVacio)){
-            for(NodoSentencia sentencia : bloque.getSentencias()){
 
-            }
-        }
-    }
     public NodoBloque getBloque(){
         if(!(bloque instanceof NodoBloqueVacio)){
             return bloque;
         }
         return new NodoBloqueVacio();
+    }
+    public Tipo getTipoParametro(String nombreParametro){
+        for(Parametro p : parametros){
+            if(p.getNombre().getLexema().equals(nombreParametro)){
+                return p.getTipo();
+            }
+        }
+        return null;
     }
 
 }
