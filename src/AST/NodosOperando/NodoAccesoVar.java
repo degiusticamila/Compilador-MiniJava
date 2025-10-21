@@ -16,12 +16,10 @@ public class NodoAccesoVar extends NodoOperando {
     public void setOperador(Token operador) {
 
     }
-
     @Override
     public void setLadoIzquierdo(NodoExpresion nodoExpresion) {
 
     }
-
     @Override
     public void setLadoDerecho(NodoExpresion nodoExpresion) {
 
@@ -29,7 +27,6 @@ public class NodoAccesoVar extends NodoOperando {
     public void imprimir(String prefijo) {
         System.out.print(prefijo + nombre.getLexema());
     }
-
     @Override
     public String formatear() {
         return nombre.getLexema();
@@ -38,7 +35,6 @@ public class NodoAccesoVar extends NodoOperando {
     @Override
     public Tipo chequear() throws ExcepcionSemantica {
         System.out.println("entro a chequear de acceso var "+nombre.getLexema());
-
 
         TablaSimbolos ts = TablaSimbolos.getInstance();
         Clase claseActual = ts.getClaseActual();
@@ -60,7 +56,6 @@ public class NodoAccesoVar extends NodoOperando {
             System.out.println(b.getTipoVariableLocalDeclarada(nombre.getLexema()));
             return b.getTipoVariableLocalDeclarada(nombre.getLexema());
         }
-
          */
         Tipo tipo = b.buscarTipoVariableEnBloques(nombre.getLexema());
         if (tipo != null) {

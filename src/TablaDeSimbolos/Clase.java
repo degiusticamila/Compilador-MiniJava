@@ -162,6 +162,9 @@ public class Clase {
         for(Metodo m : metodos.values()){
             Metodo metodoPadre = padre.metodos.get(m.getNombreMetodo().getLexema());
             if(metodoPadre != null){
+                if(metodoPadre.getModificador() == null && (m.getModificador() != null && m.getModificador().getLexema().equals("static"))){
+                    throw new ExcepcionSemantica(m.getNombreMetodo().getLexema(), m.getNombreMetodo().getNroLinea(),"Metodos inconsistentes");
+                }
                 if(!metodoPadre.getTipoRetorno().getNombre().equals(m.getTipoRetorno().getNombre())){
                     throw new ExcepcionSemantica(m.getNombreMetodo().getLexema(), m.getNombreMetodo().getNroLinea(),"Tipos incompatible");
                 }
@@ -193,15 +196,16 @@ public class Clase {
                     throw new ExcepcionSemantica(m.getNombreMetodo().getLexema(), m.getNombreMetodo().getNroLinea(),"No se puede redefinir metodos estáticos");
                 }
             }
+
         }
         for(Metodo metodoPadre : padre.metodos.values()){
             String nombreMetodoPadre = metodoPadre.getNombreMetodo().getLexema();
-            if(!this.metodos.containsKey(metodoPadre)){
+            if(!this.metodos.containsKey(metodoPadre.getNombreMetodo().getLexema())){
                 this.metodos.put(nombreMetodoPadre, metodoPadre);
-                //System.out.println("→ Heredado método '" + nombreMetodoPadre + "' de " + padre.getNombre().getLexema() + " en " + this.nombre.getLexema());
+                //System.out.println("→ Heredado metodo "+nombreMetodoPadre+" de "+padre.getNombre().getLexema()+" en "+this.nombre.getLexema());
             }
             else{
-               // System.out.println("→ Método '" + nombreMetodoPadre + "' redefinido en " + this.nombre.getLexema());
+                //System.out.println("→ Metodo "+nombreMetodoPadre+ "redefinido en "+this.nombre.getLexema());
             }
         }
     }
@@ -211,11 +215,14 @@ public class Clase {
             for(Metodo metodoPadre : padre.metodos.values()){
                 if(metodoPadre.esMetodoAbstracto()){
                     Metodo metodoImplementado = this.metodos.get(metodoPadre.getNombreMetodo().getLexema());
+
                     boolean estaImplementado = false;
                     if(metodoImplementado != null && !metodoImplementado.esMetodoAbstracto()){
+
                         estaImplementado = true;
                     }
                     if(!estaImplementado && !this.esClaseAbstracta()){
+
                         throw new ExcepcionSemantica(this.getNombre().getLexema(),this.getNombre().getNroLinea(),"Metodo "+metodoPadre.getNombreMetodo().getLexema()+" no implementado en clase "+this.nombre.getLexema());
                     }
                 }
