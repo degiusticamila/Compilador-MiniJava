@@ -90,6 +90,18 @@ public class NodoBloque extends NodoSentencia {
         }
         return null;
     }
+    public boolean buscarDeclaradaEnBloques(String nombre){
+        NodoBloque bloque = this; //arranco desde el actual
+        while(bloque != null){
+            for(NodoVarLocal var: bloque.variablesLocales){
+                if(var.getNombreVarLocal().equals(nombre)){
+                    return true;
+                }
+            }
+            bloque = bloque.getNodoBloquePadre(); //subo
+        }
+        return false;
+    }
     public Tipo buscarTipoVariableEnBloques(String nombre) {
         NodoBloque bloque = this; // empezamos desde el actual
         while (bloque != null) {

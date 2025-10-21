@@ -39,10 +39,13 @@ public class NodoVarLocal extends NodoSentencia {
         // var id = e1
 
         if(m.parametroDeclarado(nombre.getLexema())){
-            throw new ExcepcionSemantica(this.nombre.getLexema(), this.nombre.getNroLinea(), "La variable tiene el mismo nombre que el parametro");
+            throw new ExcepcionSemantica(this.nombre.getLexema(), this.nombre.getNroLinea(), "La variable tiene el mismo nombre que un parametro");
         }
         if(b.variableLocalDeclarada(nombre.getLexema())){
             throw new ExcepcionSemantica(this.nombre.getLexema(), this.nombre.getNroLinea(), "La variable tiene el mismo nombre que una del bloque");
+        }
+        if(b.buscarDeclaradaEnBloques(nombre.getLexema())){
+            throw new ExcepcionSemantica(this.nombre.getLexema(), this.nombre.getNroLinea(), "Nombre de variable local repetido");
         }
         TablaSimbolos.getInstance().getBloqueActual().insertarVariable(this);
         tipo = ladoDerecho.chequear();

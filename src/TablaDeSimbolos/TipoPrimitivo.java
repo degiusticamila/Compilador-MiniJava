@@ -1,20 +1,27 @@
 package TablaDeSimbolos;
 
+import Utils.Token;
+
 public class TipoPrimitivo extends Tipo {
-    public static final Tipo NULL = new TipoPrimitivo("null");
+    public static final Tipo NULL = new TipoPrimitivo(new Token("null", "null", -1));
 
-    public TipoPrimitivo(String nombre) {
-        super(nombre);
+    public TipoPrimitivo(Token tokenTipo) {
+        super(tokenTipo.getLexema(), tokenTipo);
     }
-
+    public TipoPrimitivo(String nombre){
+        super(nombre, new Token(nombre, nombre, -1));
+    }
     @Override
     public boolean esCompatible(Tipo t) {
-        if(nombre.equals(t.nombre)){
+       return this.nombre.equals(t.nombre);
+        /* if(nombre.equals(t.nombre)){
             return true;
         }
         else{
-            throw new Error("Tipos no compatible"+nombre+t.nombre);
+            throw new ExcepcionSemantica(token.getLexema(), token.getNroLinea(),"El tipo"+nombre+"es incompatible con "+t.nombre);
         }
+
+        */
     }
 
     @Override

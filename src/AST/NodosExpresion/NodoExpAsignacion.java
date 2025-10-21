@@ -1,7 +1,7 @@
 package AST.NodosExpresion;
 
-import TablaDeSimbolos.Tipo;
-import TablaDeSimbolos.TipoUniversal;
+import AST.NodosSentencia.NodoBloque;
+import TablaDeSimbolos.*;
 import Utils.Token;
 
 public class NodoExpAsignacion extends NodoExpresion {
@@ -34,8 +34,26 @@ public class NodoExpAsignacion extends NodoExpresion {
    }
 
     @Override
-    public Tipo chequear() {
-        return new TipoUniversal("tipo universal");
+    public Tipo chequear() throws ExcepcionSemantica {
+        System.out.println("Chequeando ExpresionAsignacion");
+        TablaSimbolos ts = TablaSimbolos.getInstance();
+        Clase claseActual = ts.getClaseActual();
+        Metodo m = ts.getMetodoActual();
+        NodoBloque b = ts.getBloqueActual();
+
+       /*La expresi´en de asignaci´on Destino=Origen es correcta si y s´olo si:
+            Destino es correctamente tipada y, adem´as estructuralmente debe cumplir que:
+        – No tiene encadenado, debe ser un acceso a variable (resuelto correctamente).
+
+        – Tiene encadenado, el ultimo elemento del encadenado debe ser una variable.
+        Origen es una expresi´on correctamente tipada y su tipo conforma con el tipo de Destino.*/
+
+        Tipo tipoLadoDerecho = ladoDerecho.chequear();
+        Tipo tipoLadoIzquierdo = ladoIzquierdo.chequear();
+        if(!tipoLadoDerecho.esCompatible(tipoLadoIzquierdo)){
+            throw new ExcepcionSemantica(operador.getLexema(),operador.getNroLinea(),"El tipo "+tipoLadoDerecho+" no conforma con "+tipoLadoIzquierdo);
+        }
+        return tipoLadoDerecho; //qué tipo se devuelve?
     }
 
     @Override

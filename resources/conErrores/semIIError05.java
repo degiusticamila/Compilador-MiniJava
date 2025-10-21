@@ -16,23 +16,9 @@ class A {
            {
                  var x = true;
            }
-           
-           
+
         }
-        
-       
     }
-    
- 
-  
-}
-
-
-
-
-class Init{
-    static void main()
-    { }
 }
 
 

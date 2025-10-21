@@ -5,23 +5,14 @@ class A {
 
     A v1;   
     
-     void m1(B p1)
-    
-    {
+     void m1(B p1, C p2) {
+         v1 = p1;
+         p1 = p2;
         p1 = v1;
-        
+
     }
-         
-    
-
 }
-
 class B extends A {}
-
-
-class Init{
-    static void main()
-    { }
-}
+class C extends B {}
 
 

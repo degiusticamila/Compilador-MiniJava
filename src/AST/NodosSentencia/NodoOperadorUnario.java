@@ -32,7 +32,7 @@ public class NodoOperadorUnario extends NodoExpresion{
 
                 //el tipo de lado derecho debe ser entero
                 if(!tipoOperando.esCompatible(new TipoPrimitivo("int"))){
-                    throw new ExcepcionSemantica(nombre.getLexema(), nombre.getNroLinea(), "Tipos incompatibles");
+                    throw new ExcepcionSemantica(nombre.getLexema(), nombre.getNroLinea(), "El tipo "+tipoOperando+" es incompatible con el operador "+nombre.getLexema());
                 }
                 return new TipoPrimitivo("int");
             }
