@@ -1,4 +1,8 @@
 package Sintactico;
+import AST.NodosEncadenado.NodoEncadenado;
+import AST.NodosEncadenado.NodoEncadenadoVacio;
+import AST.NodosEncadenado.NodoLlamadaEncadenada;
+import AST.NodosEncadenado.NodoVarEncadenada;
 import AST.NodosOperando.*;
 import AST.NodosExpresion.*;
 import AST.NodosSentencia.*;
@@ -10,6 +14,7 @@ import Utils.Token;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class AnalizadorSintactico {
@@ -694,16 +699,23 @@ public class AnalizadorSintactico {
         }
     }
     private NodoExpresion referencia() throws ExcepcionLexica, IOException, ExcepcionSintactica {
-        NodoExpresion nodoOperando = primario();
-        referenciaResto();
-        return nodoOperando;
+        NodoExpresion var = primario();
+        NodoEncadenado e = referenciaResto();
+        if(var instanceof NodoAccesoVar){
+            NodoAccesoVar varAcceso = (NodoAccesoVar)var;
+            varAcceso.setEncadenado(e);
+            return varAcceso;
+        }
+        return var;
     }
-    private void referenciaResto() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private NodoEncadenado referenciaResto() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+        NodoEncadenado encadenado = new NodoEncadenadoVacio();
         if(primeros.estaEnPrimeros(NoTerminales.Encadenado, tokenActual.getId())){
-            encadenado();
+            encadenado = encadenado();
             referenciaResto();
         }
         else{/* $ */}
+        return encadenado;
     }
     private NodoExpresion primario() throws ExcepcionLexica, IOException, ExcepcionSintactica {
         NodoOperando nodoOperando;
@@ -826,16 +838,27 @@ public class AnalizadorSintactico {
         }
         else{/*$*/}
     }
-    private void encadenado() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private NodoEncadenado encadenado() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+        //cuando se le setea a ACCESOVAR EL ENCADENADO?
+        NodoEncadenado encadenado = new NodoEncadenadoVacio();
         match(".");
+        Token tokenNombreEncadenado = tokenActual;
         match("idMetVar");
-        restoEncadenado();
+        encadenado = restoEncadenado(tokenNombreEncadenado,encadenado);
+        return encadenado;
+
     }
-    private void restoEncadenado() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private NodoEncadenado restoEncadenado(Token nombreEncadenado,NodoEncadenado encadenado) throws ExcepcionLexica, IOException, ExcepcionSintactica {
+
         if(primeros.estaEnPrimeros(NoTerminales.ArgsActuales, tokenActual.getId())){
-            argsActuales();
+            List<NodoExpresion> lista = argsActuales();
+            NodoEncadenado nodoLlamadaEncadenada = new NodoLlamadaEncadenada(nombreEncadenado,new NodoEncadenadoVacio(),lista);
+            return nodoLlamadaEncadenada;
         }
-        else{/* $ */}
+        else{
+            NodoEncadenado nodoVariableEncadenada = new NodoVarEncadenada(nombreEncadenado,new NodoEncadenadoVacio());
+            return nodoVariableEncadenada; //ver
+        }
     }
     private void match(String nombreToken) throws ExcepcionSintactica, IOException, ExcepcionLexica {
         if(nombreToken.equals(tokenActual.getId())){

@@ -1,5 +1,6 @@
 package AST.NodosOperando;
 
+import AST.NodosEncadenado.NodoEncadenado;
 import AST.NodosExpresion.NodoExpresion;
 import AST.NodosSentencia.NodoBloque;
 import TablaDeSimbolos.*;
@@ -7,7 +8,7 @@ import Utils.Token;
 
 public class NodoAccesoVar extends NodoOperando {
     Token nombre;
-
+    NodoEncadenado encadenado;
     public NodoAccesoVar(Token nombre){
         this.nombre = nombre;
     }
@@ -86,5 +87,8 @@ public class NodoAccesoVar extends NodoOperando {
             bloque = bloque.getNodoBloquePadre();
         }
         return false;
+    }
+    public void setEncadenado(NodoEncadenado nodoEncadenado){
+        this.encadenado = nodoEncadenado;
     }
 }
