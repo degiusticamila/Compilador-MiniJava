@@ -1,6 +1,7 @@
 package AST.NodosOperando;
 
 import AST.NodosEncadenado.NodoEncadenado;
+import AST.NodosEncadenado.NodoEncadenadoVacio;
 import AST.NodosExpresion.NodoExpresion;
 import AST.NodosSentencia.NodoBloque;
 import TablaDeSimbolos.*;
@@ -11,6 +12,7 @@ public class NodoAccesoVar extends NodoOperando {
     NodoEncadenado encadenado;
     public NodoAccesoVar(Token nombre){
         this.nombre = nombre;
+        encadenado = new NodoEncadenadoVacio();
     }
 
     @Override
@@ -27,10 +29,20 @@ public class NodoAccesoVar extends NodoOperando {
     }
     public void imprimir(String prefijo) {
         System.out.print(prefijo + nombre.getLexema());
+        if(!(encadenado instanceof NodoEncadenadoVacio)){
+            System.out.println(".");
+            encadenado.imprimir("");
+        }
+        System.out.println();
     }
     @Override
     public String formatear() {
-        return nombre.getLexema();
+        if(encadenado instanceof NodoEncadenadoVacio){
+            return nombre.getLexema();
+        }
+
+
+        return nombre.getLexema() + "." + encadenado.formatear();
     }
 
     @Override
