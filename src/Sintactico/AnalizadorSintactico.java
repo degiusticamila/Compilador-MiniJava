@@ -482,12 +482,13 @@ public class AnalizadorSintactico {
         }
     }
     private NodoSentencia While() throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
+        Token tokenWhile = tokenActual;
         match("while");
         match("(");
         NodoExpresion expresionWhile = expresion();
         match(")");
         NodoSentencia sentenciaWhile = sentencia();
-        NodoSentencia nodoWhile = new NodoWhile(expresionWhile, sentenciaWhile);
+        NodoSentencia nodoWhile = new NodoWhile(tokenWhile,expresionWhile, sentenciaWhile);
         return nodoWhile;
     }
     private NodoExpresion expresion() throws ExcepcionLexica, IOException, ExcepcionSintactica {

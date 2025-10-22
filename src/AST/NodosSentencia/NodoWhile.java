@@ -1,12 +1,18 @@
 package AST.NodosSentencia;
 
 import AST.NodosExpresion.NodoExpresion;
+import TablaDeSimbolos.ExcepcionSemantica;
+import TablaDeSimbolos.Tipo;
+import TablaDeSimbolos.TipoPrimitivo;
+import Utils.Token;
 
 public class NodoWhile extends NodoSentencia {
+    private Token tokenWhile;
     private NodoSentencia sentencia;
     private NodoExpresion expresion;
 
-    public NodoWhile(NodoExpresion expresion, NodoSentencia sentencia){
+    public NodoWhile(Token tokenWhile, NodoExpresion expresion, NodoSentencia sentencia){
+        this.tokenWhile = tokenWhile;
         this.expresion = expresion;
         this.sentencia =  sentencia;
     }
@@ -24,7 +30,11 @@ public class NodoWhile extends NodoSentencia {
     }
 
     @Override
-    public void chequear() {
-
+    public void chequear() throws ExcepcionSemantica {
+        Tipo tipoExpresion = expresion.chequear();
+        if(!tipoExpresion.esCompatible(new TipoPrimitivo("boolean"))){
+            throw new ExcepcionSemantica(tokenWhile.getLexema(),tokenWhile.getNroLinea(), "El tipo de la expresion es de tipo "+tipoExpresion+" y no es compatible con boolean");
+        }
+        sentencia.chequear();
     }
 }
