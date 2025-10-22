@@ -1,13 +1,13 @@
 package AST.NodosOperando;
 
+import AST.NodosEncadenado.NodoEncadenado;
 import AST.NodosExpresion.NodoExpresion;
-import TablaDeSimbolos.Tipo;
-import TablaDeSimbolos.TipoUniversal;
+import TablaDeSimbolos.*;
 import Utils.Token;
 
-public class NodoThis extends NodoOperando {
+    public class NodoThis extends NodoOperando {
     private Token tokenThis;
-
+    private NodoEncadenado encadenado;
     public NodoThis(Token tokenThis) {
         this.tokenThis = tokenThis;
     }
@@ -27,12 +27,38 @@ public class NodoThis extends NodoOperando {
     }
 
     @Override
+    public void imprimir(String prefijo) {
+
+    }
+
+    @Override
     public String formatear() {
         return tokenThis.getLexema();
     }
 
     @Override
-    public Tipo chequear() {
+    public Tipo chequear() throws ExcepcionSemantica {
+        /*El tipo de this es el mismo que el de la clase en que se esta utilizando, y no es posible utilizarlo en
+        metodos estaticos.*/
+        TablaSimbolos tablaSimbolos = TablaSimbolos.getInstance();
+        if(tablaSimbolos.getMetodoActual().esMetodoEstatico()){
+            throw new ExcepcionSemantica(tokenThis.getLexema(), tokenThis.getNroLinea(), "No es posible invocar a this en métodos estáticos");
+        }
+       /* String nombreTipo = "";
+        if(encadenado != null){
+            encadenado.chequear();
+        }
+        else{
+            nombreTipo = tablaSimbolos.getClaseActual().getNombre().getLexema();
+        }
+
+        System.out.println("Tipo de this: " + nombreTipo);
+        return new TipoReferencia(nombreTipo);
+
+        */
         return new TipoUniversal("tipo universal");
+    }
+    public void setEncadenado(NodoEncadenado nodoEncadenado) {
+        this.encadenado = nodoEncadenado;
     }
 }

@@ -28,7 +28,6 @@ public class NodoBloque extends NodoSentencia {
         }
         variablesLocales.addLast(nodo);
     }
-
     public List<NodoSentencia> getSentencias() {
         return sentencias;
     }
@@ -70,12 +69,16 @@ public class NodoBloque extends NodoSentencia {
         return false;
     }
     public boolean variableLocalDeclarada(String nombre){;
-        System.out.println();
+        /*System.out.println();
         System.out.println("¿Buscando variable local? -> " + nombre);
         System.out.println(this.variablesLocales.toString());
+
+         */
         for(NodoVarLocal nodoVarLocal: variablesLocales){
-            System.out.println("Tengo declarada: " + nodoVarLocal.getNombreVarLocal());
+           /* System.out.println("Tengo declarada: " + nodoVarLocal.getNombreVarLocal());
             System.out.println(nodoVarLocal.getNombreVarLocal());
+
+            */
             if(nodoVarLocal.getNombreVarLocal().equals(nombre)){
                 return true;
             }
@@ -110,7 +113,7 @@ public class NodoBloque extends NodoSentencia {
                     return var.getTipoVarLocal();
                 }
             }
-            bloque = bloque.getNodoBloquePadre(); // subimos
+            bloque = bloque.getNodoBloquePadre(); // subo
         }
         return null; // no se encontró
     }

@@ -40,6 +40,9 @@ public class Metodo {
     public boolean esMetodoAbstracto(){
         return modificador != null && modificador.getLexema().equals("abstract");
     }
+    public boolean esMetodoEstatico(){
+        return modificador != null && modificador.getLexema().equals("static");
+    }
     public LinkedList<Parametro> getParametros() {
         return parametros;
     }

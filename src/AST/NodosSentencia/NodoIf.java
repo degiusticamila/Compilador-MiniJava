@@ -1,12 +1,18 @@
 package AST.NodosSentencia;
 
 import AST.NodosExpresion.NodoExpresion;
+import TablaDeSimbolos.ExcepcionSemantica;
+import TablaDeSimbolos.Tipo;
+import TablaDeSimbolos.TipoPrimitivo;
+import Utils.Token;
 
 public class NodoIf extends NodoSentencia {
+    private Token tokenif;
     private NodoExpresion condicion;
     private NodoSentencia sentenciaIf;
     private NodoSentencia sentenciaElse;
-    public NodoIf(NodoExpresion condicion, NodoSentencia sentenciaIf, NodoSentencia sentenciaElse) {
+    public NodoIf(Token tokenif,NodoExpresion condicion, NodoSentencia sentenciaIf, NodoSentencia sentenciaElse) {
+        this.tokenif = tokenif;
         this.condicion = condicion;
         this.sentenciaIf = sentenciaIf;
         this.sentenciaElse = sentenciaElse;
@@ -30,7 +36,15 @@ public class NodoIf extends NodoSentencia {
     }
 
     @Override
-    public void chequear() {
-
+    public void chequear() throws ExcepcionSemantica {
+        Tipo tipoCondicion = condicion.chequear();
+        System.out.println("Tipo de condicion del if"+tipoCondicion);
+        if(!tipoCondicion.esCompatible(new TipoPrimitivo("boolean"))){
+            throw new ExcepcionSemantica(tokenif.getLexema(), tokenif.getNroLinea(), "El tipo de la condicion "+tipoCondicion+" no es compatible con boolean");
+        }
+        sentenciaIf.chequear();
+        if(!(sentenciaElse instanceof NodoSentenciaVacia)){
+            sentenciaElse.chequear();
+        }
     }
 }

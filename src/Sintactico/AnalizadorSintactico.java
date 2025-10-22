@@ -461,13 +461,14 @@ public class AnalizadorSintactico {
         }
     }
     private NodoSentencia If() throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
+        Token tokenIf = tokenActual;
         match("if");
         match("(");
         NodoExpresion nodoExpresionIf = expresion();
         match(")");
         NodoSentencia nodoSentenciaIf = sentencia();
         NodoSentencia nodoSentenciaElse = IfResto();
-        NodoSentencia nodoIf = new NodoIf(nodoExpresionIf, nodoSentenciaIf, nodoSentenciaElse);
+        NodoSentencia nodoIf = new NodoIf(tokenIf, nodoExpresionIf, nodoSentenciaIf, nodoSentenciaElse);
         return nodoIf;
     }
     private NodoSentencia IfResto() throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
@@ -705,6 +706,11 @@ public class AnalizadorSintactico {
             varAcceso.setEncadenado(e);
             return varAcceso;
         }
+        if(var instanceof NodoThis){
+            NodoThis varThis = (NodoThis)var;
+            varThis.setEncadenado(e);
+            return varThis;
+        }
         return var;
     }
     private NodoEncadenado referenciaResto() throws ExcepcionLexica, IOException, ExcepcionSintactica {
@@ -737,7 +743,7 @@ public class AnalizadorSintactico {
     private NodoExpresion primario() throws ExcepcionLexica, IOException, ExcepcionSintactica {
         NodoOperando nodoOperando;
         if(tokenActual.getId().equals("this")){
-            NodoOperando nodoOp = new NodoThis(tokenActual);
+            NodoExpresion nodoOp = new NodoThis(tokenActual);
             match("this");
             return nodoOp;
         }

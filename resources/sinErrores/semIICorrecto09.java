@@ -2,6 +2,7 @@
 
 class A {
     B a1;
+
     int a2;
 }
 
