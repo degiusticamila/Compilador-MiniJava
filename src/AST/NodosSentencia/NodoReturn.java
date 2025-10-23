@@ -1,6 +1,8 @@
 package AST.NodosSentencia;
 
 import AST.NodosExpresion.NodoExpresion;
+import AST.NodosExpresion.NodoExpresionVacia;
+import TablaDeSimbolos.*;
 import Utils.Token;
 
 public class NodoReturn extends NodoSentencia {
@@ -18,7 +20,27 @@ public class NodoReturn extends NodoSentencia {
     }
 
     @Override
-    public void chequear() {
+    public void chequear() throws ExcepcionSemantica {
+        TablaSimbolos tablaSimbolos = TablaSimbolos.getInstance();
+        Metodo metodoActual = tablaSimbolos.getMetodoActual();
+
+        Tipo tipoRetornoMetodo = metodoActual.getTipoRetorno();
+
+        if(expresionOpcional instanceof NodoExpresionVacia && (!(tipoRetornoMetodo instanceof TipoVoid))){
+            throw new ExcepcionSemantica(nombre.getLexema(),nombre.getNroLinea(),"Tipo de retorno vacio, se esperaba "+tipoRetornoMetodo);
+        }
+        if(!(expresionOpcional instanceof NodoExpresionVacia) && tipoRetornoMetodo instanceof TipoVoid){
+            Tipo tipoExpresionOp = expresionOpcional.chequear();
+            throw new ExcepcionSemantica(nombre.getLexema(),nombre.getNroLinea(), "Tipo de retorno debe ser void, no "+tipoExpresionOp);
+        }
+        if(!(expresionOpcional instanceof NodoExpresionVacia)){
+           Tipo tipoExpresionOp = expresionOpcional.chequear();
+            System.out.println("Tipo de retorno de la expresion"+tipoExpresionOp);
+           if(!tipoExpresionOp.esCompatible( tipoRetornoMetodo)){
+               throw new ExcepcionSemantica(nombre.getLexema(), nombre.getNroLinea(), "Tipo de retorno debería es "+tipoRetornoMetodo+" en lugar de "+tipoExpresionOp);
+           }
+        }
+        System.out.println("Tipo de retorno del metodo"+tipoRetornoMetodo);
 
     }
 }
