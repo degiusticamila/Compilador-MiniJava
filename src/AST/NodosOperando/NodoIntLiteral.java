@@ -7,6 +7,7 @@ import Utils.Token;
 
 public class NodoIntLiteral extends NodoOperando {
     Token nombre;
+
     public NodoIntLiteral(Token nombre){
         this.nombre = nombre;
     }
@@ -39,5 +40,8 @@ public class NodoIntLiteral extends NodoOperando {
     @Override
     public Tipo chequear() {
         return new TipoPrimitivo("int");
+    }
+    public Token getNombre(){
+        return nombre;
     }
 }

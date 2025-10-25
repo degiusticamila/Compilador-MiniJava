@@ -1,6 +1,7 @@
 package AST.NodosOperando;
 
 import AST.NodosEncadenado.NodoEncadenado;
+import AST.NodosEncadenado.NodoEncadenadoVacio;
 import AST.NodosExpresion.NodoExpresion;
 import TablaDeSimbolos.*;
 import Utils.Token;
@@ -27,13 +28,27 @@ import Utils.Token;
     }
 
     @Override
+    public Token getNombre() {
+        return tokenThis;
+    }
+    @Override
     public void imprimir(String prefijo) {
-
+        System.out.print(prefijo + tokenThis.getLexema());
+        if(!(encadenado instanceof NodoEncadenadoVacio)){
+            System.out.println(".");
+            encadenado.imprimir("");
+        }
+        System.out.println();
     }
 
     @Override
     public String formatear() {
-        return tokenThis.getLexema();
+        if(encadenado instanceof NodoEncadenadoVacio){
+            return tokenThis.getLexema();
+        }
+
+
+        return tokenThis.getLexema() + "." + encadenado.formatear();
     }
 
     @Override

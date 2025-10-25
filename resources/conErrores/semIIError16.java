@@ -1,4 +1,4 @@
-///[Error:while|8]
+///[Error:123|8]
 
 class A {
     int a1;

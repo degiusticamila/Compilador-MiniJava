@@ -27,6 +27,12 @@ public class NodoAccesoVar extends NodoOperando {
     public void setLadoDerecho(NodoExpresion nodoExpresion) {
 
     }
+
+    @Override
+    public Token getNombre() {
+        return nombre;
+    }
+
     public void imprimir(String prefijo) {
         System.out.print(prefijo + nombre.getLexema());
         if(!(encadenado instanceof NodoEncadenadoVacio)){

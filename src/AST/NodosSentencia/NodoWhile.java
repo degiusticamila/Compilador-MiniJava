@@ -33,7 +33,8 @@ public class NodoWhile extends NodoSentencia {
     public void chequear() throws ExcepcionSemantica {
         Tipo tipoExpresion = expresion.chequear();
         if(!tipoExpresion.esCompatible(new TipoPrimitivo("boolean"))){
-            throw new ExcepcionSemantica(tokenWhile.getLexema(),tokenWhile.getNroLinea(), "El tipo de la expresion es de tipo "+tipoExpresion+" y no es compatible con boolean");
+            //Extender de getNombre desde expresion para pedir el token.
+            throw new ExcepcionSemantica(tipoExpresion.getToken().getLexema(),tokenWhile.getNroLinea(), "El tipo de la expresion es de tipo "+tipoExpresion+" y no es compatible con boolean");
         }
         sentencia.chequear();
     }

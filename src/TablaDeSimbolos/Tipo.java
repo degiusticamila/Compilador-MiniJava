@@ -17,6 +17,9 @@ public abstract class Tipo {
     public String getNombre() {
         return nombre;
     }
+    public void setToken(Token token){
+        this.token = token;
+    }
     public abstract boolean esCompatible(Tipo t);
     public abstract boolean esPrimitivo();
     public abstract boolean esReferencia();

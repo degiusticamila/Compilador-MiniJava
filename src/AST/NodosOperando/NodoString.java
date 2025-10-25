@@ -6,10 +6,10 @@ import TablaDeSimbolos.TipoUniversal;
 import Utils.Token;
 
 public class NodoString extends NodoOperando{
-    private Token string;
+    private Token nombre;
 
     public NodoString(Token token) {
-        this.string = token;
+        this.nombre= token;
     }
     @Override
     public void setOperador(Token operador) {
@@ -34,5 +34,10 @@ public class NodoString extends NodoOperando{
     @Override
     public Tipo chequear() {
         return new TipoUniversal("tipo universal");
+    }
+
+    @Override
+    public Token getNombre() {
+        return nombre;
     }
 }

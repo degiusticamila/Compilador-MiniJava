@@ -27,6 +27,11 @@ public class NodoBoolean extends NodoOperando {
     }
 
     @Override
+    public Token getNombre() {
+        return nombre;
+    }
+
+    @Override
     public void imprimir(String prefijo) {
         System.out.print(prefijo + " "+" "+ nombre.getLexema());
     }

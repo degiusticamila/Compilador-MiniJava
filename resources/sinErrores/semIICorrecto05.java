@@ -3,22 +3,23 @@
 class A {
     B a1;
     int a2;
-   
-    
+
+
     
     
 } 
 
 class B extends A{
     A a3;
-    
+    C c1;
      void m1(B p1)     
     {
-        a1.a3.a2 = 4;
+        a3 = c1;
+       // a1.a3.a2 = 4;
         
     }
 }
-
+class C extends B{}
 
 class Init{
     static void main()

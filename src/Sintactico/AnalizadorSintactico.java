@@ -197,6 +197,7 @@ public class AnalizadorSintactico {
             Token modificador = modificadorOpcional();
             Token tokenTipo = tipoMetodo();
             Tipo tipo = construirTipoDesdeToken(tokenTipo);
+            tipo.setToken(tokenTipo);
             Token tokenMetodo = tokenActual;
             Metodo m = new Metodo(modificador,tipo,tokenMetodo);
             tablaSimbolos.setMetodoActual(m);
@@ -218,6 +219,7 @@ public class AnalizadorSintactico {
     private void miembroResto(Token nombreIdMetVar, Token tokenTipo) throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
         if(tokenActual.getId().equals(";")){
             Tipo tipo = construirTipoDesdeToken(tokenTipo);
+            tipo.setToken(tokenTipo);
             Atributo a = new Atributo(tipo, nombreIdMetVar);
             match(";");
             tablaSimbolos.getClaseActual().insertarAtributo(nombreIdMetVar,a);
@@ -226,7 +228,9 @@ public class AnalizadorSintactico {
 
             Token modificador = modificadorOpcional();
             Token tokenMetodo = tokenActual;
+
             Tipo tipo = construirTipoDesdeToken(tokenTipo);
+            tipo.setToken(tokenTipo);
             Metodo m = new Metodo(modificador,tipo,nombreIdMetVar);
 
             tablaSimbolos.setMetodoActual(m);
@@ -272,6 +276,7 @@ public class AnalizadorSintactico {
     }
     private Token tipo() throws ExcepcionSintactica, ExcepcionLexica, IOException {
         if(primeros.estaEnPrimeros(NoTerminales.TipoPrimitivo, tokenActual.getId())){
+            System.out.println(tokenActual.getLexema());
             Token tipoPrimitivo = tipoPrimitivo();
             return tipoPrimitivo;
         }
@@ -287,15 +292,16 @@ public class AnalizadorSintactico {
     private Token tipoPrimitivo() throws ExcepcionSintactica, ExcepcionLexica, IOException {
         if(tokenActual.getId().equals("boolean")){
             match("boolean");
-            return new Token(tokenActual.getId(),"boolean",0);
+            return new Token(tokenActual.getId(),"boolean",tokenActual.getNroLinea());
         }
         else if(tokenActual.getId().equals("char")){
             match("char");
-            return new Token(tokenActual.getId(),"char",0);
+            return new Token(tokenActual.getId(),"char",tokenActual.getNroLinea());
         }
         else if(tokenActual.getId().equals("int")){
+            System.out.println("Lexema del token actual"+tokenActual.getLexema());
             match("int");
-            return new Token(tokenActual.getId(),"int",0);
+            return new Token(tokenActual.getId(),"int",tokenActual.getNroLinea());
         }
         else{
             throw new ExcepcionSintactica(tokenActual,"boolean | char | int");
@@ -331,6 +337,7 @@ public class AnalizadorSintactico {
     private void argFormal(Token construtorOmetodo) throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
         Token tokenTipoParametro = tipo();
         Tipo tipoParametro = construirTipoDesdeToken(tokenTipoParametro);
+        tipoParametro.setToken(tokenTipoParametro);
         Token nombreParametro = tokenActual;
         Parametro p = new Parametro(tipoParametro,nombreParametro,1 );
 

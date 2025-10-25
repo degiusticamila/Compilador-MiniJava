@@ -30,4 +30,9 @@ public class NodoOperandoVacio extends NodoOperando{
     public Tipo chequear() {
         return new TipoUniversal("tipo universal");
     }
+
+    @Override
+    public Token getNombre() {
+        return null;
+    }
 }
