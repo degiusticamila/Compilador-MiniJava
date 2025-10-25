@@ -7,7 +7,7 @@ import Utils.Token;
 
 import java.util.LinkedList;
 
-public class Metodo {
+public class Metodo implements Elemento{
     private Tipo tipoRetorno;  //y si es void?
     private Token nombre;
     private LinkedList<Parametro> parametros;
@@ -83,5 +83,14 @@ public class Metodo {
             }
         }
         return null;
+    }
+    public Tipo getTipo(){
+        return tipoRetorno;
+    }
+    public String getNombre(){
+        return nombre.getLexema();
+    }
+    public int getLinea(){
+        return nombre.getNroLinea();
     }
 }

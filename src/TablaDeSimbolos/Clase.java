@@ -81,6 +81,9 @@ public class Clase {
     public Constructor getConstructor(){
         return constructor;
     }
+    public Metodo getMetodo(String nombreMetodo){
+        return metodos.get(nombreMetodo);
+    }
     public void getAtributos(){
         for(String s : atributos.keySet()){
             System.out.println(s+" Atributos : "+atributos.get(s));

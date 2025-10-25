@@ -14,9 +14,6 @@ class A {
      A m3(){
         return new A();
     }
-         
-    
-
 }
 
 
