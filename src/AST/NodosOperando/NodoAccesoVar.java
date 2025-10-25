@@ -4,12 +4,14 @@ import AST.NodosEncadenado.NodoEncadenado;
 import AST.NodosEncadenado.NodoEncadenadoVacio;
 import AST.NodosExpresion.NodoExpresion;
 import AST.NodosSentencia.NodoBloque;
+import AST.NodosSentencia.NodoVarLocal;
 import TablaDeSimbolos.*;
 import Utils.Token;
 
 public class NodoAccesoVar extends NodoOperando {
     Token nombre;
     NodoEncadenado encadenado;
+    private Elemento referenciaTS;
     public NodoAccesoVar(Token nombre){
         this.nombre = nombre;
         encadenado = new NodoEncadenadoVacio();
@@ -46,8 +48,6 @@ public class NodoAccesoVar extends NodoOperando {
         if(encadenado instanceof NodoEncadenadoVacio){
             return nombre.getLexema();
         }
-
-
         return nombre.getLexema() + "." + encadenado.formatear();
     }
 
@@ -57,33 +57,38 @@ public class NodoAccesoVar extends NodoOperando {
 
         TablaSimbolos ts = TablaSimbolos.getInstance();
         Clase claseActual = ts.getClaseActual();
-        Metodo m = ts.getMetodoActual();
-        NodoBloque b = ts.getBloqueActual();
+        Metodo metodoActual = ts.getMetodoActual();
+        NodoBloque bloqueActual = ts.getBloqueActual();
 
-        //es variable local
-        if(b.variableLocalDeclarada(nombre.getLexema())){
-            System.out.println("LA VARIABLE ESTA DECLARADA");
-            System.out.println(b.getTipoVariableLocalDeclarada(nombre.getLexema()));
-            return b.getTipoVariableLocalDeclarada(nombre.getLexema());
+        NodoVarLocal varLocal = bloqueActual.getVariableLocal(nombre.getLexema());
+        if(varLocal != null){
+            referenciaTS = varLocal;
         }
-        //falta ver en caso de que sean bloques anidados
-        /*if (buscarEnBloques(nombre.getLexema())) { //NEW
-            return b.getTipoVariableLocalDeclarada(nombre.getLexema());
+        else if(metodoActual.parametroDeclarado(nombre.getLexema())){
+            referenciaTS = metodoActual.getParametro(nombre.getLexema());
         }
-        if(b.variableDeclaradaEnAlgunBloque(nombre.getLexema())){
-            System.out.println("La variable esta declarada en un bloque de AFUERA");
-            System.out.println(b.getTipoVariableLocalDeclarada(nombre.getLexema()));
-            return b.getTipoVariableLocalDeclarada(nombre.getLexema());
+        else if(claseActual.atributoDeclarado(nombre.getLexema())){
+            referenciaTS = claseActual.getAtributo(nombre.getLexema());
         }
-         */
+        else{
+            throw new ExcepcionSemantica(nombre.getLexema(), nombre.getNroLinea(), "Variable no declarada");
+        }
+        Tipo tipoBase = referenciaTS.getTipo();
+        //Si tiene encadenado, delego el chequeo.
+        if(!(encadenado instanceof NodoEncadenadoVacio)){
+            return encadenado.chequear(tipoBase);
+        }
+        return tipoBase;
+
+        /*
         Tipo tipo = b.buscarTipoVariableEnBloques(nombre.getLexema());
         if (tipo != null) {
             System.out.println("Variable encontrada en algún bloque. Tipo = " + tipo);
             return tipo;
         }
-
         //es parametro
         else if(m.parametroDeclarado(nombre.getLexema())){
+            //varEnTS = ts.getMetodoActual().getParametro(nombre.getLexema());
             System.out.println(m.getTipoParametro(nombre.getLexema()));
             return m.getTipoParametro(nombre.getLexema());
         }
@@ -95,6 +100,7 @@ public class NodoAccesoVar extends NodoOperando {
         else{
             throw new ExcepcionSemantica(nombre.getLexema(),nombre.getNroLinea(),"variable no declarada");
         }
+        */
     }
     private boolean buscarEnBloques(String nombre) throws ExcepcionSemantica {
         NodoBloque bloque = TablaSimbolos.getInstance().getBloqueActual();

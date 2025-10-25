@@ -14,6 +14,7 @@ import Utils.Token;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class AnalizadorSintactico {
@@ -767,8 +768,11 @@ public class AnalizadorSintactico {
             return nodoOperando;
         }
         else if(primeros.estaEnPrimeros(NoTerminales.LlamadaConstructor, tokenActual.getId())){
-            llamadaConstructor();
-            return new NodoOperandoVacio();
+            NodoOperando nodoLlamadaConstructor = llamadaConstructor();
+            System.out.println("Llamada constructor");
+            System.out.println(nodoLlamadaConstructor.getNombre());
+            System.out.println();
+            return nodoLlamadaConstructor;
         }
         else if(primeros.estaEnPrimeros(NoTerminales.LlamadaMetodoEstatico, tokenActual.getId())){
             llamadaMetodoEstatico();
@@ -790,15 +794,19 @@ public class AnalizadorSintactico {
             /* $ es el caso de accesoVar*/
         }
     }
-    private void llamadaConstructor() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private NodoLlamadaConstructor llamadaConstructor() throws ExcepcionLexica, IOException, ExcepcionSintactica {
         match("new");
+        NodoLlamadaConstructor nodoLlamadaConstructor = new NodoLlamadaConstructor(tokenActual, new LinkedList<>());
         match("idClase");
 
         //OPCIONAL GENERICIDAD
         if(primeros.estaEnPrimeros(NoTerminales.TipoParametricoInst, tokenActual.getId())){
             tipoParametricoInst();
         }
-        argsActuales();
+        List<NodoExpresion> lista = argsActuales();
+        nodoLlamadaConstructor.setArgumentos(lista);
+        return nodoLlamadaConstructor;
+
     }
     private void tipoParametricoOpcional() throws ExcepcionLexica, IOException, ExcepcionSintactica {
         if(tokenActual.getId().equals("<")){

@@ -1,6 +1,7 @@
 package TablaDeSimbolos;
 
 import AST.NodosSentencia.NodoBloque;
+import AST.NodosSentencia.NodoBloqueVacio;
 import Utils.Token;
 
 import java.util.HashMap;
@@ -14,6 +15,7 @@ public class Constructor {
     public Constructor(Token nombre){
         parametros = new LinkedList<>();
         this.nombre = nombre;
+        this.bloque = new NodoBloqueVacio();
     }
     public void insertarParametro(String lexema,Parametro p,int numLine) throws ExcepcionSemantica {
         if(!parametroDeclarado(lexema)){
@@ -28,7 +30,7 @@ public class Constructor {
 
        //return parametros.containsKey(lexema);
        for(Parametro p : parametros){
-           if(p.getNombre().getLexema().equals(lexema)){
+           if(p.getNombre().equals(lexema)){
                return true;
            }
        }
@@ -47,5 +49,11 @@ public class Constructor {
     public void insertarBloque(NodoBloque bloque, NodoBloque nodoBloquePadre) {
         this.bloque = bloque;
         bloque.setNodoBloquePadre(nodoBloquePadre);
+    }
+    public NodoBloque getBloque(){
+        if(!(bloque instanceof NodoBloqueVacio)){
+            return bloque;
+        }
+        return new NodoBloqueVacio();
     }
 }

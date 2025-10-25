@@ -105,6 +105,19 @@ public class NodoBloque extends NodoSentencia {
         }
         return false;
     }
+    public NodoVarLocal getVariableLocal(String nombre){
+
+        NodoBloque bloque = this; //arranco desde el actual
+        while(bloque != null){
+            for(NodoVarLocal var: bloque.variablesLocales){
+                if(var.getNombreVarLocal().equals(nombre)){
+                    return var;
+                }
+            }
+            bloque = bloque.getNodoBloquePadre(); //subo
+        }
+        return null;
+    }
     public Tipo buscarTipoVariableEnBloques(String nombre) {
         NodoBloque bloque = this; // empezamos desde el actual
         while (bloque != null) {

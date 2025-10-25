@@ -5,7 +5,7 @@ import AST.NodosExpresion.NodoExpresionVacia;
 import TablaDeSimbolos.*;
 import Utils.Token;
 
-public class NodoVarLocal extends NodoSentencia {
+public class NodoVarLocal extends NodoSentencia implements Elemento {
     public Token nombre;
     private Token operador;
     private NodoExpresion ladoDerecho;
@@ -74,5 +74,14 @@ public class NodoVarLocal extends NodoSentencia {
     }
     public Tipo getTipoVarLocal(){
         return tipo;
+    }
+    public String getNombre(){
+        return nombre.getLexema();
+    }
+    public Tipo getTipo(){
+        return tipo;
+    }
+    public int getLinea(){
+        return nombre.getNroLinea();
     }
 }

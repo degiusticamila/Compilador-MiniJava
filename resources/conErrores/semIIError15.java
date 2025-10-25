@@ -1,4 +1,4 @@
-///[Error:if|8]
+///[Error:3|8]
 //CONSULTAR
 class A {
     int a1;

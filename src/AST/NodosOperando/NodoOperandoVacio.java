@@ -35,4 +35,9 @@ public class NodoOperandoVacio extends NodoOperando{
     public Token getNombre() {
         return null;
     }
+
+    @Override
+    public void imprimir(String s) {
+
+    }
 }

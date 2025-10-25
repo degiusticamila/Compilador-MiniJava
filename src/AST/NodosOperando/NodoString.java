@@ -40,4 +40,9 @@ public class NodoString extends NodoOperando{
     public Token getNombre() {
         return nombre;
     }
+
+    @Override
+    public void imprimir(String s) {
+        System.out.println(s);
+    }
 }

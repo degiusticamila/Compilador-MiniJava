@@ -124,7 +124,7 @@ public class Clase {
         TablaSimbolos ts = TablaSimbolos.getInstance();
         for(Atributo a :atributos.values()){
             Tipo tipoAtributo = a.getTipo();
-            Token nombreAtributo = a.getNombre();
+            Token nombreAtributo = a.getToken();
             if(!tipoAtributo.esPrimitivo()){
                 String nombreTipo = tipoAtributo.getNombre();
                 if (!ts.claseDeclarada(nombreTipo) && !ts.clasePredefinidaDeclarada(nombreTipo)) {
@@ -140,11 +140,11 @@ public class Clase {
             throw new ExcepcionSemantica(herencia.getLexema(), nombre.getNroLinea(), "Clase sin padre");
         }
         for(Atributo a : padre.atributos.values()){
-            if(this.atributos.containsKey(a.getNombre().getLexema())){
-                int linea = this.atributos.get(a.getNombre().getLexema()).getNombre().getNroLinea();
-                throw new ExcepcionSemantica(a.getNombre().getLexema(),linea, "Atributos con el mismo nombre");
+            if(this.atributos.containsKey(a.getNombre())){
+                int linea = this.atributos.get(a.getNombre()).getLinea();
+                throw new ExcepcionSemantica(a.getNombre(),linea, "Atributos con el mismo nombre");
             }
-            this.insertarAtributo(a.getNombre(),a);
+            this.insertarAtributo(a.getToken(),a);
         }
     }
     private void consolidarMetodos() throws ExcepcionSemantica {
@@ -174,7 +174,7 @@ public class Clase {
                         Parametro primeroPadre = metodoPadre.getParametros().getFirst();
                         for (int i = 0; i < m.getParametros().size(); i++) {
                             if (!primeroHijo.equals(primeroPadre)) {
-                                throw new ExcepcionSemantica(m.getNombreMetodo().getLexema(), primeroHijo.getNombre().getNroLinea(), "Parametros incompatible");
+                                throw new ExcepcionSemantica(m.getNombreMetodo().getLexema(), primeroHijo.getLinea(), "Parametros incompatible");
                             }
                             primeroHijo = m.getParametros().get(i);
                             primeroPadre = metodoPadre.getParametros().get(i);
@@ -278,7 +278,7 @@ public class Clase {
             System.out.println("  (ninguno)");
         } else {
             for (Atributo a : atributos.values()) {
-                System.out.println("  - " + a.getNombre().getLexema() + " : " + a.getTipo().getNombre());
+                System.out.println("  - " + a.getNombre() + " : " + a.getTipo().getNombre());
             }
         }
         System.out.println("\nMétodos:");
@@ -293,7 +293,7 @@ public class Clase {
                 //  Mostrar parámetros si tiene
                 if (m.getParametros() != null && !m.getParametros().isEmpty()) {
                     for (Parametro p : m.getParametros()) {
-                        System.out.println("       ▹ Param: " + p.getNombre().getLexema() + " : " + p.getTipo().getNombre());
+                        System.out.println("       ▹ Param: " + p.getNombre() + " : " + p.getTipo().getNombre());
                     }
                 } else {
                     System.out.println("       ▹ (sin parámetros)");
@@ -307,10 +307,16 @@ public class Clase {
             System.out.println("  - " + constructor.getNombreConstructor().getLexema());
             if (constructor.getParametros() != null && !constructor.getParametros().isEmpty()) {
                 for (Parametro p : constructor.getParametros()) {
-                    System.out.println("       ▹ Param: " + p.getNombre().getLexema() + " : " + p.getTipo().getNombre());
+                    System.out.println("       ▹ Param: " + p.getNombre() + " : " + p.getTipo().getNombre());
+                }
+                if(constructor.getBloque() != null){
+                    constructor.getBloque().imprimir(" ");
                 }
             } else {
                 System.out.println("       ▹ (sin parámetros)");
+            }
+            if(constructor.getBloque() != null){
+                constructor.getBloque().imprimir(" ");
             }
         } else {
             System.out.println("  (ninguno)");
@@ -322,5 +328,8 @@ public class Clase {
     }
     public HashMap<String, Metodo> metodos(){
         return metodos;
+    }
+    public Atributo getAtributo(String lexema){
+        return atributos.get(lexema);
     }
 }

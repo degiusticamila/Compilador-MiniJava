@@ -14,7 +14,6 @@ public class NodoLlamadaEncadenada extends NodoEncadenado {
     public NodoLlamadaEncadenada(Token nombre, NodoEncadenado encadenado, List<NodoExpresion> parametros) {
         super(nombre);
         this.parametros = parametros;
-
         this.encadenado = encadenado;
     }
     @Override

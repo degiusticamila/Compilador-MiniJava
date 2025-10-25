@@ -2,7 +2,7 @@ package TablaDeSimbolos;
 
 import Utils.Token;
 
-public class Atributo {
+public class Atributo implements Elemento{
     private Tipo tipo;
     private Token nombre;
 
@@ -16,7 +16,13 @@ public class Atributo {
     public Tipo getTipo() {
         return tipo;
     }
-    public Token getNombre(){
+    public Token getToken(){
         return nombre;
+    }
+    public String getNombre() {
+        return nombre.getLexema();
+    }
+    public int getLinea() {
+        return nombre.getNroLinea();
     }
 }
