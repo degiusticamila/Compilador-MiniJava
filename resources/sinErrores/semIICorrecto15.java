@@ -7,7 +7,7 @@ class A {
 
     void m1(){
         this.a1 = 5;
-        this.b1.charB = 'a';
+       this.b1.charB = 'a';
         this.b1.c1.boolB = false;
     }
 }    
@@ -21,3 +21,7 @@ class C extends B{
 }
 
 
+class Init{
+    static void main()
+    { }
+}

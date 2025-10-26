@@ -720,6 +720,11 @@ public class AnalizadorSintactico {
             varThis.setEncadenado(e);
             return varThis;
         }
+        if(var instanceof NodoLlamadaConstructor){
+            NodoLlamadaConstructor constructor = (NodoLlamadaConstructor) var;
+            constructor.setEncadenado(e);
+            return constructor;
+        }
         return var;
     }
     private NodoEncadenado referenciaResto() throws ExcepcionLexica, IOException, ExcepcionSintactica {
@@ -796,7 +801,7 @@ public class AnalizadorSintactico {
     }
     private NodoLlamadaConstructor llamadaConstructor() throws ExcepcionLexica, IOException, ExcepcionSintactica {
         match("new");
-        NodoLlamadaConstructor nodoLlamadaConstructor = new NodoLlamadaConstructor(tokenActual, new LinkedList<>());
+        NodoLlamadaConstructor nodoLlamadaConstructor = new NodoLlamadaConstructor(tokenActual, new LinkedList<>(), new NodoEncadenadoVacio());
         match("idClase");
 
         //OPCIONAL GENERICIDAD

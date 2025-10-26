@@ -11,6 +11,7 @@ import Utils.Token;
     private NodoEncadenado encadenado;
     public NodoThis(Token tokenThis) {
         this.tokenThis = tokenThis;
+        this.encadenado = new NodoEncadenadoVacio();
     }
     @Override
     public void setOperador(Token operador) {
@@ -59,6 +60,16 @@ import Utils.Token;
         if(tablaSimbolos.getMetodoActual().esMetodoEstatico()){
             throw new ExcepcionSemantica(tokenThis.getLexema(), tokenThis.getNroLinea(), "No es posible invocar a this en métodos estáticos");
         }
+        Clase clase = tablaSimbolos.getClaseActual();
+        if(clase == null){
+            throw new ExcepcionSemantica(tokenThis.getLexema(), tokenThis.getNroLinea(), "No existe clase");
+        }
+        Tipo tipoThis =new TipoReferencia(clase.getNombre().getLexema());
+
+        if(!(encadenado instanceof NodoEncadenadoVacio)){
+            return encadenado.chequear(tipoThis);
+        }
+        return tipoThis;
        /* String nombreTipo = "";
         if(encadenado != null){
             encadenado.chequear();
@@ -71,7 +82,6 @@ import Utils.Token;
         return new TipoReferencia(nombreTipo);
 
         */
-        return new TipoUniversal("tipo universal");
     }
     public void setEncadenado(NodoEncadenado nodoEncadenado) {
         this.encadenado = nodoEncadenado;
