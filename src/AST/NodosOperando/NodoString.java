@@ -29,7 +29,7 @@ public class NodoString extends NodoOperando{
 
     @Override
     public String formatear() {
-        return "";
+        return nombre.getLexema();
     }
 
     @Override
@@ -43,7 +43,7 @@ public class NodoString extends NodoOperando{
     }
 
     @Override
-    public void imprimir(String s) {
-        System.out.println(s);
+    public void imprimir(String prefijo) {
+        System.out.print(prefijo+nombre.getLexema());
     }
 }
