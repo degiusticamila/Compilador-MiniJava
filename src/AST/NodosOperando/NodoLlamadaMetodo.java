@@ -3,9 +3,7 @@ package AST.NodosOperando;
 import AST.NodosEncadenado.NodoEncadenado;
 import AST.NodosEncadenado.NodoEncadenadoVacio;
 import AST.NodosExpresion.NodoExpresion;
-import TablaDeSimbolos.ExcepcionSemantica;
-import TablaDeSimbolos.Tipo;
-import TablaDeSimbolos.TipoUniversal;
+import TablaDeSimbolos.*;
 import Utils.Token;
 
 import java.util.List;
@@ -75,7 +73,33 @@ public class NodoLlamadaMetodo extends NodoOperando{
 
     @Override
     public Tipo chequear() throws ExcepcionSemantica {
-        return new TipoUniversal("tipo universal");
+        TablaSimbolos ts = TablaSimbolos.getInstance();
+        Clase claseActual = ts.getClaseActual();
+
+        if(!claseActual.metodoDeclarado(nombre.getLexema())){
+            throw new ExcepcionSemantica(nombre.getLexema(),nombre.getNroLinea(), "Método "+nombre.getLexema()+" no declarado en la clase "+claseActual.getNombre().getLexema());
+        }
+        Metodo metodo = claseActual.getMetodo(nombre.getLexema());
+        if(argumentos.size() != metodo.getParametros().size()){
+            throw new ExcepcionSemantica(nombre.getLexema(), nombre.getNroLinea(),
+                    "Cantidad de argumentos incorrecta para '"+nombre.getLexema()+
+                            "'. Se esperaban "+metodo.getParametros().size()+" y se recibieron "+argumentos.size());
+        }
+        for(int i = 0; i < argumentos.size(); i++){
+            Tipo tipoActual = argumentos.get(i).chequear();
+            Tipo tipoFormal = metodo.getParametros().get(i).getTipo();
+
+            if(!tipoActual.esCompatible(tipoFormal)){  // o tipoActual.conformaCon(tipoFormal)
+                throw new ExcepcionSemantica(nombre.getLexema(), nombre.getNroLinea(),
+                        "El argumento "+(i+1)+" del método '"+nombre.getLexema()+
+                                "' no es compatible: se esperaba "+tipoFormal+" y se recibió "+tipoActual);
+            }
+        }
+        Tipo tipoRetorno = metodo.getTipoRetorno();
+        if(!(encadenado instanceof NodoEncadenadoVacio)){
+            return encadenado.chequear(tipoRetorno);
+        }
+        return tipoRetorno;
     }
     public void setEncadenado(NodoEncadenado nodoEncadenado) {
         this.encadenado = nodoEncadenado;
