@@ -16,7 +16,6 @@ public class NodoAccesoVar extends NodoOperando {
         this.nombre = nombre;
         encadenado = new NodoEncadenadoVacio();
     }
-
     @Override
     public void setOperador(Token operador) {
 

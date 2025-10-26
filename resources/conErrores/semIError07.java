@@ -6,5 +6,8 @@ class A{
 class B extends A{
     static void m1(){}
 }
-
+class Init{
+    static void main()
+    { }
+}
 

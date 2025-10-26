@@ -15,3 +15,7 @@ class C extends B{}
 
 
 
+class Init{
+    static void main()
+    { }
+}

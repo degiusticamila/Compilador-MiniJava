@@ -1,17 +1,29 @@
 package AST.NodosEncadenado;
-import TablaDeSimbolos.Tipo;
-import TablaDeSimbolos.TipoUniversal;
+import TablaDeSimbolos.*;
 import Utils.Token;
 
 public class NodoVarEncadenada extends NodoEncadenado {
+    Token nombre;
     private NodoEncadenado encadenado;
+    Atributo atributoEnTS;
     public NodoVarEncadenada(Token nombre, NodoEncadenado encadenado) {
         super(nombre);
         this.encadenado = encadenado;
     }
     @Override
-    public Tipo chequear(Tipo t) {
-        return new TipoUniversal("Tipo universal");
+    public Tipo chequear(Tipo t) throws ExcepcionSemantica {
+        TablaSimbolos tablaSimbolos = TablaSimbolos.getInstance();
+        if(t.esReferencia() && tablaSimbolos.obtenerClase(t.getNombre()).atributoDeclarado(super.nombre.getLexema())){
+            atributoEnTS = tablaSimbolos.obtenerClase(t.getNombre()).getAtributo(super.nombre.getLexema());
+
+        }else{
+            throw new ExcepcionSemantica(super.nombre.getLexema(),super.nombre.getNroLinea(),"No existe atributo "+super.nombre.getLexema());
+        }
+        if(!(encadenado instanceof NodoEncadenadoVacio)){
+            return encadenado.chequear(t);
+        }
+
+        return atributoEnTS.getTipo();
     }
 
     @Override
@@ -29,9 +41,9 @@ public class NodoVarEncadenada extends NodoEncadenado {
     @Override
     public String formatear() {
         if(encadenado instanceof NodoEncadenadoVacio){
-            return nombre.getLexema();
+            return super.nombre.getLexema();
         }
-        return nombre.getLexema()+"."+encadenado.formatear();
+        return super.nombre.getLexema()+"."+encadenado.formatear();
     }
 
     @Override
