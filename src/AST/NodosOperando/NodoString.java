@@ -2,6 +2,7 @@ package AST.NodosOperando;
 
 import AST.NodosExpresion.NodoExpresion;
 import TablaDeSimbolos.Tipo;
+import TablaDeSimbolos.TipoReferencia;
 import TablaDeSimbolos.TipoUniversal;
 import Utils.Token;
 
@@ -33,7 +34,7 @@ public class NodoString extends NodoOperando{
 
     @Override
     public Tipo chequear() {
-        return new TipoUniversal("tipo universal");
+        return new TipoReferencia("String");
     }
 
     @Override
