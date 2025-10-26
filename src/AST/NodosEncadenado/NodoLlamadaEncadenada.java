@@ -16,7 +16,7 @@ public class NodoLlamadaEncadenada extends NodoEncadenado {
     @Override
     public Tipo chequear(Tipo t) throws ExcepcionSemantica {
         if(!t.esReferencia()){
-            throw new ExcepcionSemantica(super.nombre.getLexema(), super.nombre.getNroLinea(), "Encadenado sobre tipo no definido o primitivo"+ t.getNombre());
+            throw new ExcepcionSemantica(super.nombre.getLexema(), super.nombre.getNroLinea(), "Encadenado sobre tipo no definido o primitivo: "+ t.getNombre());
         }
         TablaSimbolos ts = TablaSimbolos.getInstance();
         Clase clase = ts.obtenerClase(t.getNombre());

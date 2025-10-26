@@ -1,4 +1,4 @@
-///[Error:a1|31]
+///[Error:m1|31]
 // Encadenado sobre un tipo primitivo int
 class A{
     int a1;

@@ -1,4 +1,4 @@
-///[Error:m4|32]
+///[Error:m4|33]
 // Encadenado sobre un metodo void
 class A{
     int a1;
