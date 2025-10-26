@@ -1,8 +1,7 @@
 package AST.NodosOperando;
 
 import AST.NodosExpresion.NodoExpresion;
-import TablaDeSimbolos.ExcepcionSemantica;
-import TablaDeSimbolos.Tipo;
+import TablaDeSimbolos.*;
 import Utils.Token;
 
 import java.util.List;
@@ -18,7 +17,7 @@ public class NodoLlamadaMetodoEstatico extends NodoOperando{
     }
     @Override
     public Token getNombre() {
-        return null;
+        return nombreMetodo;
     }
 
     @Override
@@ -37,17 +36,60 @@ public class NodoLlamadaMetodoEstatico extends NodoOperando{
     }
 
     @Override
-    public void imprimir(String s) {
-
+    public void imprimir(String prefijo) {
+        System.out.println(prefijo + nombreClase.getLexema() + "." + nombreMetodo.getLexema() + "(");
+        for (int i = 0; i < argumentos.size(); i++) {
+            System.out.println(prefijo + "  " + argumentos.get(i).formatear());
+            if (i < argumentos.size() - 1) System.out.println(",");
+        }
+        System.out.print(prefijo + ")");
     }
 
     @Override
     public String formatear() {
-        return "";
+        StringBuilder s = new StringBuilder(nombreClase.getLexema() + "." + nombreMetodo.getLexema() + "(");
+        for (int i = 0; i < argumentos.size(); i++) {
+            s.append(argumentos.get(i).formatear());
+            if (i < argumentos.size() - 1) s.append(", ");
+        }
+        s.append(")");
+        return s.toString();
     }
 
     @Override
     public Tipo chequear() throws ExcepcionSemantica {
-        return null;
+        System.out.println("Chequear de nodoLLAMADAMETODO ESTATICO");
+       /*La clase nombreClase debe existir en la TS
+       El método nombreMetodo debe existir en esa clase
+       El metodo debe ser estatico
+       La cantidad de argumentos debe coincidir
+       Los tipos pasados en los argumentos deben conformar con los parametros formales
+        */
+        TablaSimbolos ts = TablaSimbolos.getInstance();
+        Clase clase = ts.obtenerClase(nombreClase.getLexema());
+        if(clase == null){
+            throw new ExcepcionSemantica(clase.getNombre().getLexema(), clase.getNombre().getNroLinea(),"La clase "+nombreClase.getLexema()+" no existe");
+        }
+        if(!clase.metodoDeclarado(nombreMetodo.getLexema())){
+            throw new ExcepcionSemantica(nombreMetodo.getLexema(), nombreMetodo.getNroLinea(), "El metodo "+nombreMetodo.getLexema()+" no esta declarado en la clase "+nombreClase.getLexema());
+        }
+        Metodo metodo = clase.getMetodo(nombreMetodo.getLexema());
+        if(!metodo.esMetodoEstatico()){
+            throw new ExcepcionSemantica(nombreMetodo.getLexema(), nombreMetodo.getNroLinea(), "El metodo "+nombreMetodo.getLexema()+" no es static y se esta llamando como "+nombreClase.getLexema()+"."+nombreMetodo.getLexema()+"()");
+        }
+        if(argumentos.size() != metodo.getParametros().size()){
+            throw new ExcepcionSemantica(nombreMetodo.getLexema(), nombreMetodo.getNroLinea(), "Cantidad de argumentos incorrecta "+nombreMetodo.getLexema()+" deben ser "+metodo.getParametros().size()+" en lugar de "+argumentos.size());
+        }
+        for (int i = 0; i < argumentos.size(); i++) {
+            Tipo tipoArgActual = argumentos.get(i).chequear();
+            Tipo tipoArgFormal = metodo.getParametros().get(i).getTipo();
+
+            if (!tipoArgActual.esCompatible(tipoArgFormal)) {
+                throw new ExcepcionSemantica(nombreMetodo.getLexema(), nombreMetodo.getNroLinea(),
+                        "El argumento " + (i + 1) + " no es compatible: se esperaba " +
+                                tipoArgFormal + " y se recibió " + tipoArgActual);
+            }
+        }
+        return metodo.getTipoRetorno();
     }
 }

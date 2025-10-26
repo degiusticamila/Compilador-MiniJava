@@ -27,8 +27,8 @@ public class Main {
             analisisSintactico();
             analizadorSintactico.consolidarTS();
             //Desactivo chequeo semántico para procesar encadenados
-           analizadorSintactico.chequeoSemantico();
-           TablaSimbolos.getInstance().imprimirDetalleClases();
+            analizadorSintactico.chequeoSemantico();
+            TablaSimbolos.getInstance().imprimirDetalleClases();
             System.out.println("[SinErrores]");
         } catch (ExcepcionLexica e) {
             System.out.println("Error Lexico: " + e.getMessage());

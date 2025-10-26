@@ -15,7 +15,7 @@ class B extends A{
      void m1(B p1)     
     {
         a3 = c1;
-       // a1.a3.a2 = 4;
+       a1.a3.a2 = 4;
         
     }
 }
