@@ -10,6 +10,9 @@ class A {
         var a3 = 5;
         ++a3;
     }
+    void m2(){
+        m1();
+    }
 
 }
 class Init{

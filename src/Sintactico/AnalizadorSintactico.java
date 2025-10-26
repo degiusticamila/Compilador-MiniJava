@@ -725,6 +725,11 @@ public class AnalizadorSintactico {
             constructor.setEncadenado(e);
             return constructor;
         }
+        if(var instanceof NodoLlamadaMetodo){
+            NodoLlamadaMetodo llamada = (NodoLlamadaMetodo) var;
+            llamada.setEncadenado(e);
+            return llamada;
+        }
         return var;
     }
     private NodoEncadenado referenciaResto() throws ExcepcionLexica, IOException, ExcepcionSintactica {
@@ -769,7 +774,7 @@ public class AnalizadorSintactico {
         else if(tokenActual.getId().equals("idMetVar")){
             nodoOperando = new NodoAccesoVar(tokenActual);
             match("idMetVar");
-            llamadaMetodoResto();
+            nodoOperando = llamadaMetodoResto(nodoOperando);
             return nodoOperando;
         }
         else if(primeros.estaEnPrimeros(NoTerminales.LlamadaConstructor, tokenActual.getId())){
@@ -780,8 +785,8 @@ public class AnalizadorSintactico {
             return nodoLlamadaConstructor;
         }
         else if(primeros.estaEnPrimeros(NoTerminales.LlamadaMetodoEstatico, tokenActual.getId())){
-            llamadaMetodoEstatico();
-            return new NodoOperandoVacio();
+            NodoOperando nodoLlamadaMetodoEstatico = llamadaMetodoEstatico();
+            return nodoLlamadaMetodoEstatico;
         }
         else if(primeros.estaEnPrimeros(NoTerminales.ExpresionParentizada, tokenActual.getId())){
             NodoExpresion expresion = expresionParentizada();
@@ -791,12 +796,14 @@ public class AnalizadorSintactico {
             throw new ExcepcionSintactica(tokenActual, "identificador metodo variable | constructor | llamada metodo estatico | expresion parentizada");
         }
     }
-    private void llamadaMetodoResto() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private NodoOperando llamadaMetodoResto(NodoOperando nodo) throws ExcepcionLexica, IOException, ExcepcionSintactica {
         if(primeros.estaEnPrimeros(NoTerminales.ArgsActuales, tokenActual.getId())){
-            argsActuales();
+            List<NodoExpresion> lista = argsActuales();
+            NodoLlamadaMetodo nodoLlamadaMetodo = new NodoLlamadaMetodo(nodo.getNombre(),lista);
+            return nodoLlamadaMetodo;
         }
         else{
-            /* $ es el caso de accesoVar*/
+            return nodo;
         }
     }
     private NodoLlamadaConstructor llamadaConstructor() throws ExcepcionLexica, IOException, ExcepcionSintactica {
@@ -846,11 +853,16 @@ public class AnalizadorSintactico {
         match(")");
         return expresion;
     }
-    private void llamadaMetodoEstatico() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private NodoLlamadaMetodoEstatico llamadaMetodoEstatico() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+        Token nombreClase = tokenActual;
         match("idClase");
         match(".");
+        Token nombreMetodo = tokenActual;
         match("idMetVar");
-        argsActuales();
+        List<NodoExpresion> lista = argsActuales();
+        NodoLlamadaMetodoEstatico nodoLlamadaMetodoEstatico = new NodoLlamadaMetodoEstatico(nombreClase,nombreMetodo,lista);
+        return nodoLlamadaMetodoEstatico;
+
     }
     private List<NodoExpresion> argsActuales() throws ExcepcionLexica, IOException, ExcepcionSintactica {
         match("(");
