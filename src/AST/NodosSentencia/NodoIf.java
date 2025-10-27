@@ -40,7 +40,7 @@ public class NodoIf extends NodoSentencia {
         Tipo tipoCondicion = condicion.chequear();
         System.out.println("Tipo de condicion del if"+tipoCondicion);
         if(!tipoCondicion.esCompatible(new TipoPrimitivo("boolean"))){
-            throw new ExcepcionSemantica(tokenif.getLexema(), tokenif.getNroLinea(), "El tipo de la condicion "+tipoCondicion+" no es compatible con boolean");
+            throw new ExcepcionSemantica(condicion.formatear(), tokenif.getNroLinea(), "El tipo de la condicion "+tipoCondicion+" no es compatible con boolean");
         }
         sentenciaIf.chequear();
         if(!(sentenciaElse instanceof NodoSentenciaVacia)){

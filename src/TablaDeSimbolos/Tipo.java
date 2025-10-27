@@ -26,6 +26,9 @@ public abstract class Tipo {
     public Token getToken() {
         return token;
     }
+    public boolean esNull(){
+        return "null".equals(nombre);
+    }
     @Override
     public String toString() {
         return nombre;

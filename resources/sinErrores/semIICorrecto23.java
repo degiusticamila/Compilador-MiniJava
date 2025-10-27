@@ -1,11 +1,11 @@
-///[Error:1|8]
+///Asignando null
 
 class A {
-    int a1;
-    B b1;
-    C c1;
+    B b;
     void m1(){
-        return 1;
+        b  = null;
+        var string = "Hola camila";
+        string = null;
     }
 
 }

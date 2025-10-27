@@ -27,20 +27,28 @@ public class NodoReturn extends NodoSentencia {
         Tipo tipoRetornoMetodo = metodoActual.getTipoRetorno();
 
         if(expresionOpcional instanceof NodoExpresionVacia && (!(tipoRetornoMetodo instanceof TipoVoid))){
-            throw new ExcepcionSemantica(nombre.getLexema(),nombre.getNroLinea(),"Tipo de retorno vacio, se esperaba "+tipoRetornoMetodo);
+            throw new ExcepcionSemantica(expresionOpcional.formatear(),nombre.getNroLinea(),"Tipo de retorno vacio, se esperaba "+tipoRetornoMetodo);
         }
         if(!(expresionOpcional instanceof NodoExpresionVacia) && tipoRetornoMetodo instanceof TipoVoid){
             Tipo tipoExpresionOp = expresionOpcional.chequear();
-            throw new ExcepcionSemantica(nombre.getLexema(),nombre.getNroLinea(), "Tipo de retorno debe ser void, no "+tipoExpresionOp);
+            throw new ExcepcionSemantica(expresionOpcional.formatear(),nombre.getNroLinea(), "Tipo de retorno debe ser void, no "+tipoExpresionOp);
         }
         if(!(expresionOpcional instanceof NodoExpresionVacia)){
            Tipo tipoExpresionOp = expresionOpcional.chequear();
             System.out.println("Tipo de retorno de la expresion"+tipoExpresionOp);
-           if(!tipoExpresionOp.esCompatible( tipoRetornoMetodo)){
-               throw new ExcepcionSemantica(nombre.getLexema(), nombre.getNroLinea(), "Tipo de retorno debería es "+tipoRetornoMetodo+" en lugar de "+tipoExpresionOp);
-           }
-        }
-        System.out.println("Tipo de retorno del metodo"+tipoRetornoMetodo);
+            if(tipoExpresionOp.equals(TipoPrimitivo.NULL)){
 
+            }
+            else{
+                if(!tipoExpresionOp.esCompatible( tipoRetornoMetodo)){
+                    throw new ExcepcionSemantica(expresionOpcional.formatear(), nombre.getNroLinea(), "Tipo de retorno debería es "+tipoRetornoMetodo+" en lugar de "+tipoExpresionOp);
+                }
+            }
+          /* if(!tipoExpresionOp.esCompatible( tipoRetornoMetodo)){
+               throw new ExcepcionSemantica(expresionOpcional.formatear(), nombre.getNroLinea(), "Tipo de retorno debería es "+tipoRetornoMetodo+" en lugar de "+tipoExpresionOp);
+           }
+
+           */
+        }
     }
 }

@@ -3,6 +3,7 @@ package AST.NodosOperando;
 import AST.NodosExpresion.NodoExpresion;
 import TablaDeSimbolos.Tipo;
 import TablaDeSimbolos.TipoPrimitivo;
+import TablaDeSimbolos.TipoReferencia;
 import Utils.Token;
 
 public class NodoNull extends NodoOperando {
@@ -43,6 +44,6 @@ public class NodoNull extends NodoOperando {
 
     @Override
     public Tipo chequear() {
-        return TipoPrimitivo.NULL;
+        return TipoReferencia.NULL;
     }
 }

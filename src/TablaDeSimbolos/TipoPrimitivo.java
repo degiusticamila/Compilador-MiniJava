@@ -14,6 +14,7 @@ public class TipoPrimitivo extends Tipo {
     }
     @Override
     public boolean esCompatible(Tipo t) {
+
        return this.nombre.equals(t.nombre);
         /* if(nombre.equals(t.nombre)){
             return true;

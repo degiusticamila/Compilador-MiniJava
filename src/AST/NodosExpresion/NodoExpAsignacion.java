@@ -37,37 +37,23 @@ public class NodoExpAsignacion extends NodoExpresion {
     public Tipo chequear() throws ExcepcionSemantica {
         System.out.println("Chequeando ExpresionAsignacion");
         TablaSimbolos ts = TablaSimbolos.getInstance();
-        Clase claseActual = ts.getClaseActual();
-        Metodo m = ts.getMetodoActual();
-        NodoBloque b = ts.getBloqueActual();
-
-       /*La expresi´en de asignaci´on Destino=Origen es correcta si y s´olo si:
-            Destino es correctamente tipada y, adem´as estructuralmente debe cumplir que:
-        – No tiene encadenado, debe ser un acceso a variable (resuelto correctamente).
-
-        – Tiene encadenado, el ultimo elemento del encadenado debe ser una variable.
-        Origen es una expresi´on correctamente tipada y su tipo conforma con el tipo de Destino.*/
 
         Tipo tipoLadoDerecho = ladoDerecho.chequear();
         Tipo tipoLadoIzquierdo = ladoIzquierdo.chequear();
+
+        // Si se asigna null a una variable de tipo referencia, la expresión completa
+        // adopta el tipo del lado izquierdo (destino), no el tipo null.
+        if(tipoLadoDerecho.equals(TipoReferencia.NULL) && tipoLadoIzquierdo.esReferencia()){
+             return tipoLadoIzquierdo;
+        }
         if(!tipoLadoDerecho.esCompatible(tipoLadoIzquierdo)){
             throw new ExcepcionSemantica(operador.getLexema(),operador.getNroLinea(),"El tipo "+tipoLadoDerecho+" no conforma con "+tipoLadoIzquierdo);
         }
-        return tipoLadoDerecho; //qué tipo se devuelve?
+        return tipoLadoDerecho;
     }
 
     @Override
    public void imprimir(String prefijo) {
-       /*System.out.println(prefijo + "ExpAsignacion (=)");
-       if (ladoIzquierdo != null) {
-           System.out.println(prefijo + "  L ->");
-           ladoIzquierdo.imprimir(prefijo + "    ");
-       }
-       if (ladoDerecho != null) {
-           System.out.println(prefijo + "  R ->");
-           ladoDerecho.imprimir(prefijo + "    ");
-       }
-        */
        System.out.println(prefijo + "ExpAsignacion (" + operador.getLexema() + ")");
        System.out.println(prefijo + "  L -> " + ladoIzquierdo.formatear());
        System.out.println(prefijo + "  R -> " + ladoDerecho.formatear());

@@ -3,7 +3,7 @@ package TablaDeSimbolos;
 import Utils.Token;
 
 public class TipoReferencia extends Tipo {
-
+    public static final TipoReferencia NULL = new TipoReferencia("null");
     public TipoReferencia(Token tokenTipo){
         super(tokenTipo.getLexema(), tokenTipo);
     }
@@ -13,9 +13,13 @@ public class TipoReferencia extends Tipo {
 
     @Override
     public boolean esCompatible(Tipo t) {
+        System.out.println("entro a es compatible de referencia");
+        if(this.equals(TipoReferencia.NULL)){
+            return t.esReferencia();
+        }
+
         //t = tipo destino (izquierda)
         // this = tipo origen (derecha)
-
         if(this.nombre.equals(t.getNombre())){
             return true;
         }
@@ -30,17 +34,15 @@ public class TipoReferencia extends Tipo {
             throw new RuntimeException(e);
         }
         Clase claseActual = ts.obtenerClase(this.nombre);
-
         while(claseActual != null && claseActual.getHerencia() != null){
             String nombrePadre = claseActual.getHerencia().getLexema();
             if(nombrePadre.equals(t.getNombre())){
-                return true; //Subclase valida
+                return true;
             }
             claseActual = ts.obtenerClase(nombrePadre);
         }
         return false;
     }
-
     @Override
 
     public boolean esPrimitivo(){return false;}

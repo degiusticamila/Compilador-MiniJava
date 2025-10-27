@@ -1,11 +1,11 @@
-///[Error:1|8]
+///[Error:|8]
 
 class A {
     int a1;
     B b1;
     C c1;
     boolean m1(){
-        return 1;
+        return    ;
     }
 
 }

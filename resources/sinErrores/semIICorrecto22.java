@@ -1,11 +1,11 @@
-///[Error:1|8]
+///Retornando null
 
 class A {
     int a1;
     B b1;
     C c1;
-    boolean m1(){
-        return 1;
+    A m1(){
+        return null;
     }
 
 }
