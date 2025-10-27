@@ -945,7 +945,7 @@ public class AnalizadorSintactico {
         for(Clase c : tablaSimbolos.getClases().values()){
             tablaSimbolos.setClaseActual(c);
             System.out.println("clase Actual "+c.getNombre().getLexema());
-            for(Metodo m : c.metodos().values()){
+            for(Metodo m : c.getMetodosPropios().values()){
                 tablaSimbolos.setMetodoActual(m);
                 System.out.println("metodo Actual"+m.getNombreMetodo().getLexema());
                 tablaSimbolos.setBloqueActual(m.getBloque());

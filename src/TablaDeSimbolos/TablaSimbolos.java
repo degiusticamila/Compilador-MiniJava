@@ -281,9 +281,7 @@ public class TablaSimbolos {
             c.consolidarClase();
 
         }
-
         //TablaSimbolos.getInstance().imprimirDetalleClases();
-
     }
     private void consolidarHerencia(){
         for(Clase c : clases.values()){
@@ -300,13 +298,8 @@ public class TablaSimbolos {
     }
     private void chequearCircularidadClase(Clase clase, HashSet<String> clasesVisitadas, StringBuilder diagramaClases) throws ExcepcionSemantica {
         if(clase.getHerencia() == null) return;
-
         String nombreClase = clase.getNombre().getLexema();
         String nombrePadre = clase.getHerencia().getLexema();
-       /*if(!clases.containsKey(nombrePadre)){
-            throw new ExcepcionSemantica(nombreClase, clase.getHerencia().getNroLinea(), "Clase no definida");
-        }
-        */
         if (!clases.containsKey(nombrePadre)) return;
         if(clasesVisitadas.contains(nombreClase)){
             diagramaClases.append(nombreClase);
@@ -360,9 +353,5 @@ public class TablaSimbolos {
                 System.out.println("-"+e.getMessage());
             }
         }
-    }
-
-    public void reportarError(ExcepcionSemantica e) {
-        erroresSemanticos.add(e);
     }
 }

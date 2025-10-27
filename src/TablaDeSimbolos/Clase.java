@@ -9,6 +9,7 @@ public class Clase {
 
     private HashMap<String, Atributo> atributos;
     private HashMap<String, Metodo> metodos;
+    private HashMap<String, Metodo> metodosPropios;
     private Constructor constructor;
     private Token modificador;
     private Token nombre;
@@ -17,6 +18,7 @@ public class Clase {
     public Clase(Token nombre,Token modificador){
         atributos = new HashMap<>();
         metodos = new HashMap<>();
+        metodosPropios = new HashMap<>();
         this.nombre = nombre;
         this.modificador = modificador;
     }
@@ -31,6 +33,7 @@ public class Clase {
     public void insertarMetodo(Token nombreMetodo,Metodo m) throws ExcepcionSemantica {
         if(!metodoDeclarado(nombreMetodo.getLexema())){
             metodos.put(nombreMetodo.getLexema(), m);
+            metodosPropios.put(nombreMetodo.getLexema(), m);
         }
         else{
             throw new ExcepcionSemantica(nombreMetodo.getLexema(), nombreMetodo.getNroLinea(), "Metodo ya declarado");
@@ -81,6 +84,7 @@ public class Clase {
     public Constructor getConstructor(){
         return constructor;
     }
+    public HashMap<String,Metodo> getMetodosPropios(){return metodosPropios;}
     public Metodo getMetodo(String nombreMetodo){
         return metodos.get(nombreMetodo);
     }
@@ -94,11 +98,19 @@ public class Clase {
             System.out.println(s+" : "+metodos.get(s).toString());
         }
     }
+    public HashMap<String, Metodo> getMetodosHeredados(){
+        HashMap<String, Metodo> heredados = new HashMap<>();
+        for(String nombre : metodos.keySet()){
+            if(!metodosPropios.containsKey(nombre)){
+                heredados.put(nombre,metodos.get(nombre));
+            }
+        }
+        return heredados;
+    }
     public String toString() {
         return modificador != null ? ("("+nombre.toString()+", "+modificador.toString()+")") : nombre.toString();
     }
     public void consolidarClase() throws ExcepcionSemantica {
-
         if(!esClaseAbstracta()){
             for(Metodo m : metodos.values()){
                 if(m.esMetodoAbstracto()){
@@ -106,7 +118,6 @@ public class Clase {
                 }
             }
         }
-
         Clase padre = TablaSimbolos.getInstance().obtenerClase(herencia.getLexema());
         if(padre != null){
             if(padre.getModificador() != null && padre.getModificador().getLexema().equals("final")){
@@ -121,7 +132,6 @@ public class Clase {
         }
         chequearAtributos();
         consolidarMetodos();
-
     }
     private void chequearAtributos() throws ExcepcionSemantica {
         TablaSimbolos ts = TablaSimbolos.getInstance();
