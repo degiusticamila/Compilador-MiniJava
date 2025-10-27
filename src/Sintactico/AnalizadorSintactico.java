@@ -941,6 +941,7 @@ public class AnalizadorSintactico {
         }
     }
     public void chequeoSemantico() throws ExcepcionSemantica{
+        tablaSimbolos.existeMetodoMain();
         System.out.println("Entro a metodo chequeo semantico");
         for(Clase c : tablaSimbolos.getClases().values()){
             tablaSimbolos.setClaseActual(c);
@@ -956,4 +957,5 @@ public class AnalizadorSintactico {
             }
         }
     }
+
 }

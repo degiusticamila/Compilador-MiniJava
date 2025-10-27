@@ -2,6 +2,7 @@ package TablaDeSimbolos;
 
 import AST.NodosSentencia.NodoBloque;
 import AST.NodosSentencia.NodoBloqueVacio;
+import Utils.SourceManager;
 import Utils.Token;
 
 import java.util.ArrayList;
@@ -353,5 +354,20 @@ public class TablaSimbolos {
                 System.out.println("-"+e.getMessage());
             }
         }
+    }
+    public boolean existeMetodoMain() throws ExcepcionSemantica {
+        int count = 0;
+        for(Clase c : clases.values()){
+            for (Metodo m : c.getMetodosPropios().values()){
+                if(m.esMetodoEstatico() && m.getNombreMetodo().getLexema().equals("main")){
+                    count++;
+                }
+            }
+        }
+       if(count != 1){
+           String eof = Character.toString(SourceManager.END_OF_FILE);
+           throw new ExcepcionSemantica(eof, SourceManager.END_OF_FILE," Metodo main no declarado");
+       }
+       return true;
     }
 }
