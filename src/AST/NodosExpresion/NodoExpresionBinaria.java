@@ -108,7 +108,5 @@ public class NodoExpresionBinaria extends NodoExpresionCompuesta {
             return new TipoUniversal("tipo universal");
         }
 
-
-       //return new TipoUniversal("tipo universal");
     }
 }

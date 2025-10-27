@@ -277,7 +277,6 @@ public class AnalizadorSintactico {
     }
     private Token tipo() throws ExcepcionSintactica, ExcepcionLexica, IOException {
         if(primeros.estaEnPrimeros(NoTerminales.TipoPrimitivo, tokenActual.getId())){
-            System.out.println(tokenActual.getLexema());
             Token tipoPrimitivo = tipoPrimitivo();
             return tipoPrimitivo;
         }
@@ -300,7 +299,6 @@ public class AnalizadorSintactico {
             return new Token(tokenActual.getId(),"char",tokenActual.getNroLinea());
         }
         else if(tokenActual.getId().equals("int")){
-            System.out.println("Lexema del token actual"+tokenActual.getLexema());
             match("int");
             return new Token(tokenActual.getId(),"int",tokenActual.getNroLinea());
         }
@@ -779,9 +777,6 @@ public class AnalizadorSintactico {
         }
         else if(primeros.estaEnPrimeros(NoTerminales.LlamadaConstructor, tokenActual.getId())){
             NodoOperando nodoLlamadaConstructor = llamadaConstructor();
-            System.out.println("Llamada constructor");
-            System.out.println(nodoLlamadaConstructor.getNombre());
-            System.out.println();
             return nodoLlamadaConstructor;
         }
         else if(primeros.estaEnPrimeros(NoTerminales.LlamadaMetodoEstatico, tokenActual.getId())){
@@ -895,11 +890,8 @@ public class AnalizadorSintactico {
         else{/*$*/}
     }
     private NodoEncadenado encadenado() throws ExcepcionLexica, IOException, ExcepcionSintactica {
-        //cuando se le setea a ACCESOVAR EL ENCADENADO?
         NodoEncadenado encadenado = new NodoEncadenadoVacio();
-
         match(".");
-        System.out.println("Entro a metodo encadenado"+tokenActual.getLexema());
         Token tokenNombreEncadenado = tokenActual;
         match("idMetVar");
         encadenado = restoEncadenado(tokenNombreEncadenado,encadenado);
@@ -942,16 +934,16 @@ public class AnalizadorSintactico {
     }
     public void chequeoSemantico() throws ExcepcionSemantica{
         tablaSimbolos.existeMetodoMain();
-        System.out.println("Entro a metodo chequeo semantico");
+        //System.out.println("Entro a metodo chequeo semantico");
         for(Clase c : tablaSimbolos.getClases().values()){
             tablaSimbolos.setClaseActual(c);
-            System.out.println("clase Actual "+c.getNombre().getLexema());
+           // System.out.println("clase Actual "+c.getNombre().getLexema());
             for(Metodo m : c.getMetodosPropios().values()){
                 tablaSimbolos.setMetodoActual(m);
-                System.out.println("metodo Actual"+m.getNombreMetodo().getLexema());
+                //System.out.println("metodo Actual"+m.getNombreMetodo().getLexema());
                 tablaSimbolos.setBloqueActual(m.getBloque());
                 if(!(m.getBloque() instanceof  NodoBloqueVacio)){
-                    System.out.println("bloque del metodo "+m.getNombreMetodo().getLexema());
+                    //System.out.println("bloque del metodo "+m.getNombreMetodo().getLexema());
                     m.getBloque().chequear();
                 }
             }

@@ -90,7 +90,7 @@ public class NodoLlamadaConstructor extends NodoOperando{
                 Tipo tipoActual = argumentos.get(i).chequear();
                 Tipo tipoFormal = constructorClase.getParametros().get(i).getTipo();
 
-                if (!tipoActual.equals(tipoFormal)) {
+                if (!tipoActual.esCompatible(tipoFormal)) {
                     throw new ExcepcionSemantica(nombre.getLexema(), nombre.getNroLinea(), "El argumento " + (i + 1) + "no es compatible: se esperaba " + tipoFormal.getNombre() + " y recibe " + tipoActual.getNombre());
                 }
             }

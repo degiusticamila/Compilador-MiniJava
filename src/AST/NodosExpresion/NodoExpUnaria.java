@@ -46,10 +46,4 @@ public class NodoExpUnaria extends NodoExpresionCompuesta {
         return new TipoUniversal("tipo universal");
     }
 
-    /*public void imprimir(String prefijo) {
-        System.out.println(prefijo + "ExpUnaria(" + operador.getLexema() + ")");
-        if (operador != null) System.out.print(operador.getLexema());;
-        if (nodoOperando != null) nodoOperando.imprimir(prefijo + "  R-> ");
-    }
-     */
 }

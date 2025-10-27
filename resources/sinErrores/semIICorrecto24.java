@@ -1,5 +1,4 @@
-
-
+//
 class A {
     int a1;
     int a2;

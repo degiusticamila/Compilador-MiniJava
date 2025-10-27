@@ -35,7 +35,6 @@ public class NodoExpAsignacion extends NodoExpresion {
 
     @Override
     public Tipo chequear() throws ExcepcionSemantica {
-        System.out.println("Chequeando ExpresionAsignacion");
         TablaSimbolos ts = TablaSimbolos.getInstance();
 
         Tipo tipoLadoDerecho = ladoDerecho.chequear();

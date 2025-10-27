@@ -47,13 +47,6 @@ public class NodoLlamadaEncadenada extends NodoEncadenado {
             return encadenado.chequear(tipoRetorno);
         }
         return tipoRetorno;
-        /* 1. Verificar que tipoBase sea una clase (no primitivo)
-        2. Buscar si el método "nombre" existe en esa clase
-        3. Verificar cantidad de parámetros e invocación correcta
-        4. Verificar conformidad de cada parámetro actual con el tipo formal
-        5. Obtener el tipo de retorno del método encontrado
-        6. Si el encadenado continúa → delegar: encadenado.chequear(tipoRetorno)
-        7. Si no → retornar tipoRetorno*/
 
     }
 

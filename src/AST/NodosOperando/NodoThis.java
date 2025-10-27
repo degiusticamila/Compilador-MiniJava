@@ -70,18 +70,7 @@ import Utils.Token;
             return encadenado.chequear(tipoThis);
         }
         return tipoThis;
-       /* String nombreTipo = "";
-        if(encadenado != null){
-            encadenado.chequear();
-        }
-        else{
-            nombreTipo = tablaSimbolos.getClaseActual().getNombre().getLexema();
-        }
 
-        System.out.println("Tipo de this: " + nombreTipo);
-        return new TipoReferencia(nombreTipo);
-
-        */
     }
     public void setEncadenado(NodoEncadenado nodoEncadenado) {
         this.encadenado = nodoEncadenado;

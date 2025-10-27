@@ -16,14 +16,7 @@ public class TipoPrimitivo extends Tipo {
     public boolean esCompatible(Tipo t) {
 
        return this.nombre.equals(t.nombre);
-        /* if(nombre.equals(t.nombre)){
-            return true;
-        }
-        else{
-            throw new ExcepcionSemantica(token.getLexema(), token.getNroLinea(),"El tipo"+nombre+"es incompatible con "+t.nombre);
-        }
 
-        */
     }
 
     @Override

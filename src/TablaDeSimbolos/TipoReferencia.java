@@ -13,7 +13,7 @@ public class TipoReferencia extends Tipo {
 
     @Override
     public boolean esCompatible(Tipo t) {
-        System.out.println("entro a es compatible de referencia");
+
         if(this.equals(TipoReferencia.NULL)){
             return t.esReferencia();
         }

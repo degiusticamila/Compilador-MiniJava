@@ -52,7 +52,6 @@ public class NodoAccesoVar extends NodoOperando {
 
     @Override
     public Tipo chequear() throws ExcepcionSemantica {
-        System.out.println("entro a chequear de acceso var "+nombre.getLexema());
 
         TablaSimbolos ts = TablaSimbolos.getInstance();
         Clase claseActual = ts.getClaseActual();
@@ -80,7 +79,7 @@ public class NodoAccesoVar extends NodoOperando {
             //tipoBase = metodoRef.getTipo();
         }
         else{
-            throw new ExcepcionSemantica(nombre.getLexema(), nombre.getNroLinea(), "Variable no declaradaaaa");
+            throw new ExcepcionSemantica(nombre.getLexema(), nombre.getNroLinea(), "Variable no declarada");
         }
         tipoBase = referenciaTS.getTipo();
         //Si tiene encadenado, delego el chequeo.

@@ -35,7 +35,7 @@ public class NodoReturn extends NodoSentencia {
         }
         if(!(expresionOpcional instanceof NodoExpresionVacia)){
            Tipo tipoExpresionOp = expresionOpcional.chequear();
-            System.out.println("Tipo de retorno de la expresion"+tipoExpresionOp);
+
             if(tipoExpresionOp.equals(TipoPrimitivo.NULL)){
 
             }
@@ -44,11 +44,7 @@ public class NodoReturn extends NodoSentencia {
                     throw new ExcepcionSemantica(expresionOpcional.formatear(), nombre.getNroLinea(), "Tipo de retorno debería es "+tipoRetornoMetodo+" en lugar de "+tipoExpresionOp);
                 }
             }
-          /* if(!tipoExpresionOp.esCompatible( tipoRetornoMetodo)){
-               throw new ExcepcionSemantica(expresionOpcional.formatear(), nombre.getNroLinea(), "Tipo de retorno debería es "+tipoRetornoMetodo+" en lugar de "+tipoExpresionOp);
-           }
 
-           */
         }
     }
 }

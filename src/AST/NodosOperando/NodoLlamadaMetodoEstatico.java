@@ -58,13 +58,6 @@ public class NodoLlamadaMetodoEstatico extends NodoOperando{
 
     @Override
     public Tipo chequear() throws ExcepcionSemantica {
-        System.out.println("Chequear de nodoLLAMADAMETODO ESTATICO");
-       /*La clase nombreClase debe existir en la TS
-       El método nombreMetodo debe existir en esa clase
-       El metodo debe ser estatico
-       La cantidad de argumentos debe coincidir
-       Los tipos pasados en los argumentos deben conformar con los parametros formales
-        */
         TablaSimbolos ts = TablaSimbolos.getInstance();
         Clase clase = ts.obtenerClase(nombreClase.getLexema());
         if(clase == null){
