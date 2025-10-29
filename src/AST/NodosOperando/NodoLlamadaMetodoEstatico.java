@@ -1,5 +1,7 @@
 package AST.NodosOperando;
 
+import AST.NodosEncadenado.NodoEncadenado;
+import AST.NodosEncadenado.NodoEncadenadoVacio;
 import AST.NodosExpresion.NodoExpresion;
 import TablaDeSimbolos.*;
 import Utils.Token;
@@ -10,10 +12,13 @@ public class NodoLlamadaMetodoEstatico extends NodoOperando{
     private Token nombreClase;
     private Token nombreMetodo;
     private List<NodoExpresion> argumentos;
-    public NodoLlamadaMetodoEstatico(Token nombre, Token nombreMetodo, List<NodoExpresion> argumentos) {
+    private NodoEncadenado encadenado;
+
+    public NodoLlamadaMetodoEstatico(Token nombre, Token nombreMetodo, List<NodoExpresion> argumentos, NodoEncadenado encadenado) {
         this.nombreClase = nombre;
         this.nombreMetodo = nombreMetodo;
         this.argumentos = argumentos;
+        this.encadenado = encadenado;
     }
     @Override
     public Token getNombre() {
@@ -61,7 +66,8 @@ public class NodoLlamadaMetodoEstatico extends NodoOperando{
         TablaSimbolos ts = TablaSimbolos.getInstance();
         Clase clase = ts.obtenerClase(nombreClase.getLexema());
         if(clase == null){
-            throw new ExcepcionSemantica(clase.getNombre().getLexema(), clase.getNombre().getNroLinea(),"La clase "+nombreClase.getLexema()+" no existe");
+            throw new ExcepcionSemantica(nombreClase.getLexema(), nombreClase.getNroLinea(), "La clase no está definida");
+
         }
         if(!clase.metodoDeclarado(nombreMetodo.getLexema())){
             throw new ExcepcionSemantica(nombreMetodo.getLexema(), nombreMetodo.getNroLinea(), "El metodo "+nombreMetodo.getLexema()+" no esta declarado en la clase "+nombreClase.getLexema());
@@ -83,6 +89,13 @@ public class NodoLlamadaMetodoEstatico extends NodoOperando{
                                 tipoArgFormal + " y se recibió " + tipoArgActual);
             }
         }
-        return metodo.getTipoRetorno();
+        Tipo tipoRetorno = metodo.getTipoRetorno();
+        if(!(encadenado instanceof NodoEncadenadoVacio)){
+            return encadenado.chequear(tipoRetorno);
+        }
+        return tipoRetorno;
+    }
+    public void setEncadenado(NodoEncadenado encadenado){
+        this.encadenado = encadenado;
     }
 }

@@ -75,7 +75,9 @@ public class NodoLlamadaMetodo extends NodoOperando{
     public Tipo chequear() throws ExcepcionSemantica {
         TablaSimbolos ts = TablaSimbolos.getInstance();
         Clase claseActual = ts.getClaseActual();
-
+        if(ts.getMetodoActual().esMetodoEstatico()){
+            throw new ExcepcionSemantica(nombre.getLexema(),nombre.getNroLinea(), "No se puede invocar un metodo dentro de un metodo estático");
+        }
         if(!claseActual.metodoDeclarado(nombre.getLexema())){
             throw new ExcepcionSemantica(nombre.getLexema(),nombre.getNroLinea(), "Método "+nombre.getLexema()+" no declarado en la clase "+claseActual.getNombre().getLexema());
         }

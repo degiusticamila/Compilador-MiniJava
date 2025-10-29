@@ -728,6 +728,11 @@ public class AnalizadorSintactico {
             llamada.setEncadenado(e);
             return llamada;
         }
+        if(var instanceof NodoLlamadaMetodoEstatico){
+            NodoLlamadaMetodoEstatico metodoEstatico = (NodoLlamadaMetodoEstatico) var;
+            metodoEstatico.setEncadenado(e);
+            return metodoEstatico;
+        }
         return var;
     }
     private NodoEncadenado referenciaResto() throws ExcepcionLexica, IOException, ExcepcionSintactica {
@@ -855,7 +860,7 @@ public class AnalizadorSintactico {
         Token nombreMetodo = tokenActual;
         match("idMetVar");
         List<NodoExpresion> lista = argsActuales();
-        NodoLlamadaMetodoEstatico nodoLlamadaMetodoEstatico = new NodoLlamadaMetodoEstatico(nombreClase,nombreMetodo,lista);
+        NodoLlamadaMetodoEstatico nodoLlamadaMetodoEstatico = new NodoLlamadaMetodoEstatico(nombreClase,nombreMetodo,lista,new NodoEncadenadoVacio());
         return nodoLlamadaMetodoEstatico;
 
     }

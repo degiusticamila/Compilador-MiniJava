@@ -1,7 +1,14 @@
 package AST.NodosSentencia;
 
+import AST.NodosExpresion.NodoExpAsignacion;
 import AST.NodosExpresion.NodoExpresion;
+import AST.NodosOperando.NodoLlamadaConstructor;
+import AST.NodosOperando.NodoLlamadaMetodo;
+import AST.NodosOperando.NodoLlamadaMetodoEstatico;
+import AST.NodosOperando.NodoOperando;
 import TablaDeSimbolos.ExcepcionSemantica;
+import TablaDeSimbolos.Tipo;
+import Utils.SourceManager;
 
 public class NodoSentenciaExpresion extends NodoSentencia{
     private NodoExpresion expresion;
@@ -18,6 +25,16 @@ public class NodoSentenciaExpresion extends NodoSentencia{
 
     @Override
     public void chequear() throws ExcepcionSemantica {
-        expresion.chequear();
+        //Tipo tipoExpresion = expresion.chequear();
+        if (expresion instanceof NodoExpAsignacion ||
+                expresion instanceof NodoOperadorUnario ||
+                expresion instanceof NodoLlamadaMetodo ||
+                expresion instanceof NodoLlamadaMetodoEstatico ||
+                expresion instanceof NodoOperando) {
+            expresion.chequear();
+            return;
+        }
+
+        throw new ExcepcionSemantica(expresion.formatear(),-1,"La expresión no produce efecto (resultado no utilizado)");
     }
 }

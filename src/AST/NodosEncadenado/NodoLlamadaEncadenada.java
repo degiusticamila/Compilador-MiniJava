@@ -38,7 +38,7 @@ public class NodoLlamadaEncadenada extends NodoEncadenado {
             Tipo tipoFormal = metodo.getParametros().get(i).getTipo();
 
             if(!tipoActual.esCompatible(tipoFormal)){
-                throw new ExcepcionSemantica(super.nombre.getLexema(),super.nombre.getNroLinea(),"El argumento "+ (i+1)+ "no es compatible: se esperaba "+tipoFormal.getNombre()+" y recibe "+tipoActual.getNombre());
+                throw new ExcepcionSemantica(super.nombre.getLexema(),super.nombre.getNroLinea(),"El argumento "+ (i+1)+ " no es compatible: se esperaba "+tipoFormal.getNombre()+" y recibe "+tipoActual.getNombre());
             }
         }
         Tipo tipoRetorno = metodo.getTipo();
