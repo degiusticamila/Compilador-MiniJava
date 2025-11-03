@@ -5,7 +5,12 @@ class A {
     int a2;
 
     void m1(){
-
+        {
+            var v1 = 6;
+        }
+        {
+            var v1 = 7;
+        }
         ++a1;
         var a3 = 5;
         ++a3;
