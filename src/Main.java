@@ -1,3 +1,4 @@
+import ArchivoSalida.ArchivoSalida;
 import Lexico.AnalizadorLexico;
 import Lexico.ExcepcionLexica;
 import Sintactico.AnalizadorSintactico;
@@ -13,6 +14,7 @@ import java.io.IOException;
 
 public class Main {
     private static SourceManager sourceManager;
+    private static ArchivoSalida archivoSalida;
     private static AnalizadorSintactico analizadorSintactico;
     private static AnalizadorLexico analizadorLexico;
 
@@ -27,6 +29,8 @@ public class Main {
             analisisSintactico();
             analizadorSintactico.consolidarTS();
             analizadorSintactico.chequeoSemantico();
+
+            generacionCodigo("testOut.out");
             //TablaSimbolos.getInstance().imprimirDetalleClases();
             System.out.println("[SinErrores]");
         } catch (ExcepcionLexica e) {
@@ -89,5 +93,11 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    public void generacionCodigo(String nombre_archivo){
+        archivoSalida = new ArchivoSalida(nombre_archivo);
+        //TO - DO
+        //tablaSimbolos.generarCodigo(archivoSalida);
+        archivoSalida.close();
     }
 }

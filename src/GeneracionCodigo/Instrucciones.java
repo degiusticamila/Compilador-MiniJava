@@ -17,17 +17,13 @@ public enum Instrucciones {
     GT,
     LE,
     GE,
-
     DUP,
     POP,
     SWAP,
-
     JUMP,
     BF,
     BT,
-
     NOP,
-
     READ,
     BPRINT,
     CPRINT,
