@@ -4,6 +4,7 @@ import Lexico.ExcepcionLexica;
 import Sintactico.AnalizadorSintactico;
 import Sintactico.ExcepcionSintactica;
 import TablaDeSimbolos.ExcepcionSemantica;
+
 import TablaDeSimbolos.TablaSimbolos;
 import Utils.SourceManager;
 import Utils.SourceManagerImpl;
@@ -11,6 +12,8 @@ import Utils.Token;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+
+import static TablaDeSimbolos.TablaSimbolos.tablaSimbolos;
 
 public class Main {
     private static SourceManager sourceManager;
@@ -31,7 +34,7 @@ public class Main {
             analizadorSintactico.chequeoSemantico();
 
             generacionCodigo("testOut.out");
-            //TablaSimbolos.getInstance().imprimirDetalleClases();
+            TablaSimbolos.getInstance().imprimirDetalleClases();
             System.out.println("[SinErrores]");
         } catch (ExcepcionLexica e) {
             System.out.println("Error Lexico: " + e.getMessage());
@@ -94,10 +97,9 @@ public class Main {
             e.printStackTrace();
         }
     }
-    public void generacionCodigo(String nombre_archivo){
+    public static void generacionCodigo(String nombre_archivo){
         archivoSalida = new ArchivoSalida(nombre_archivo);
-        //TO - DO
-        //tablaSimbolos.generarCodigo(archivoSalida);
+        tablaSimbolos.generarCodigo(archivoSalida);
         archivoSalida.close();
     }
 }

@@ -1,0 +1,17 @@
+.DATA
+VT@A: DW lbl_m1@A
+DW lbl_setall@A
+
+.CODE
+
+.DATA
+VT@B: DW lbl_seta4@B
+DW lbl_m2@B
+
+.CODE
+
+.DATA
+VT@Init: DW lbl_main@Init
+
+.CODE
+

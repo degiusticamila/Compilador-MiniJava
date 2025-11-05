@@ -14,6 +14,7 @@ public class Metodo implements Elemento{
     private Token modificador;
     private NodoBloque bloque;
 
+
     public Metodo(Token modificador,Tipo tipoRetorno, Token nombreMetodo){
         parametros = new LinkedList<>();
         this.modificador = modificador;
@@ -93,4 +94,6 @@ public class Metodo implements Elemento{
     public int getLinea(){
         return nombre.getNroLinea();
     }
+
+
 }

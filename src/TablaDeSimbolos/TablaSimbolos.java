@@ -2,6 +2,7 @@ package TablaDeSimbolos;
 
 import AST.NodosSentencia.NodoBloque;
 import AST.NodosSentencia.NodoBloqueVacio;
+import ArchivoSalida.ArchivoSalida;
 import Utils.SourceManager;
 import Utils.Token;
 
@@ -12,7 +13,7 @@ import java.util.List;
 
 public class TablaSimbolos {
 
-    private static TablaSimbolos tablaSimbolos;
+    public static TablaSimbolos tablaSimbolos;
     private List<ExcepcionSemantica> erroresSemanticos = new ArrayList<>();
     private HashMap<String,Clase> clases;
     private HashMap<String,Clase> clasesPredefinidas;
@@ -369,5 +370,13 @@ public class TablaSimbolos {
            throw new ExcepcionSemantica(eof, SourceManager.END_OF_FILE," Metodo main no declarado");
        }
        return true;
+    }
+    public void generarCodigo(ArchivoSalida archivo){
+        for(Clase clase: clases.values()){
+            clase.generarCodigo(archivo);
+        }
+    }
+    public void calcularOffsets(){
+
     }
 }

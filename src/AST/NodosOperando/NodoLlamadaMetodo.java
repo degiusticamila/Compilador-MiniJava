@@ -3,6 +3,8 @@ package AST.NodosOperando;
 import AST.NodosEncadenado.NodoEncadenado;
 import AST.NodosEncadenado.NodoEncadenadoVacio;
 import AST.NodosExpresion.NodoExpresion;
+import AST.NodosSentencia.NodoBloque;
+import AST.NodosSentencia.NodoSentencia;
 import TablaDeSimbolos.*;
 import Utils.Token;
 
@@ -12,7 +14,7 @@ public class NodoLlamadaMetodo extends NodoOperando{
     private Token nombre;
     private List<NodoExpresion> argumentos;
     private NodoEncadenado encadenado;
-
+    private Elemento referenciaTS;
     public NodoLlamadaMetodo(Token nombre, List<NodoExpresion> argumentos) {
         this.nombre = nombre;
         this.argumentos = argumentos;
@@ -75,9 +77,16 @@ public class NodoLlamadaMetodo extends NodoOperando{
     public Tipo chequear() throws ExcepcionSemantica {
         TablaSimbolos ts = TablaSimbolos.getInstance();
         Clase claseActual = ts.getClaseActual();
-        if(ts.getMetodoActual().esMetodoEstatico()){
+        System.out.println("metodo actual: "+ts.getMetodoActual().getNombreMetodo().getLexema());
+
+       /* if(ts.getMetodoActual().esMetodoEstatico() ){
+       //PREGUNTAR
+            System.out.println("entro a tirar la excepcion");
             throw new ExcepcionSemantica(nombre.getLexema(),nombre.getNroLinea(), "No se puede invocar un metodo dentro de un metodo estático");
         }
+
+        */
+
         if(!claseActual.metodoDeclarado(nombre.getLexema())){
             throw new ExcepcionSemantica(nombre.getLexema(),nombre.getNroLinea(), "Método "+nombre.getLexema()+" no declarado en la clase "+claseActual.getNombre().getLexema());
         }
@@ -105,5 +114,14 @@ public class NodoLlamadaMetodo extends NodoOperando{
     }
     public void setEncadenado(NodoEncadenado nodoEncadenado) {
         this.encadenado = nodoEncadenado;
+    }
+    public void obtenerModificador(String nombreLlamadaMetodo) throws ExcepcionSemantica {
+        TablaSimbolos ts = TablaSimbolos.getInstance();
+
+    }
+    public void setearReferenciaTs() throws ExcepcionSemantica {
+        TablaSimbolos ts = TablaSimbolos.getInstance();
+        Metodo metodoActual = ts.getMetodoActual();
+        NodoBloque bloqueActual = metodoActual.getBloque();
     }
 }

@@ -1,14 +1,19 @@
 package TablaDeSimbolos;
 
+import ArchivoSalida.ArchivoSalida;
+import GeneracionCodigo.Instrucciones;
 import Utils.Token;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 public class Clase {
 
     private HashMap<String, Atributo> atributos;
     private HashMap<String, Metodo> metodos;
+    private List<Metodo> metodosOrdenados;
     private HashMap<String, Metodo> metodosPropios;
     private Constructor constructor;
     private Token modificador;
@@ -19,6 +24,7 @@ public class Clase {
         atributos = new HashMap<>();
         metodos = new HashMap<>();
         metodosPropios = new HashMap<>();
+        metodosOrdenados = new ArrayList<>();
         this.nombre = nombre;
         this.modificador = modificador;
     }
@@ -34,6 +40,7 @@ public class Clase {
         if(!metodoDeclarado(nombreMetodo.getLexema())){
             metodos.put(nombreMetodo.getLexema(), m);
             metodosPropios.put(nombreMetodo.getLexema(), m);
+            metodosOrdenados.addFirst(m);
         }
         else{
             throw new ExcepcionSemantica(nombreMetodo.getLexema(), nombreMetodo.getNroLinea(), "Metodo ya declarado");
@@ -107,6 +114,7 @@ public class Clase {
         }
         return heredados;
     }
+
     public String toString() {
         return modificador != null ? ("("+nombre.toString()+", "+modificador.toString()+")") : nombre.toString();
     }
@@ -344,5 +352,36 @@ public class Clase {
     }
     public Atributo getAtributo(String lexema){
         return atributos.get(lexema);
+    }
+    public void generarCodigo(ArchivoSalida archivo){
+        //ordenarMetodos
+        //ordenarAtributos
+
+        archivo.generar(".DATA");
+        if(metodosPropios.isEmpty()){
+            archivo.generar("VT@"+nombre.getLexema()+": "+ Instrucciones.NOP);
+        }
+        else{
+            List<Metodo> listaMetodos = mapeoAlista(metodosPropios);
+            String primerMetodo = listaMetodos.getFirst().getNombre();
+            archivo.generar("VT@"+nombre.getLexema()+": "+ Instrucciones.DW+" lbl_"+primerMetodo+"@"+nombre.getLexema());
+            for(int i = 1; i < listaMetodos.size(); i++){
+                String nombreMetodo = listaMetodos.get(i).getNombre();
+                archivo.generar(Instrucciones.DW+" lbl_"+nombreMetodo+"@"+nombre.getLexema());
+            }
+            //recorro los metodos y los inserto en la VT
+        }
+        archivo.generar("");
+        archivo.generar(".CODE");
+        //TO-DO CODIGO
+        archivo.generar("");
+    }
+    public void calcularOffsetMetodos(){
+
+    }
+    public List<Metodo> mapeoAlista(HashMap<String, Metodo> metodos){
+        List<Metodo> lista;
+        lista = new ArrayList<>(metodos.values());
+        return lista;
     }
 }

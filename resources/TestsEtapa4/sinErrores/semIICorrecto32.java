@@ -4,23 +4,19 @@ class A {
     void m1(A a) {
 
     }
+    void m2(A a) {}
+    void m3(A a) {}
+    void m4(A a) {}
 }
 
 class B extends A {
 
 }
 
-class C extends B {
-
-}
 
 class Init{
     static void main()
     {
-        var a = new A();
 
-        a.m1(new A());
-        a.m1(new C());
-        a.m1(new B());
     }
 }

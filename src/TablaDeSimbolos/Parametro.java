@@ -41,4 +41,9 @@ public class Parametro implements Elemento{
     public int getLinea() {
         return nombre.getNroLinea();
     }
+
+    @Override
+    public Token getModificador() {
+        return null;
+    }
 }
