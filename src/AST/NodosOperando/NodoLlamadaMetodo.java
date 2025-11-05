@@ -77,7 +77,11 @@ public class NodoLlamadaMetodo extends NodoOperando{
     public Tipo chequear() throws ExcepcionSemantica {
         TablaSimbolos ts = TablaSimbolos.getInstance();
         Clase claseActual = ts.getClaseActual();
-        System.out.println("metodo actual: "+ts.getMetodoActual().getNombreMetodo().getLexema());
+        Metodo metodo = claseActual.getMetodo(nombre.getLexema());
+        if(!metodo.esMetodoEstatico() && ts.getMetodoActual().esMetodoEstatico()){
+            throw new ExcepcionSemantica(nombre.getLexema(), nombre.getNroLinea(),"Metodo dinamico dentro de metodo estatico");
+        }
+        //System.out.println("metodo actual: "+ts.getMetodoActual().getNombreMetodo().getLexema());
 
        /* if(ts.getMetodoActual().esMetodoEstatico() ){
        //PREGUNTAR
@@ -90,7 +94,6 @@ public class NodoLlamadaMetodo extends NodoOperando{
         if(!claseActual.metodoDeclarado(nombre.getLexema())){
             throw new ExcepcionSemantica(nombre.getLexema(),nombre.getNroLinea(), "Método "+nombre.getLexema()+" no declarado en la clase "+claseActual.getNombre().getLexema());
         }
-        Metodo metodo = claseActual.getMetodo(nombre.getLexema());
         if(argumentos.size() != metodo.getParametros().size()){
             throw new ExcepcionSemantica(nombre.getLexema(), nombre.getNroLinea(),
                     "Cantidad de argumentos incorrecta para '"+nombre.getLexema()+

@@ -28,13 +28,14 @@ public class Main {
     public static void main(String[] args) {
         sourceManager = new SourceManagerImpl();
         abrirArchivo(args);
+
         try {
             analisisSintactico();
             analizadorSintactico.consolidarTS();
             analizadorSintactico.chequeoSemantico();
 
-            generacionCodigo("testOut.out");
-            TablaSimbolos.getInstance().imprimirDetalleClases();
+            generacionCodigo("[gen-01.java].out");
+           // TablaSimbolos.getInstance().imprimirDetalleClases();
             System.out.println("[SinErrores]");
         } catch (ExcepcionLexica e) {
             System.out.println("Error Lexico: " + e.getMessage());

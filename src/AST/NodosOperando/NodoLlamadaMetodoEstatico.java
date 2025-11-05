@@ -64,6 +64,7 @@ public class NodoLlamadaMetodoEstatico extends NodoOperando{
     @Override
     public Tipo chequear() throws ExcepcionSemantica {
         TablaSimbolos ts = TablaSimbolos.getInstance();
+        System.out.println("nodo llamada metodo estatico");
         Clase clase = ts.obtenerClase(nombreClase.getLexema());
         if(clase == null){
             throw new ExcepcionSemantica(nombreClase.getLexema(), nombreClase.getNroLinea(), "La clase no está definida");
