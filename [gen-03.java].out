@@ -1,0 +1,11 @@
+.DATA
+VT@A: DW lbl_m1@A
+DW lbl_m2@A
+
+.CODE
+
+.DATA
+VT@Init: DW lbl_main@Init
+
+.CODE
+

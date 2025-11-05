@@ -1,4 +1,9 @@
 .DATA
+VT@A: DW lbl_mc@A
+
+.CODE
+
+.DATA
 VT@Init: DW lbl_main@Init
 
 .CODE

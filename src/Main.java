@@ -28,13 +28,12 @@ public class Main {
     public static void main(String[] args) {
         sourceManager = new SourceManagerImpl();
         abrirArchivo(args);
-
         try {
             analisisSintactico();
             analizadorSintactico.consolidarTS();
             analizadorSintactico.chequeoSemantico();
 
-            generacionCodigo("[gen-01.java].out");
+            generacionCodigo(args[1]);
            // TablaSimbolos.getInstance().imprimirDetalleClases();
             System.out.println("[SinErrores]");
         } catch (ExcepcionLexica e) {
