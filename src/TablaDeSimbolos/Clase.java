@@ -358,13 +358,15 @@ public class Clase {
         //ordenarAtributos
 
         archivo.generar(".DATA");
-        if(metodosPropios.isEmpty()){
-            archivo.generar("VT@"+nombre.getLexema()+": "+ Instrucciones.NOP);
+        archivo.generar("lblVT"+nombre.getLexema()+": "+ Instrucciones.NOP);
+
+        /*if(metodosPropios.isEmpty()){
+
         }
         else{
             List<Metodo> listaMetodos = mapeoAlista(metodosPropios);
             String primerMetodo = listaMetodos.getFirst().getNombre();
-            archivo.generar("VT@"+nombre.getLexema()+": "+ Instrucciones.DW+" lbl_"+primerMetodo+"@"+nombre.getLexema());
+           // archivo.generar("VT@"+nombre.getLexema()+": "+ Instrucciones.DW+" lbl_"+primerMetodo+"@"+nombre.getLexema());
             for(int i = 1; i < listaMetodos.size(); i++){
                 String nombreMetodo = listaMetodos.get(i).getNombre();
                 archivo.generar(Instrucciones.DW+" lbl_"+nombreMetodo+"@"+nombre.getLexema());
@@ -374,6 +376,15 @@ public class Clase {
         archivo.generar("");
         archivo.generar(".CODE");
         //TO-DO CODIGO
+        archivo.generar("");
+
+         */
+        archivo.generar("");
+        archivo.generar(".CODE");
+        for(Metodo m : metodosPropios.values()){
+            System.out.println(m.getNombre()+" de clase "+nombre.getLexema());
+            m.generar(archivo);
+        }
         archivo.generar("");
     }
     public void calcularOffsetMetodos(){

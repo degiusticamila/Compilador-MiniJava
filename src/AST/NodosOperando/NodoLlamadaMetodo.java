@@ -5,6 +5,7 @@ import AST.NodosEncadenado.NodoEncadenadoVacio;
 import AST.NodosExpresion.NodoExpresion;
 import AST.NodosSentencia.NodoBloque;
 import AST.NodosSentencia.NodoSentencia;
+import ArchivoSalida.ArchivoSalida;
 import TablaDeSimbolos.*;
 import Utils.Token;
 
@@ -126,5 +127,8 @@ public class NodoLlamadaMetodo extends NodoOperando{
         TablaSimbolos ts = TablaSimbolos.getInstance();
         Metodo metodoActual = ts.getMetodoActual();
         NodoBloque bloqueActual = metodoActual.getBloque();
+    }
+    public void generar(ArchivoSalida archivo) throws ExcepcionSemantica {
+
     }
 }

@@ -1,5 +1,14 @@
+.CODE
+PUSH lblMetmain@Init
+CALL
+
+HALT
+
 .DATA
-VT@Init: DW lbl_main@Init
+lblVTInit: NOP
 
 .CODE
+lblMetmain@Init: LOADFP #Apila el valor del registro fp
+LOADSP #Apila el valor del registro sp
+STOREFP #Almacena el tope de la pila en el registro fp
 

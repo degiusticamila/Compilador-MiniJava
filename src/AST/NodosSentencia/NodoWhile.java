@@ -1,6 +1,7 @@
 package AST.NodosSentencia;
 
 import AST.NodosExpresion.NodoExpresion;
+import ArchivoSalida.ArchivoSalida;
 import TablaDeSimbolos.ExcepcionSemantica;
 import TablaDeSimbolos.Tipo;
 import TablaDeSimbolos.TipoPrimitivo;
@@ -36,5 +37,10 @@ public class NodoWhile extends NodoSentencia {
             throw new ExcepcionSemantica(expresion.formatear(),tokenWhile.getNroLinea(), "El tipo de la expresion es de tipo "+tipoExpresion+" y no es compatible con boolean");
         }
         sentencia.chequear();
+    }
+
+    @Override
+    public void generar(ArchivoSalida archivo) {
+
     }
 }

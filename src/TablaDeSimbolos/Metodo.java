@@ -3,6 +3,8 @@ package TablaDeSimbolos;
 import AST.NodosSentencia.NodoBloque;
 import AST.NodosSentencia.NodoBloqueVacio;
 import AST.NodosSentencia.NodoSentencia;
+import ArchivoSalida.ArchivoSalida;
+import GeneracionCodigo.Instrucciones;
 import Utils.Token;
 
 import java.util.LinkedList;
@@ -94,6 +96,20 @@ public class Metodo implements Elemento{
     public int getLinea(){
         return nombre.getNroLinea();
     }
-
+    public void generar(ArchivoSalida archivo){
+        generarEtiquetaMetodo(archivo);
+        generarConstruirRA(archivo);
+        generarBloque(archivo);
+    }
+    public void generarEtiquetaMetodo(ArchivoSalida archivo){
+        archivo.generar("lblMet"+nombre.getLexema()+"@"+TablaSimbolos.tablaSimbolos.getClaseActual().getNombre().getLexema()+": "+ Instrucciones.LOADFP + " #Apila el valor del registro fp");
+    }
+    public void generarConstruirRA(ArchivoSalida archivo){
+        archivo.generar(""+Instrucciones.LOADSP+" #Apila el valor del registro sp");
+        archivo.generar(""+Instrucciones.STOREFP+" #Almacena el tope de la pila en el registro fp");
+    }
+    public void generarBloque(ArchivoSalida archivo){
+        bloque.generar(archivo);
+    }
 
 }

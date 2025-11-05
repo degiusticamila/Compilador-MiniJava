@@ -2,6 +2,7 @@ package AST.NodosSentencia;
 
 import AST.NodosExpresion.NodoExpresion;
 import AST.NodosExpresion.NodoExpresionVacia;
+import ArchivoSalida.ArchivoSalida;
 import TablaDeSimbolos.*;
 import Utils.Token;
 
@@ -46,5 +47,10 @@ public class NodoReturn extends NodoSentencia {
             }
 
         }
+    }
+
+    @Override
+    public void generar(ArchivoSalida archivo) {
+
     }
 }

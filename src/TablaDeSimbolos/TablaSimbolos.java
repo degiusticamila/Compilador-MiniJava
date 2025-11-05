@@ -3,6 +3,7 @@ package TablaDeSimbolos;
 import AST.NodosSentencia.NodoBloque;
 import AST.NodosSentencia.NodoBloqueVacio;
 import ArchivoSalida.ArchivoSalida;
+import GeneracionCodigo.Instrucciones;
 import Utils.SourceManager;
 import Utils.Token;
 
@@ -362,6 +363,7 @@ public class TablaSimbolos {
             for (Metodo m : c.getMetodosPropios().values()){
                 if(m.esMetodoEstatico() && m.getNombreMetodo().getLexema().equals("main")){
                     count++;
+
                 }
             }
         }
@@ -371,10 +373,48 @@ public class TablaSimbolos {
        }
        return true;
     }
-    public void generarCodigo(ArchivoSalida archivo){
+    public void generarCodigo(ArchivoSalida archivo) throws ExcepcionSemantica {
+        generarCodigoLlamadaMain(archivo);
+        generarCodigoHalt(archivo);
+        generarPrimitivasMalloc_HeapInit(archivo);
+        generarCodigoClases(archivo);
+
+    }
+    public void generarCodigoLlamadaMain(ArchivoSalida archivo) throws ExcepcionSemantica {
+        archivo.generar(".CODE");
+        Clase nombreClaseMain = obtenerClaseMain();
+        archivo.generar(Instrucciones.PUSH+" lblMetmain@"+nombreClaseMain.getNombre().getLexema());
+        archivo.generar(""+Instrucciones.CALL);
+        archivo.generar("");
+
+    }
+    public void generarCodigoHalt(ArchivoSalida archivo){
+        archivo.generar(""+Instrucciones.HALT);
+        archivo.generar("");
+    }
+    public void generarPrimitivasMalloc_HeapInit(ArchivoSalida archivo){
+        //TO-DO
+    }
+    public void generarCodigoClases(ArchivoSalida archivo){
         for(Clase clase: clases.values()){
             clase.generarCodigo(archivo);
         }
+    }
+    public Clase obtenerClaseMain() throws ExcepcionSemantica {
+        Clase claseMain = null;
+        int count = 0;
+        for(Clase c : clases.values()){
+            for (Metodo m : c.getMetodosPropios().values()){
+                if(m.esMetodoEstatico() && m.getNombreMetodo().getLexema().equals("main")){
+                    claseMain = c;
+                }
+            }
+        }
+        if(claseMain == null){
+            String eof = Character.toString(SourceManager.END_OF_FILE);
+            throw new ExcepcionSemantica(eof, SourceManager.END_OF_FILE," Metodo main no declarado");
+        }
+        return claseMain;
     }
     public void calcularOffsets(){
 

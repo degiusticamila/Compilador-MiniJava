@@ -1,17 +1,36 @@
-.DATA
-VT@A: DW lbl_m1@A
-DW lbl_setall@A
-
 .CODE
+PUSH lblMetmain@Init
+CALL
 
-.DATA
-VT@B: DW lbl_seta4@B
-DW lbl_m2@B
-
-.CODE
+HALT
 
 .DATA
-VT@Init: DW lbl_main@Init
+lblVTA: NOP
 
 .CODE
+lblMetm1@Init: LOADFP #Apila el valor del registro fp
+LOADSP #Apila el valor del registro sp
+STOREFP #Almacena el tope de la pila en el registro fp
+lblMetsetall@Init: LOADFP #Apila el valor del registro fp
+LOADSP #Apila el valor del registro sp
+STOREFP #Almacena el tope de la pila en el registro fp
+
+.DATA
+lblVTB: NOP
+
+.CODE
+lblMetseta4@Init: LOADFP #Apila el valor del registro fp
+LOADSP #Apila el valor del registro sp
+STOREFP #Almacena el tope de la pila en el registro fp
+lblMetm2@Init: LOADFP #Apila el valor del registro fp
+LOADSP #Apila el valor del registro sp
+STOREFP #Almacena el tope de la pila en el registro fp
+
+.DATA
+lblVTInit: NOP
+
+.CODE
+lblMetmain@Init: LOADFP #Apila el valor del registro fp
+LOADSP #Apila el valor del registro sp
+STOREFP #Almacena el tope de la pila en el registro fp
 

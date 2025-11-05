@@ -6,6 +6,7 @@ import AST.NodosOperando.NodoLlamadaConstructor;
 import AST.NodosOperando.NodoLlamadaMetodo;
 import AST.NodosOperando.NodoLlamadaMetodoEstatico;
 import AST.NodosOperando.NodoOperando;
+import ArchivoSalida.ArchivoSalida;
 import TablaDeSimbolos.ExcepcionSemantica;
 import TablaDeSimbolos.Tipo;
 import Utils.SourceManager;
@@ -36,5 +37,12 @@ public class NodoSentenciaExpresion extends NodoSentencia{
         }
 
         throw new ExcepcionSemantica(expresion.formatear(),-1,"La expresión no produce efecto (resultado no utilizado)");
+    }
+
+    @Override
+    public void generar(ArchivoSalida archivo) {
+        if(expresion instanceof NodoLlamadaMetodo){
+            generar(archivo);
+        }
     }
 }

@@ -1,6 +1,7 @@
 package AST.NodosSentencia;
 
 import AST.NodosExpresion.NodoExpresion;
+import ArchivoSalida.ArchivoSalida;
 import TablaDeSimbolos.ExcepcionSemantica;
 import TablaDeSimbolos.Tipo;
 import TablaDeSimbolos.TipoPrimitivo;
@@ -45,5 +46,10 @@ public class NodoIf extends NodoSentencia {
         if(!(sentenciaElse instanceof NodoSentenciaVacia)){
             sentenciaElse.chequear();
         }
+    }
+
+    @Override
+    public void generar(ArchivoSalida archivo) {
+
     }
 }

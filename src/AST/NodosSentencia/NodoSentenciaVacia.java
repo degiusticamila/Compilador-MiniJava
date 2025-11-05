@@ -1,5 +1,7 @@
 package AST.NodosSentencia;
 
+import ArchivoSalida.ArchivoSalida;
+
 public class NodoSentenciaVacia extends NodoSentencia {
     @Override
     public void imprimir(String prefijo) {
@@ -8,6 +10,11 @@ public class NodoSentenciaVacia extends NodoSentencia {
 
     @Override
     public void chequear() {
+
+    }
+
+    @Override
+    public void generar(ArchivoSalida archivo) {
 
     }
 }

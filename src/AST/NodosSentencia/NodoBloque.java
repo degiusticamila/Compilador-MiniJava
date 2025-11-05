@@ -1,6 +1,7 @@
 package AST.NodosSentencia;
 
 import AST.NodosOperando.NodoOperando;
+import ArchivoSalida.ArchivoSalida;
 import TablaDeSimbolos.ExcepcionSemantica;
 import TablaDeSimbolos.TablaSimbolos;
 import TablaDeSimbolos.Tipo;
@@ -135,5 +136,10 @@ public class NodoBloque extends NodoSentencia {
     }
     public NodoBloque getNodoBloquePadre(){
         return nodoBloquePadre;
+    }
+    public void generar(ArchivoSalida archivo){
+        for(NodoSentencia sentencia: sentencias){
+            sentencia.generar(archivo);
+        }
     }
 }

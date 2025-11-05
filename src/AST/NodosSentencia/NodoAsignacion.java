@@ -1,6 +1,7 @@
 package AST.NodosSentencia;
 
 import AST.NodosExpresion.NodoExpresion;
+import ArchivoSalida.ArchivoSalida;
 import TablaDeSimbolos.Tipo;
 
 public class NodoAsignacion extends NodoSentencia {
@@ -24,6 +25,11 @@ public class NodoAsignacion extends NodoSentencia {
 
     @Override
     public void chequear() {
+
+    }
+
+    @Override
+    public void generar(ArchivoSalida archivo) {
 
     }
 }

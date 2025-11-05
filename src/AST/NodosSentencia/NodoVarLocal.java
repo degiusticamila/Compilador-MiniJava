@@ -2,6 +2,7 @@ package AST.NodosSentencia;
 
 import AST.NodosExpresion.NodoExpresion;
 import AST.NodosExpresion.NodoExpresionVacia;
+import ArchivoSalida.ArchivoSalida;
 import TablaDeSimbolos.*;
 import Utils.Token;
 
@@ -51,6 +52,12 @@ public class NodoVarLocal extends NodoSentencia implements Elemento {
         }
 
     }
+
+    @Override
+    public void generar(ArchivoSalida archivo) {
+
+    }
+
     public String getNombreVarLocal(){
         return nombre.getLexema();
     }

@@ -97,7 +97,7 @@ public class Main {
             e.printStackTrace();
         }
     }
-    public static void generacionCodigo(String nombre_archivo){
+    public static void generacionCodigo(String nombre_archivo) throws ExcepcionSemantica {
         archivoSalida = new ArchivoSalida(nombre_archivo);
         tablaSimbolos.generarCodigo(archivoSalida);
         archivoSalida.close();
