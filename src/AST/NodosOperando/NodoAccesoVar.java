@@ -5,6 +5,7 @@ import AST.NodosEncadenado.NodoEncadenadoVacio;
 import AST.NodosExpresion.NodoExpresion;
 import AST.NodosSentencia.NodoBloque;
 import AST.NodosSentencia.NodoVarLocal;
+import ArchivoSalida.ArchivoSalida;
 import TablaDeSimbolos.*;
 import Utils.Token;
 
@@ -89,6 +90,12 @@ public class NodoAccesoVar extends NodoOperando {
         return tipoBase;
 
     }
+
+    @Override
+    public void generar(ArchivoSalida archivo) {
+
+    }
+
     private boolean buscarEnBloques(String nombre) throws ExcepcionSemantica {
         NodoBloque bloque = TablaSimbolos.getInstance().getBloqueActual();
         while (bloque != null) {

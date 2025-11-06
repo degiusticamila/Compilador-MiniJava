@@ -3,6 +3,7 @@ package AST.NodosOperando;
 import AST.NodosEncadenado.NodoEncadenado;
 import AST.NodosEncadenado.NodoEncadenadoVacio;
 import AST.NodosExpresion.NodoExpresion;
+import ArchivoSalida.ArchivoSalida;
 import TablaDeSimbolos.*;
 import Utils.Token;
 
@@ -102,6 +103,12 @@ public class NodoLlamadaConstructor extends NodoOperando{
         }
         return tipoConstructor;
     }
+
+    @Override
+    public void generar(ArchivoSalida archivo) {
+
+    }
+
     public void setArgumentos(List<NodoExpresion> argumentos){
         this.argumentos = argumentos;
     }

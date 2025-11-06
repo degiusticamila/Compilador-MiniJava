@@ -1,5 +1,6 @@
 package AST.NodosExpresion;
 
+import ArchivoSalida.ArchivoSalida;
 import TablaDeSimbolos.*;
 import Utils.Token;
 
@@ -48,6 +49,11 @@ public class NodoExpAsignacion extends NodoExpresion {
             throw new ExcepcionSemantica(operador.getLexema(),operador.getNroLinea(),"El tipo "+tipoLadoDerecho+" no conforma con "+tipoLadoIzquierdo);
         }
         return tipoLadoDerecho;
+    }
+
+    @Override
+    public void generar(ArchivoSalida archivo) {
+
     }
 
     @Override

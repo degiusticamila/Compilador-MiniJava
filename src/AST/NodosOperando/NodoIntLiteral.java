@@ -1,6 +1,8 @@
 package AST.NodosOperando;
 
 import AST.NodosExpresion.NodoExpresion;
+import ArchivoSalida.ArchivoSalida;
+import GeneracionCodigo.Instrucciones;
 import TablaDeSimbolos.Tipo;
 import TablaDeSimbolos.TipoPrimitivo;
 import Utils.Token;
@@ -41,6 +43,13 @@ public class NodoIntLiteral extends NodoOperando {
     public Tipo chequear() {
         return new TipoPrimitivo("int");
     }
+
+    @Override
+    public void generar(ArchivoSalida archivo) {
+        archivo.generar(Instrucciones.PUSH+" "+nombre.getLexema());
+
+    }
+
     public Token getNombre(){
         return nombre;
     }

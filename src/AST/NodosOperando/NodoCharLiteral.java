@@ -1,6 +1,7 @@
 package AST.NodosOperando;
 
 import AST.NodosExpresion.NodoExpresion;
+import ArchivoSalida.ArchivoSalida;
 import TablaDeSimbolos.Tipo;
 import TablaDeSimbolos.TipoPrimitivo;
 import Utils.Token;
@@ -44,5 +45,10 @@ public class NodoCharLiteral extends NodoOperando {
     @Override
     public Tipo chequear() {
         return new TipoPrimitivo("char");
+    }
+
+    @Override
+    public void generar(ArchivoSalida archivo) {
+
     }
 }

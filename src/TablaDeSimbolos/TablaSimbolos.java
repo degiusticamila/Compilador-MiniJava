@@ -73,6 +73,7 @@ public class TablaSimbolos {
     public HashMap<String, Clase> getClases(){
         return clases;
     }
+    public HashMap<String, Clase> getClasesPredefinidas(){ return clasesPredefinidas;}
     private void insertarClasesPredefinidas() throws ExcepcionSemantica {
         Token nombreClaseObject = new Token("idClase", "Object", -1);
         Token nombreClaseSystem = new Token("idClase", "System", -1);
@@ -377,6 +378,7 @@ public class TablaSimbolos {
         generarCodigoLlamadaMain(archivo);
         generarCodigoHalt(archivo);
         generarPrimitivasMalloc_HeapInit(archivo);
+        generarCodigoClasesPredefinidas(archivo);
         generarCodigoClases(archivo);
 
     }
@@ -395,14 +397,19 @@ public class TablaSimbolos {
     public void generarPrimitivasMalloc_HeapInit(ArchivoSalida archivo){
         //TO-DO
     }
+    public void generarCodigoClasesPredefinidas(ArchivoSalida archivo){
+        for(Clase clasePredefinida : clasesPredefinidas.values()){
+            clasePredefinida.generarCodigo(archivo);
+        }
+    }
     public void generarCodigoClases(ArchivoSalida archivo){
         for(Clase clase: clases.values()){
+            System.out.println("Generando codigo para la clase: "+clase.getNombre());
             clase.generarCodigo(archivo);
         }
     }
     public Clase obtenerClaseMain() throws ExcepcionSemantica {
         Clase claseMain = null;
-        int count = 0;
         for(Clase c : clases.values()){
             for (Metodo m : c.getMetodosPropios().values()){
                 if(m.esMetodoEstatico() && m.getNombreMetodo().getLexema().equals("main")){

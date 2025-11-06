@@ -1,6 +1,7 @@
 package AST.NodosOperando;
 
 import AST.NodosExpresion.NodoExpresion;
+import ArchivoSalida.ArchivoSalida;
 import TablaDeSimbolos.Tipo;
 import TablaDeSimbolos.TipoPrimitivo;
 import TablaDeSimbolos.TipoReferencia;
@@ -45,5 +46,10 @@ public class NodoNull extends NodoOperando {
     @Override
     public Tipo chequear() {
         return TipoReferencia.NULL;
+    }
+
+    @Override
+    public void generar(ArchivoSalida archivo) {
+
     }
 }

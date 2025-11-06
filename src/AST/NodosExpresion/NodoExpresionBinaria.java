@@ -1,5 +1,6 @@
 package AST.NodosExpresion;
 
+import ArchivoSalida.ArchivoSalida;
 import TablaDeSimbolos.ExcepcionSemantica;
 import TablaDeSimbolos.Tipo;
 import TablaDeSimbolos.TipoPrimitivo;
@@ -107,6 +108,11 @@ public class NodoExpresionBinaria extends NodoExpresionCompuesta {
         else{
             return new TipoUniversal("tipo universal");
         }
+
+    }
+
+    @Override
+    public void generar(ArchivoSalida archivo) {
 
     }
 }

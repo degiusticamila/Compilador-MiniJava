@@ -47,6 +47,16 @@ public class Metodo implements Elemento{
     public boolean esMetodoEstatico(){
         return modificador != null && modificador.getLexema().equals("static");
     }
+    public Clase esMetodoPredefinido(){
+        for(Clase clasePredefinida : TablaSimbolos.tablaSimbolos.getClasesPredefinidas().values()){
+            for(Metodo metodoPredefino : clasePredefinida.getMetodosPropios().values()){
+                if(metodoPredefino.getNombre().equals(nombre.getLexema())){
+                    return clasePredefinida;
+                }
+            }
+        }
+        return null;
+    }
     public LinkedList<Parametro> getParametros() {
         return parametros;
     }
@@ -100,8 +110,12 @@ public class Metodo implements Elemento{
         generarEtiquetaMetodo(archivo);
         generarConstruirRA(archivo);
         generarBloque(archivo);
+        generarRetornoMetodo(archivo);
     }
     public void generarEtiquetaMetodo(ArchivoSalida archivo){
+        //si es metodo predefinido
+
+        //si es metodo propio
         archivo.generar("lblMet"+nombre.getLexema()+"@"+TablaSimbolos.tablaSimbolos.getClaseActual().getNombre().getLexema()+": "+ Instrucciones.LOADFP + " #Apila el valor del registro fp");
     }
     public void generarConstruirRA(ArchivoSalida archivo){
@@ -110,6 +124,10 @@ public class Metodo implements Elemento{
     }
     public void generarBloque(ArchivoSalida archivo){
         bloque.generar(archivo);
+    }
+    public void generarRetornoMetodo(ArchivoSalida archivo){
+        archivo.generar(Instrucciones.STOREFP+" #Apila el valor del registro sp");
+        archivo.generar(Instrucciones.RET +" 0");
     }
 
 }

@@ -3,6 +3,7 @@ package AST.NodosOperando;
 import AST.NodosEncadenado.NodoEncadenado;
 import AST.NodosEncadenado.NodoEncadenadoVacio;
 import AST.NodosExpresion.NodoExpresion;
+import ArchivoSalida.ArchivoSalida;
 import TablaDeSimbolos.*;
 import Utils.Token;
 
@@ -72,7 +73,13 @@ import Utils.Token;
         return tipoThis;
 
     }
-    public void setEncadenado(NodoEncadenado nodoEncadenado) {
+
+        @Override
+        public void generar(ArchivoSalida archivo) {
+
+        }
+
+        public void setEncadenado(NodoEncadenado nodoEncadenado) {
         this.encadenado = nodoEncadenado;
     }
 }

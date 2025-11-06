@@ -1,6 +1,7 @@
 package AST.NodosOperando;
 
 import AST.NodosExpresion.NodoExpresion;
+import ArchivoSalida.ArchivoSalida;
 import TablaDeSimbolos.Tipo;
 import TablaDeSimbolos.TipoUniversal;
 import Utils.Token;
@@ -29,6 +30,11 @@ public class NodoOperandoVacio extends NodoOperando{
     @Override
     public Tipo chequear() {
         return new TipoUniversal("tipo universal");
+    }
+
+    @Override
+    public void generar(ArchivoSalida archivo) {
+
     }
 
     @Override

@@ -3,6 +3,7 @@ package AST.NodosOperando;
 import AST.NodosEncadenado.NodoEncadenado;
 import AST.NodosEncadenado.NodoEncadenadoVacio;
 import AST.NodosExpresion.NodoExpresion;
+import ArchivoSalida.ArchivoSalida;
 import TablaDeSimbolos.*;
 import Utils.Token;
 
@@ -96,6 +97,12 @@ public class NodoLlamadaMetodoEstatico extends NodoOperando{
         }
         return tipoRetorno;
     }
+
+    @Override
+    public void generar(ArchivoSalida archivo) {
+
+    }
+
     public void setEncadenado(NodoEncadenado encadenado){
         this.encadenado = encadenado;
     }

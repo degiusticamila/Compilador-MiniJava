@@ -1,6 +1,7 @@
 package AST.NodosExpresion;
 
 import AST.NodosOperando.NodoOperando;
+import ArchivoSalida.ArchivoSalida;
 import TablaDeSimbolos.Tipo;
 import TablaDeSimbolos.TipoUniversal;
 import Utils.Token;
@@ -44,6 +45,11 @@ public class NodoExpUnaria extends NodoExpresionCompuesta {
     @Override
     public Tipo chequear() {
         return new TipoUniversal("tipo universal");
+    }
+
+    @Override
+    public void generar(ArchivoSalida archivo) {
+
     }
 
 }

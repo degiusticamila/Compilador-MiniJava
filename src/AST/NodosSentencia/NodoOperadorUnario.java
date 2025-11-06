@@ -1,6 +1,7 @@
 package AST.NodosSentencia;
 
 import AST.NodosExpresion.NodoExpresion;
+import ArchivoSalida.ArchivoSalida;
 import TablaDeSimbolos.ExcepcionSemantica;
 import TablaDeSimbolos.Tipo;
 import TablaDeSimbolos.TipoPrimitivo;
@@ -44,6 +45,11 @@ public class NodoOperadorUnario extends NodoExpresion{
         }
 
         return new TipoUniversal("tipo universal");
+    }
+
+    @Override
+    public void generar(ArchivoSalida archivo) {
+
     }
 
     @Override

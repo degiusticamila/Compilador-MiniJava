@@ -6,6 +6,7 @@ import AST.NodosExpresion.NodoExpresion;
 import AST.NodosSentencia.NodoBloque;
 import AST.NodosSentencia.NodoSentencia;
 import ArchivoSalida.ArchivoSalida;
+import GeneracionCodigo.Instrucciones;
 import TablaDeSimbolos.*;
 import Utils.Token;
 
@@ -128,7 +129,16 @@ public class NodoLlamadaMetodo extends NodoOperando{
         Metodo metodoActual = ts.getMetodoActual();
         NodoBloque bloqueActual = metodoActual.getBloque();
     }
-    public void generar(ArchivoSalida archivo) throws ExcepcionSemantica {
-
+    public void generar(ArchivoSalida archivo){
+        //Es un caso particular, CAMBIAR
+        for(NodoExpresion parametro : argumentos){
+            parametro.generar(archivo);
+        }
+        //Apilo la etiqueta del metodo estatico que quiero llamar
+        // y lo llamo
+        Clase claseActual = TablaSimbolos.tablaSimbolos.getClaseActual();
+        Metodo metodo = claseActual.getMetodo(nombre.getLexema());
+        archivo.generar("PUSH lblMet"+nombre.getLexema()+"@Object");
+        archivo.generar(""+ Instrucciones.CALL);
     }
 }

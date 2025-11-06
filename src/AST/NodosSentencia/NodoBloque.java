@@ -2,6 +2,7 @@ package AST.NodosSentencia;
 
 import AST.NodosOperando.NodoOperando;
 import ArchivoSalida.ArchivoSalida;
+import GeneracionCodigo.Instrucciones;
 import TablaDeSimbolos.ExcepcionSemantica;
 import TablaDeSimbolos.TablaSimbolos;
 import TablaDeSimbolos.Tipo;
@@ -141,5 +142,6 @@ public class NodoBloque extends NodoSentencia {
         for(NodoSentencia sentencia: sentencias){
             sentencia.generar(archivo);
         }
+        archivo.generar(Instrucciones.FMEM+" 0");
     }
 }

@@ -386,6 +386,8 @@ public class Clase {
             m.generar(archivo);
         }
         archivo.generar("");
+        generarCodigoConstructor(archivo);
+        generarRetornoConstructor(archivo);
     }
     public void calcularOffsetMetodos(){
 
@@ -394,5 +396,16 @@ public class Clase {
         List<Metodo> lista;
         lista = new ArrayList<>(metodos.values());
         return lista;
+    }
+    public void generarCodigoConstructor(ArchivoSalida archivo){
+        //ESTA HARDCODEADO DE MOMENTO!
+        archivo.generar("lblConstructor@Init: LOADFP");
+        archivo.generar("LOADSP");
+        archivo.generar("STOREFP");
+    }
+    public void generarRetornoConstructor(ArchivoSalida archivo){
+        archivo.generar("FMEM 0");
+        archivo.generar("STOREFP");
+        archivo.generar("RET 1");
     }
 }

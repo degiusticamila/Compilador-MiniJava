@@ -1,6 +1,7 @@
 package AST.NodosOperando;
 
 import AST.NodosExpresion.NodoExpresion;
+import ArchivoSalida.ArchivoSalida;
 import TablaDeSimbolos.Tipo;
 import TablaDeSimbolos.TipoReferencia;
 import TablaDeSimbolos.TipoUniversal;
@@ -35,6 +36,11 @@ public class NodoString extends NodoOperando{
     @Override
     public Tipo chequear() {
         return new TipoReferencia("String");
+    }
+
+    @Override
+    public void generar(ArchivoSalida archivo) {
+
     }
 
     @Override
