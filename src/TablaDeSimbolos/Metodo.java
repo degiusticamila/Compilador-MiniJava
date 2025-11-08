@@ -116,11 +116,11 @@ public class Metodo implements Elemento{
         //si es metodo de una clase predefinida (System, String, Object)
         Clase clasePredefinida = this.esMetodoPredefinido();
         if(clasePredefinida != null){
-            archivo.generar("lbl_"+nombre.getLexema()+"@"+clasePredefinida.getNombre().getLexema()+": "+Instrucciones.LOADFP + " #Apila el valor del registro fp");
+            archivo.generar("lbl_"+nombre.getLexema()+"@"+clasePredefinida.getNombre().getLexema()+": "+Instrucciones.LOADFP);
         }
         else{
             //es metodo propio
-            archivo.generar("lbl_"+nombre.getLexema()+"@"+TablaSimbolos.tablaSimbolos.getClaseActual().getNombre().getLexema()+": "+ Instrucciones.LOADFP + " #Apila el valor del registro fp");
+            archivo.generar("lbl_"+nombre.getLexema()+"@"+TablaSimbolos.tablaSimbolos.getClaseActual().getNombre().getLexema()+": "+ Instrucciones.LOADFP);
         }
     }
     public void generarConstruirRA(ArchivoSalida archivo){
@@ -133,8 +133,9 @@ public class Metodo implements Elemento{
         bloque.generar(archivo);
     }
     public void generarRetornoMetodo(ArchivoSalida archivo){
-        archivo.generar(Instrucciones.STOREFP+" #Apila el valor del registro sp");
+        archivo.generar(Instrucciones.STOREFP+"");
         archivo.generar(Instrucciones.RET +" "+this.getParametros().size());
+        archivo.generar("");
     }
 
 }

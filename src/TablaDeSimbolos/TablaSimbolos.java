@@ -1,6 +1,6 @@
 package TablaDeSimbolos;
 
-import AST.NodosSentencia.Bloques.BloqueDebugPrint;
+import AST.NodosSentencia.Bloques.*;
 import AST.NodosSentencia.NodoBloque;
 import AST.NodosSentencia.NodoBloqueVacio;
 import ArchivoSalida.ArchivoSalida;
@@ -132,6 +132,8 @@ public class TablaSimbolos {
         Tipo tipoRetorno = new TipoPrimitivo("int");
         Metodo m = new Metodo(modificador,tipoRetorno, nombreMetodo);
         claseSystem.insertarMetodo(nombreMetodo,m);
+
+        m.insertarBloque(new BloqueRead(),new NodoBloqueVacio());
     }
     public void printB(Clase claseSystem) throws ExcepcionSemantica {
         //static void printB(boolean b)
@@ -147,7 +149,7 @@ public class TablaSimbolos {
         Parametro b = new Parametro(tipoParam,nombreParam,1);
 
         m.insertarParametro(nombreParam.getLexema(), b,-1);
-
+        m.insertarBloque(new BloquePrintB(),new NodoBloqueVacio());
     }
     public void printC(Clase claseSystem) throws ExcepcionSemantica {
         //static void printC(char c)
@@ -163,6 +165,7 @@ public class TablaSimbolos {
         Parametro c = new Parametro(tipoParam,nombreParam,1);
 
         m.insertarParametro(nombreParam.getLexema(), c,-1);
+        m.insertarBloque(new BloquePrintC(),new NodoBloqueVacio());
     }
     public void printI(Clase claseSystem) throws ExcepcionSemantica {
         //static void printI(int i)
@@ -178,6 +181,7 @@ public class TablaSimbolos {
         Parametro i = new Parametro(tipoParam,nombreParam,1);
 
         m.insertarParametro(nombreParam.getLexema(), i,-1);
+        m.insertarBloque(new BloquePrintI(),new NodoBloqueVacio());
     }
     public void printS(Clase claseSystem) throws ExcepcionSemantica {
         //static void printS(String s)
@@ -193,6 +197,7 @@ public class TablaSimbolos {
         Parametro s = new Parametro(tipoParam,nombreParam,1);
 
         m.insertarParametro(nombreParam.getLexema(), s,-1);
+        m.insertarBloque(new BloquePrintS(),new NodoBloqueVacio());
     }
     public void println(Clase claseSystem) throws ExcepcionSemantica {
         //static void println()
@@ -201,6 +206,7 @@ public class TablaSimbolos {
         Tipo tipoVoid = new TipoVoid();
         Metodo m = new Metodo(modificador,tipoVoid, nombreMetodo);
         claseSystem.insertarMetodo(nombreMetodo,m);
+        m.insertarBloque(new BloquePrintln(),new NodoBloqueVacio());
     }
     public void printBln(Clase claseSystem) throws ExcepcionSemantica {
         //static void printBln(boolean b)
@@ -216,6 +222,7 @@ public class TablaSimbolos {
         Parametro b = new Parametro(tipoParam,nombreParam,1);
 
         m.insertarParametro(nombreParam.getLexema(), b,-1);
+        m.insertarBloque(new BloquePrintBln(),new NodoBloqueVacio());
     }
     public void printCln(Clase claseSystem) throws ExcepcionSemantica {
         //static void printCln(char c)
@@ -231,6 +238,7 @@ public class TablaSimbolos {
         Parametro c = new Parametro(tipoParam,nombreParam,1);
 
         m.insertarParametro(nombreParam.getLexema(), c,-1);
+        m.insertarBloque(new BloquePrintCln(),new NodoBloqueVacio());
     }
     public void printIln(Clase claseSystem) throws ExcepcionSemantica {
         //static void printIln(int i)
@@ -246,6 +254,7 @@ public class TablaSimbolos {
         Parametro i = new Parametro(tipoParam,nombreParam,1);
 
         m.insertarParametro(nombreParam.getLexema(), i,-1);
+        m.insertarBloque(new BloquePrintIln(),new NodoBloqueVacio());
     }
     public void printSln(Clase claseSystem) throws ExcepcionSemantica {
         //static void printSln(String s)
@@ -261,6 +270,7 @@ public class TablaSimbolos {
         Parametro s = new Parametro(tipoParam,nombreParam,1);
 
         m.insertarParametro(nombreParam.getLexema(), s,-1);
+        m.insertarBloque(new BloquePrintSln(),new NodoBloqueVacio());
     }
     public void insertarMetodosPredefinidosString(Clase claseString){
 

@@ -24,13 +24,14 @@ RET 1
 VT@Object: NOP
 
 .CODE
-lbl_debugPrint@Object: LOADFP #Apila el valor del registro fp
+lbl_debugPrint@Object: LOADFP
 LOADSP
 STOREFP
 LOAD 3
 IPRINT
-STOREFP #Apila el valor del registro sp
+STOREFP
 RET 1
+
 
 lbl_constructor@Object: NOP
 .DATA
@@ -43,73 +44,75 @@ lbl_constructor@String: NOP
 VT@System: NOP
 
 .CODE
-lbl_printC@System: LOADFP #Apila el valor del registro fp
+lbl_printC@System: LOADFP
 LOADSP
 STOREFP
-FMEM 0
-STOREFP #Apila el valor del registro sp
+STOREFP
 RET 1
-lbl_printS@System: LOADFP #Apila el valor del registro fp
+
+lbl_printS@System: LOADFP
 LOADSP
 STOREFP
-FMEM 0
-STOREFP #Apila el valor del registro sp
+STOREFP
 RET 1
-lbl_println@System: LOADFP #Apila el valor del registro fp
+
+lbl_println@System: LOADFP
 LOADSP
 STOREFP
-FMEM 0
-STOREFP #Apila el valor del registro sp
+STOREFP
 RET 0
-lbl_printCln@System: LOADFP #Apila el valor del registro fp
+
+lbl_printCln@System: LOADFP
 LOADSP
 STOREFP
-FMEM 0
-STOREFP #Apila el valor del registro sp
+STOREFP
 RET 1
-lbl_printSln@System: LOADFP #Apila el valor del registro fp
+
+lbl_printSln@System: LOADFP
 LOADSP
 STOREFP
-FMEM 0
-STOREFP #Apila el valor del registro sp
+STOREFP
 RET 1
-lbl_read@System: LOADFP #Apila el valor del registro fp
+
+lbl_read@System: LOADFP
 LOADSP
 STOREFP
-FMEM 0
-STOREFP #Apila el valor del registro sp
+STOREFP
 RET 0
-lbl_printB@System: LOADFP #Apila el valor del registro fp
+
+lbl_printB@System: LOADFP
 LOADSP
 STOREFP
-FMEM 0
-STOREFP #Apila el valor del registro sp
+LOAD 3
+BPRINT
+STOREFP
 RET 1
-lbl_printIln@System: LOADFP #Apila el valor del registro fp
+
+lbl_printIln@System: LOADFP
 LOADSP
 STOREFP
-FMEM 0
-STOREFP #Apila el valor del registro sp
+STOREFP
 RET 1
-lbl_printI@System: LOADFP #Apila el valor del registro fp
+
+lbl_printI@System: LOADFP
 LOADSP
 STOREFP
-FMEM 0
-STOREFP #Apila el valor del registro sp
+STOREFP
 RET 1
-lbl_printBln@System: LOADFP #Apila el valor del registro fp
+
+lbl_printBln@System: LOADFP
 LOADSP
 STOREFP
-FMEM 0
-STOREFP #Apila el valor del registro sp
+STOREFP
 RET 1
+
 
 lbl_constructor@System: NOP
 .DATA
 VT@A: NOP
 
 .CODE
-lbl_mc@Init: LOADFP #Apila el valor del registro fp
+lbl_mc@Init: LOADFP
 LOADSP
 STOREFP
 PUSH 1234
@@ -118,19 +121,21 @@ CALL
 PUSH lbl_debugPrint@Object
 CALL
 FMEM 0
-STOREFP #Apila el valor del registro sp
+STOREFP
 RET 0
+
 
 lbl_constructor@A: NOP
 .DATA
 VT@Init: NOP
 
 .CODE
-lbl_main@Init: LOADFP #Apila el valor del registro fp
+lbl_main@Init: LOADFP
 LOADSP
 STOREFP
 FMEM 1
-STOREFP #Apila el valor del registro sp
+STOREFP
 RET 0
+
 
 lbl_constructor@Init: NOP
