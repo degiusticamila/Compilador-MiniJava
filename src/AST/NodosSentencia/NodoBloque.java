@@ -142,6 +142,6 @@ public class NodoBloque extends NodoSentencia {
         for(NodoSentencia sentencia: sentencias){
             sentencia.generar(archivo);
         }
-        archivo.generar(Instrucciones.FMEM+" 0");
+        archivo.generar(Instrucciones.FMEM+" "+ variablesLocales.size()); //ojota
     }
 }

@@ -1,125 +1,122 @@
 .CODE
-PUSH lblMetmain@Init
+PUSH lbl_main@Init
 CALL
 
 HALT
 
-.DATA
-lblVTObject: NOP
+simple_heap_init: RET 0
 
-.CODE
-lblMetdebugPrint@Init: LOADFP #Apila el valor del registro fp
-LOADSP #Apila el valor del registro sp
-STOREFP #Almacena el tope de la pila en el registro fp
-FMEM 0
-STOREFP #Apila el valor del registro sp
-RET 0
-
-lblConstructor@Init: LOADFP
+simple_malloc: 
+LOADFP
 LOADSP
 STOREFP
-FMEM 0
+LOADHL
+DUP
+PUSH 1
+ADD
+STORE 4
+LOAD 3
+ADD
+STOREHL
 STOREFP
 RET 1
 .DATA
-lblVTString: NOP
+VT@Object: NOP
+
+.CODE
+lbl_debugPrint@Object: LOADFP #Apila el valor del registro fp
+LOADSP
+STOREFP
+LOAD 3
+IPRINT
+STOREFP #Apila el valor del registro sp
+RET 1
+
+lbl_constructor@Object: NOP
+.DATA
+VT@String: NOP
 
 .CODE
 
-lblConstructor@Init: LOADFP
+lbl_constructor@String: NOP
+.DATA
+VT@System: NOP
+
+.CODE
+lbl_printC@System: LOADFP #Apila el valor del registro fp
 LOADSP
 STOREFP
 FMEM 0
-STOREFP
+STOREFP #Apila el valor del registro sp
 RET 1
-.DATA
-lblVTSystem: NOP
-
-.CODE
-lblMetprintC@Init: LOADFP #Apila el valor del registro fp
-LOADSP #Apila el valor del registro sp
-STOREFP #Almacena el tope de la pila en el registro fp
-FMEM 0
-STOREFP #Apila el valor del registro sp
-RET 0
-lblMetprintS@Init: LOADFP #Apila el valor del registro fp
-LOADSP #Apila el valor del registro sp
-STOREFP #Almacena el tope de la pila en el registro fp
-FMEM 0
-STOREFP #Apila el valor del registro sp
-RET 0
-lblMetprintln@Init: LOADFP #Apila el valor del registro fp
-LOADSP #Apila el valor del registro sp
-STOREFP #Almacena el tope de la pila en el registro fp
-FMEM 0
-STOREFP #Apila el valor del registro sp
-RET 0
-lblMetprintCln@Init: LOADFP #Apila el valor del registro fp
-LOADSP #Apila el valor del registro sp
-STOREFP #Almacena el tope de la pila en el registro fp
-FMEM 0
-STOREFP #Apila el valor del registro sp
-RET 0
-lblMetprintSln@Init: LOADFP #Apila el valor del registro fp
-LOADSP #Apila el valor del registro sp
-STOREFP #Almacena el tope de la pila en el registro fp
-FMEM 0
-STOREFP #Apila el valor del registro sp
-RET 0
-lblMetread@Init: LOADFP #Apila el valor del registro fp
-LOADSP #Apila el valor del registro sp
-STOREFP #Almacena el tope de la pila en el registro fp
-FMEM 0
-STOREFP #Apila el valor del registro sp
-RET 0
-lblMetprintB@Init: LOADFP #Apila el valor del registro fp
-LOADSP #Apila el valor del registro sp
-STOREFP #Almacena el tope de la pila en el registro fp
-FMEM 0
-STOREFP #Apila el valor del registro sp
-RET 0
-lblMetprintIln@Init: LOADFP #Apila el valor del registro fp
-LOADSP #Apila el valor del registro sp
-STOREFP #Almacena el tope de la pila en el registro fp
-FMEM 0
-STOREFP #Apila el valor del registro sp
-RET 0
-lblMetprintI@Init: LOADFP #Apila el valor del registro fp
-LOADSP #Apila el valor del registro sp
-STOREFP #Almacena el tope de la pila en el registro fp
-FMEM 0
-STOREFP #Apila el valor del registro sp
-RET 0
-lblMetprintBln@Init: LOADFP #Apila el valor del registro fp
-LOADSP #Apila el valor del registro sp
-STOREFP #Almacena el tope de la pila en el registro fp
-FMEM 0
-STOREFP #Apila el valor del registro sp
-RET 0
-
-lblConstructor@Init: LOADFP
+lbl_printS@System: LOADFP #Apila el valor del registro fp
 LOADSP
 STOREFP
 FMEM 0
-STOREFP
+STOREFP #Apila el valor del registro sp
 RET 1
+lbl_println@System: LOADFP #Apila el valor del registro fp
+LOADSP
+STOREFP
+FMEM 0
+STOREFP #Apila el valor del registro sp
+RET 0
+lbl_printCln@System: LOADFP #Apila el valor del registro fp
+LOADSP
+STOREFP
+FMEM 0
+STOREFP #Apila el valor del registro sp
+RET 1
+lbl_printSln@System: LOADFP #Apila el valor del registro fp
+LOADSP
+STOREFP
+FMEM 0
+STOREFP #Apila el valor del registro sp
+RET 1
+lbl_read@System: LOADFP #Apila el valor del registro fp
+LOADSP
+STOREFP
+FMEM 0
+STOREFP #Apila el valor del registro sp
+RET 0
+lbl_printB@System: LOADFP #Apila el valor del registro fp
+LOADSP
+STOREFP
+FMEM 0
+STOREFP #Apila el valor del registro sp
+RET 1
+lbl_printIln@System: LOADFP #Apila el valor del registro fp
+LOADSP
+STOREFP
+FMEM 0
+STOREFP #Apila el valor del registro sp
+RET 1
+lbl_printI@System: LOADFP #Apila el valor del registro fp
+LOADSP
+STOREFP
+FMEM 0
+STOREFP #Apila el valor del registro sp
+RET 1
+lbl_printBln@System: LOADFP #Apila el valor del registro fp
+LOADSP
+STOREFP
+FMEM 0
+STOREFP #Apila el valor del registro sp
+RET 1
+
+lbl_constructor@System: NOP
 .DATA
-lblVTInit: NOP
+VT@Init: NOP
 
 .CODE
-lblMetmain@Init: LOADFP #Apila el valor del registro fp
-LOADSP #Apila el valor del registro sp
-STOREFP #Almacena el tope de la pila en el registro fp
+lbl_main@Init: LOADFP #Apila el valor del registro fp
+LOADSP
+STOREFP
 PUSH 1234
-PUSH lblMetdebugPrint@Object
+PUSH lbl_debugPrint@Object
 CALL
 FMEM 0
 STOREFP #Apila el valor del registro sp
 RET 0
 
-lblConstructor@Init: LOADFP
-LOADSP
-STOREFP
-FMEM 0
-STOREFP
-RET 1
+lbl_constructor@Init: NOP

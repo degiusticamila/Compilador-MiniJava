@@ -113,21 +113,28 @@ public class Metodo implements Elemento{
         generarRetornoMetodo(archivo);
     }
     public void generarEtiquetaMetodo(ArchivoSalida archivo){
-        //si es metodo predefinido
-
-        //si es metodo propio
-        archivo.generar("lblMet"+nombre.getLexema()+"@"+TablaSimbolos.tablaSimbolos.getClaseActual().getNombre().getLexema()+": "+ Instrucciones.LOADFP + " #Apila el valor del registro fp");
+        //si es metodo de una clase predefinida (System, String, Object)
+        Clase clasePredefinida = this.esMetodoPredefinido();
+        if(clasePredefinida != null){
+            archivo.generar("lbl_"+nombre.getLexema()+"@"+clasePredefinida.getNombre().getLexema()+": "+Instrucciones.LOADFP + " #Apila el valor del registro fp");
+        }
+        else{
+            //es metodo propio
+            archivo.generar("lbl_"+nombre.getLexema()+"@"+TablaSimbolos.tablaSimbolos.getClaseActual().getNombre().getLexema()+": "+ Instrucciones.LOADFP + " #Apila el valor del registro fp");
+        }
     }
     public void generarConstruirRA(ArchivoSalida archivo){
-        archivo.generar(""+Instrucciones.LOADSP+" #Apila el valor del registro sp");
-        archivo.generar(""+Instrucciones.STOREFP+" #Almacena el tope de la pila en el registro fp");
+        //archivo.generar(""+Instrucciones.LOADSP+" #Apila el valor del registro sp");
+        archivo.generar(""+Instrucciones.LOADSP);
+        //archivo.generar(""+Instrucciones.STOREFP+" #Almacena el tope de la pila en el registro fp");
+        archivo.generar(""+Instrucciones.STOREFP);
     }
     public void generarBloque(ArchivoSalida archivo){
         bloque.generar(archivo);
     }
     public void generarRetornoMetodo(ArchivoSalida archivo){
         archivo.generar(Instrucciones.STOREFP+" #Apila el valor del registro sp");
-        archivo.generar(Instrucciones.RET +" 0");
+        archivo.generar(Instrucciones.RET +" "+this.getParametros().size());
     }
 
 }

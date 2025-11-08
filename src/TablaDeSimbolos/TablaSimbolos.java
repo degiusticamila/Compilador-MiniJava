@@ -1,5 +1,6 @@
 package TablaDeSimbolos;
 
+import AST.NodosSentencia.Bloques.BloqueDebugPrint;
 import AST.NodosSentencia.NodoBloque;
 import AST.NodosSentencia.NodoBloqueVacio;
 import ArchivoSalida.ArchivoSalida;
@@ -109,6 +110,8 @@ public class TablaSimbolos {
         Token nombreParam = new Token("idMetvar","i",-1);
         Parametro i = new Parametro(tipoParam,nombreParam,1);
         m.insertarParametro(nombreParam.getLexema(), i,-1);
+
+        m.insertarBloque(new BloqueDebugPrint(),new NodoBloqueVacio());
     }
     public void insertarMetodosPredefinidosSystem(Clase claseSystem) throws ExcepcionSemantica {
         read(claseSystem);
@@ -385,7 +388,7 @@ public class TablaSimbolos {
     public void generarCodigoLlamadaMain(ArchivoSalida archivo) throws ExcepcionSemantica {
         archivo.generar(".CODE");
         Clase nombreClaseMain = obtenerClaseMain();
-        archivo.generar(Instrucciones.PUSH+" lblMetmain@"+nombreClaseMain.getNombre().getLexema());
+        archivo.generar(Instrucciones.PUSH+" lbl_main@"+nombreClaseMain.getNombre().getLexema());
         archivo.generar(""+Instrucciones.CALL);
         archivo.generar("");
 
@@ -396,6 +399,22 @@ public class TablaSimbolos {
     }
     public void generarPrimitivasMalloc_HeapInit(ArchivoSalida archivo){
         //TO-DO
+        archivo.generar("simple_heap_init: "+Instrucciones.RET+" 0");
+        archivo.generar("");
+        archivo.generar("simple_malloc: ");
+        archivo.generar(""+Instrucciones.LOADFP);
+        archivo.generar(""+Instrucciones.LOADSP);
+        archivo.generar(""+Instrucciones.STOREFP);
+        archivo.generar(""+Instrucciones.LOADHL);
+        archivo.generar(""+Instrucciones.DUP);
+        archivo.generar(Instrucciones.PUSH+" 1");
+        archivo.generar(""+Instrucciones.ADD);
+        archivo.generar(Instrucciones.STORE+" 4");
+        archivo.generar(Instrucciones.LOAD+" 3");
+        archivo.generar(""+Instrucciones.ADD);
+        archivo.generar(""+Instrucciones.STOREHL);
+        archivo.generar(""+Instrucciones.STOREFP);
+        archivo.generar(Instrucciones.RET+" 1");
     }
     public void generarCodigoClasesPredefinidas(ArchivoSalida archivo){
         for(Clase clasePredefinida : clasesPredefinidas.values()){

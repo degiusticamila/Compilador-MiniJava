@@ -358,27 +358,8 @@ public class Clase {
         //ordenarAtributos
 
         archivo.generar(".DATA");
-        archivo.generar("lblVT"+nombre.getLexema()+": "+ Instrucciones.NOP);
+        archivo.generar("VT@"+nombre.getLexema()+": "+ Instrucciones.NOP);
 
-        /*if(metodosPropios.isEmpty()){
-
-        }
-        else{
-            List<Metodo> listaMetodos = mapeoAlista(metodosPropios);
-            String primerMetodo = listaMetodos.getFirst().getNombre();
-           // archivo.generar("VT@"+nombre.getLexema()+": "+ Instrucciones.DW+" lbl_"+primerMetodo+"@"+nombre.getLexema());
-            for(int i = 1; i < listaMetodos.size(); i++){
-                String nombreMetodo = listaMetodos.get(i).getNombre();
-                archivo.generar(Instrucciones.DW+" lbl_"+nombreMetodo+"@"+nombre.getLexema());
-            }
-            //recorro los metodos y los inserto en la VT
-        }
-        archivo.generar("");
-        archivo.generar(".CODE");
-        //TO-DO CODIGO
-        archivo.generar("");
-
-         */
         archivo.generar("");
         archivo.generar(".CODE");
         for(Metodo m : metodosPropios.values()){
@@ -387,7 +368,7 @@ public class Clase {
         }
         archivo.generar("");
         generarCodigoConstructor(archivo);
-        generarRetornoConstructor(archivo);
+
     }
     public void calcularOffsetMetodos(){
 
@@ -398,10 +379,20 @@ public class Clase {
         return lista;
     }
     public void generarCodigoConstructor(ArchivoSalida archivo){
+
         //ESTA HARDCODEADO DE MOMENTO!
-        archivo.generar("lblConstructor@Init: LOADFP");
-        archivo.generar("LOADSP");
-        archivo.generar("STOREFP");
+        if(nombre.getLexema().equals("Object") || nombre.getLexema().equals("System") || nombre.getLexema().equals("String")){
+            archivo.generar("lbl_constructor@"+nombre.getLexema()+": "+Instrucciones.NOP);
+        }
+        else if(constructor == null){
+            archivo.generar("lbl_constructor@"+nombre.getLexema()+": "+Instrucciones.NOP);
+        }
+        else{
+            archivo.generar("lbl_constructor@"+nombre.getLexema()+": LOADFP");
+            archivo.generar("LOADSP");
+            archivo.generar("STOREFP");
+            generarRetornoConstructor(archivo);
+        }
     }
     public void generarRetornoConstructor(ArchivoSalida archivo){
         archivo.generar("FMEM 0");
