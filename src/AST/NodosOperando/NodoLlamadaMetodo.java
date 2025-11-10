@@ -80,6 +80,9 @@ public class NodoLlamadaMetodo extends NodoOperando{
         TablaSimbolos ts = TablaSimbolos.getInstance();
         Clase claseActual = ts.getClaseActual();
         Metodo metodo = claseActual.getMetodo(nombre.getLexema());
+        if(metodo == null){
+            throw new ExcepcionSemantica(nombre.getLexema(),nombre.getNroLinea(),"Metodo no declarado");
+        }
         if(!metodo.esMetodoEstatico() && ts.getMetodoActual().esMetodoEstatico()){
             throw new ExcepcionSemantica(nombre.getLexema(), nombre.getNroLinea(),"Metodo dinamico dentro de metodo estatico");
         }

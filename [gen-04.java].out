@@ -21,7 +21,8 @@ STOREHL
 STOREFP
 RET 1
 .DATA
-VT@Object: NOP
+VT@Object: 
+NOP
 
 .CODE
 lbl_debugPrint@Object: LOADFP
@@ -35,48 +36,62 @@ RET 1
 
 lbl_constructor@Object: NOP
 .DATA
-VT@String: NOP
+VT@String: 
+NOP
 
 .CODE
 
 lbl_constructor@String: NOP
 .DATA
-VT@System: NOP
+VT@System: 
+NOP
 
 .CODE
 lbl_printC@System: LOADFP
 LOADSP
 STOREFP
+LOAD 3
+CPRINT
 STOREFP
 RET 1
 
 lbl_printS@System: LOADFP
 LOADSP
 STOREFP
+LOAD 3
+SPRINT
 STOREFP
 RET 1
 
 lbl_println@System: LOADFP
 LOADSP
 STOREFP
+PRNLN
 STOREFP
 RET 0
 
 lbl_printCln@System: LOADFP
 LOADSP
 STOREFP
+LOAD 3
+CPRINT
+PRNLN
 STOREFP
 RET 1
 
 lbl_printSln@System: LOADFP
 LOADSP
 STOREFP
+LOAD 3
+SPRINT
+PRNLN
 STOREFP
 RET 1
 
 lbl_read@System: LOADFP
 LOADSP
 STOREFP
+READ
 STOREFP
 RET 0
 
@@ -91,79 +106,93 @@ RET 1
 lbl_printIln@System: LOADFP
 LOADSP
 STOREFP
+LOAD 3
+IPRINT
+PRNLN
 STOREFP
 RET 1
 
 lbl_printI@System: LOADFP
 LOADSP
 STOREFP
+LOAD 3
+IPRINT
 STOREFP
 RET 1
 
 lbl_printBln@System: LOADFP
 LOADSP
 STOREFP
+LOAD 3
+BPRINT
+PRNLN
 STOREFP
 RET 1
 
 
 lbl_constructor@System: NOP
 .DATA
-VT@A: NOP
+VT@A: 
+DW lbl_m1@A
+DW lbl_setall@A
 
 .CODE
-lbl_m1@Init: LOADFP
+lbl_m1@A: LOADFP
 LOADSP
 STOREFP
 PUSH lbl_debugPrint@Object
 CALL
 PUSH lbl_debugPrint@Object
 CALL
-FMEM 0
 STOREFP
 RET 0
 
-lbl_setall@Init: LOADFP
+lbl_setall@A: LOADFP
 LOADSP
 STOREFP
-FMEM 0
+LOAD 3
 STOREFP
 RET 1
 
 
 lbl_constructor@A: NOP
 .DATA
-VT@B: NOP
+VT@B: 
+DW lbl_seta4@B
+DW lbl_m1@B
+DW lbl_m2@B
+DW lbl_setall@B
 
 .CODE
-lbl_seta4@Init: LOADFP
+lbl_seta4@B: LOADFP
 LOADSP
 STOREFP
-FMEM 0
+PUSH 4000
+PUSH 55
 STOREFP
 RET 0
 
-lbl_m2@Init: LOADFP
+lbl_m2@B: LOADFP
 LOADSP
 STOREFP
 PUSH lbl_debugPrint@Object
 CALL
 PUSH lbl_debugPrint@Object
 CALL
-FMEM 0
 STOREFP
 RET 0
 
 
 lbl_constructor@B: NOP
 .DATA
-VT@Init: NOP
+VT@Init: 
+NOP
 
 .CODE
 lbl_main@Init: LOADFP
 LOADSP
 STOREFP
-FMEM 1
+STORE 0
 STOREFP
 RET 0
 

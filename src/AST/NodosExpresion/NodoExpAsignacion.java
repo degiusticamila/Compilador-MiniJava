@@ -1,6 +1,10 @@
 package AST.NodosExpresion;
 
+import AST.NodosOperando.NodoAccesoVar;
+import AST.NodosOperando.NodoLlamadaMetodo;
+import AST.NodosSentencia.NodoVarLocal;
 import ArchivoSalida.ArchivoSalida;
+import GeneracionCodigo.Instrucciones;
 import TablaDeSimbolos.*;
 import Utils.Token;
 
@@ -48,11 +52,39 @@ public class NodoExpAsignacion extends NodoExpresion {
         if(!tipoLadoDerecho.esCompatible(tipoLadoIzquierdo)){
             throw new ExcepcionSemantica(operador.getLexema(),operador.getNroLinea(),"El tipo "+tipoLadoDerecho+" no conforma con "+tipoLadoIzquierdo);
         }
+        /*
+        if(ladoDerecho instanceof NodoLlamadaMetodo && tipoLadoDerecho.esCompatible(new TipoVoid())){
+            throw new ExcepcionSemantica(operador.getLexema(), operador.getNroLinea(), "El tipo "+tipoLadoDerecho+" no es asignable");
+        }
+        LO NECESITO PERO EN OTRO LADO
+         */
         return tipoLadoDerecho;
     }
 
     @Override
     public void generar(ArchivoSalida archivo) {
+        System.out.println();
+        System.out.println("Entro a generar codigo de NodoExpAsignacion");
+        System.out.println();
+       ladoDerecho.generar(archivo); //me genera el 33
+        if(ladoIzquierdo instanceof NodoAccesoVar nodoAccesoVar){
+            Elemento referencia = nodoAccesoVar.getReferenciaTS();
+
+            if(referencia instanceof NodoVarLocal varLocal){
+                archivo.generar(Instrucciones.STORE+ " "+varLocal.getOffset());
+            }
+            else if(referencia instanceof Parametro p){
+                archivo.generar(Instrucciones.STORE+ " "+p.getOffset());
+            }
+            else if(referencia instanceof Atributo a){
+                //to-do
+            }
+        }
+       // archivo.generar(""+ Instrucciones.STORE+ );
+        //si tengo x = 33
+        //tengo que
+        // apilar el 33
+        //guardar a 33 en la direccion de memoria de x
 
     }
 

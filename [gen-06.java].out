@@ -132,25 +132,6 @@ RET 1
 
 lbl_constructor@System: NOP
 .DATA
-VT@A: 
-DW lbl_mc@A
-
-.CODE
-lbl_mc@A: LOADFP
-LOADSP
-STOREFP
-PUSH 1234
-PUSH lbl_debugPrint@Object
-CALL
-PUSH 33
-PUSH lbl_debugPrint@Object
-CALL
-STOREFP
-RET 0
-
-
-lbl_constructor@A: NOP
-.DATA
 VT@Init: 
 NOP
 
@@ -158,7 +139,13 @@ NOP
 lbl_main@Init: LOADFP
 LOADSP
 STOREFP
+PUSH 1
 STORE 0
+PUSH 33
+STORE 0
+LOAD 0
+PUSH lbl_debugPrint@Object
+CALL
 STOREFP
 RET 0
 

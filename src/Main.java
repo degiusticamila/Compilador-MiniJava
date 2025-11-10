@@ -32,8 +32,9 @@ public class Main {
             analisisSintactico();
             analizadorSintactico.consolidarTS();
             analizadorSintactico.chequeoSemantico();
+            tablaSimbolos.calcularOffsets();
 
-            generacionCodigo(args[1]);
+//            generacionCodigo(args[1]);
             TablaSimbolos.getInstance().imprimirDetalleClases();
             System.out.println("[SinErrores]");
         } catch (ExcepcionLexica e) {

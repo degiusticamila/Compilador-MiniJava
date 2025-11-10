@@ -408,7 +408,7 @@ public class TablaSimbolos {
         archivo.generar("");
     }
     public void generarPrimitivasMalloc_HeapInit(ArchivoSalida archivo){
-        //TO-DO
+
         archivo.generar("simple_heap_init: "+Instrucciones.RET+" 0");
         archivo.generar("");
         archivo.generar("simple_malloc: ");
@@ -426,12 +426,12 @@ public class TablaSimbolos {
         archivo.generar(""+Instrucciones.STOREFP);
         archivo.generar(Instrucciones.RET+" 1");
     }
-    public void generarCodigoClasesPredefinidas(ArchivoSalida archivo){
+    public void generarCodigoClasesPredefinidas(ArchivoSalida archivo) throws ExcepcionSemantica {
         for(Clase clasePredefinida : clasesPredefinidas.values()){
             clasePredefinida.generarCodigo(archivo);
         }
     }
-    public void generarCodigoClases(ArchivoSalida archivo){
+    public void generarCodigoClases(ArchivoSalida archivo) throws ExcepcionSemantica {
         for(Clase clase: clases.values()){
             System.out.println("Generando codigo para la clase: "+clase.getNombre());
             clase.generarCodigo(archivo);
@@ -453,6 +453,10 @@ public class TablaSimbolos {
         return claseMain;
     }
     public void calcularOffsets(){
-
+        for(Clase c: clases.values()){
+            for(Metodo m : c.getMetodosPropios().values()){
+                m.calcularOffsets();
+            }
+        }
     }
 }

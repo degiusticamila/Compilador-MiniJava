@@ -106,7 +106,7 @@ public class NodoLlamadaConstructor extends NodoOperando{
 
     @Override
     public void generar(ArchivoSalida archivo) {
-
+        //es la que hace el .cir?
     }
 
     public void setArgumentos(List<NodoExpresion> argumentos){

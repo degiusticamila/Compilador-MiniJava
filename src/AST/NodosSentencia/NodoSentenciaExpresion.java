@@ -41,7 +41,9 @@ public class NodoSentenciaExpresion extends NodoSentencia{
 
     @Override
     public void generar(ArchivoSalida archivo) {
-        if(expresion instanceof NodoLlamadaMetodo){
+        if (expresion instanceof NodoExpAsignacion ||
+                expresion instanceof NodoLlamadaMetodo ||
+                expresion instanceof NodoLlamadaMetodoEstatico) {
             expresion.generar(archivo);
         }
     }

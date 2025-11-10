@@ -3,6 +3,7 @@ package TablaDeSimbolos;
 import AST.NodosSentencia.NodoBloque;
 import AST.NodosSentencia.NodoBloqueVacio;
 import AST.NodosSentencia.NodoSentencia;
+import AST.NodosSentencia.NodoVarLocal;
 import ArchivoSalida.ArchivoSalida;
 import GeneracionCodigo.Instrucciones;
 import Utils.Token;
@@ -15,6 +16,7 @@ public class Metodo implements Elemento{
     private LinkedList<Parametro> parametros;
     private Token modificador;
     private NodoBloque bloque;
+    private int offsetThis;
 
 
     public Metodo(Token modificador,Tipo tipoRetorno, Token nombreMetodo){
@@ -115,13 +117,17 @@ public class Metodo implements Elemento{
     public void generarEtiquetaMetodo(ArchivoSalida archivo){
         //si es metodo de una clase predefinida (System, String, Object)
         Clase clasePredefinida = this.esMetodoPredefinido();
-        if(clasePredefinida != null){
+       /* if(clasePredefinida != null){
             archivo.generar("lbl_"+nombre.getLexema()+"@"+clasePredefinida.getNombre().getLexema()+": "+Instrucciones.LOADFP);
         }
         else{
+            System.out.println("la clase es "+TablaSimbolos.tablaSimbolos.getClaseActual().getNombre().getLexema());
             //es metodo propio
+            //archivo.generar("lbl_"+nombre.getLexema()+"@"+TablaSimbolos.tablaSimbolos.getClaseActual().getNombre().getLexema()+": "+ Instrucciones.LOADFP);
             archivo.generar("lbl_"+nombre.getLexema()+"@"+TablaSimbolos.tablaSimbolos.getClaseActual().getNombre().getLexema()+": "+ Instrucciones.LOADFP);
         }
+
+        */
     }
     public void generarConstruirRA(ArchivoSalida archivo){
         //archivo.generar(""+Instrucciones.LOADSP+" #Apila el valor del registro sp");
@@ -136,6 +142,34 @@ public class Metodo implements Elemento{
         archivo.generar(Instrucciones.STOREFP+"");
         archivo.generar(Instrucciones.RET +" "+this.getParametros().size());
         archivo.generar("");
+    }
+    public void calcularOffsets(){
+        int offsetParametro;
+        if(!esMetodoEstatico()){
+            this.offsetThis = 2;
+        }
+        if(esMetodoEstatico()){
+            offsetParametro = 2; // no tiene this
+        }
+        else{
+            offsetParametro = 3;
+        }
+        for(Parametro p : parametros){
+            p.setOffset(offsetParametro);
+            offsetParametro++;
+        }
+
+        int offsetVariablesLocales = 0;
+        for(NodoVarLocal variableLocal : this.bloque.getTodasLasVariablesLocales()){
+            variableLocal.setOffset(offsetVariablesLocales);
+            offsetVariablesLocales--;
+        }
+    }
+    public int getOffsetThis(){
+        return offsetThis;
+    }
+    public void setOffsetThis(int offsetThis){
+        this.offsetThis = offsetThis;
     }
 
 }

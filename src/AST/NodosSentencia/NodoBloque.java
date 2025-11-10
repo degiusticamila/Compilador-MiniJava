@@ -142,6 +142,15 @@ public class NodoBloque extends NodoSentencia {
         for(NodoSentencia sentencia: sentencias){
             sentencia.generar(archivo);
         }
-        archivo.generar(Instrucciones.FMEM+" "+ variablesLocales.size()); //ojota
+        //archivo.generar(Instrucciones.FMEM+" "+ variablesLocales.size()); //ojota
+    }
+    public List<NodoVarLocal> getTodasLasVariablesLocales(){
+        List<NodoVarLocal> vars = new ArrayList<>(this.variablesLocales);
+        for(NodoSentencia s : sentencias){
+            if(s instanceof NodoBloque){
+                vars.addAll(((NodoBloque)s).getTodasLasVariablesLocales());
+            }
+        }
+        return vars;
     }
 }

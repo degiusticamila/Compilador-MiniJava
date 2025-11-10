@@ -6,6 +6,7 @@ import AST.NodosExpresion.NodoExpresion;
 import AST.NodosSentencia.NodoBloque;
 import AST.NodosSentencia.NodoVarLocal;
 import ArchivoSalida.ArchivoSalida;
+import GeneracionCodigo.Instrucciones;
 import TablaDeSimbolos.*;
 import Utils.Token;
 
@@ -93,7 +94,15 @@ public class NodoAccesoVar extends NodoOperando {
 
     @Override
     public void generar(ArchivoSalida archivo) {
-
+        if(referenciaTS instanceof NodoVarLocal varLocal){
+            archivo.generar(Instrucciones.LOAD+ " "+ varLocal.getOffset());
+        }
+        else if(referenciaTS instanceof Parametro p){
+            System.out.println();
+            System.out.println("Desplazamiento de" +p.getNombre()+" "+ p.getOffset());
+            System.out.println();
+            archivo.generar(Instrucciones.LOAD+ " "+ p.getOffset());
+        }
     }
 
     private boolean buscarEnBloques(String nombre) throws ExcepcionSemantica {
@@ -108,5 +117,18 @@ public class NodoAccesoVar extends NodoOperando {
     }
     public void setEncadenado(NodoEncadenado nodoEncadenado){
         this.encadenado = nodoEncadenado;
+    }
+    public int getOffset(){
+        if(referenciaTS instanceof NodoVarLocal){
+            return ((NodoVarLocal) referenciaTS).getOffset();
+        }
+        if(referenciaTS instanceof Parametro){
+            return ((Parametro) referenciaTS).getOffset();
+        }
+        //si es atributo, TODO
+        return 0;
+    }
+    public Elemento getReferenciaTS(){
+        return referenciaTS;
     }
 }

@@ -353,17 +353,31 @@ public class Clase {
     public Atributo getAtributo(String lexema){
         return atributos.get(lexema);
     }
-    public void generarCodigo(ArchivoSalida archivo){
+    public void generarCodigo(ArchivoSalida archivo) throws ExcepcionSemantica {
         //ordenarMetodos
         //ordenarAtributos
 
         archivo.generar(".DATA");
-        archivo.generar("VT@"+nombre.getLexema()+": "+ Instrucciones.NOP);
+        archivo.generar("VT@"+nombre.getLexema()+": ");
+
+        if(TablaSimbolos.tablaSimbolos.getClasesPredefinidas().containsKey(nombre.getLexema()) || this.equals(TablaSimbolos.tablaSimbolos.obtenerClaseMain())){
+            archivo.generar(""+Instrucciones.NOP);
+        }
+        else{
+            //Clase definida por el usuario
+            for(Metodo m : metodos.values()){
+                if(!m.esMetodoEstatico()){
+                    archivo.generar(Instrucciones.DW+" lbl_"+m.getNombreMetodo().getLexema()+"@"+nombre.getLexema());
+                }
+            }
+        }
+
 
         archivo.generar("");
         archivo.generar(".CODE");
         for(Metodo m : metodosPropios.values()){
             System.out.println(m.getNombre()+" de clase "+nombre.getLexema());
+            archivo.generar("lbl_"+m.getNombre()+"@"+nombre.getLexema()+": "+ Instrucciones.LOADFP);
             m.generar(archivo);
         }
         archivo.generar("");

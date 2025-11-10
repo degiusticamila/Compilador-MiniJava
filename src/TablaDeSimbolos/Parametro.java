@@ -2,10 +2,11 @@ package TablaDeSimbolos;
 
 import Utils.Token;
 
-public class Parametro implements Elemento{
+public class Parametro extends OffsetElemento implements Elemento{
     private Tipo tipo;
     private Token nombre;
     private int posicion;
+    private int offset;
 
     public Parametro(Tipo tipo, Token nombre, int posicion) {
         this.tipo = tipo;
@@ -45,5 +46,15 @@ public class Parametro implements Elemento{
     @Override
     public Token getModificador() {
         return null;
+    }
+
+    @Override
+    public int getOffset() {
+        return offset;
+    }
+
+    @Override
+    public void setOffset(int n) {
+        this.offset = n;
     }
 }

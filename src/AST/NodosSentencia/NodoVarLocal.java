@@ -2,7 +2,9 @@ package AST.NodosSentencia;
 
 import AST.NodosExpresion.NodoExpresion;
 import AST.NodosExpresion.NodoExpresionVacia;
+import AST.NodosOperando.NodoLlamadaMetodo;
 import ArchivoSalida.ArchivoSalida;
+import GeneracionCodigo.Instrucciones;
 import TablaDeSimbolos.*;
 import Utils.Token;
 
@@ -11,6 +13,7 @@ public class NodoVarLocal extends NodoSentencia implements Elemento {
     private Token operador;
     private NodoExpresion ladoDerecho;
     private Tipo tipo;
+    private int offset;
     public NodoVarLocal(Token nombre) {
         this.nombre = nombre;
         this.ladoDerecho = new NodoExpresionVacia();
@@ -50,12 +53,18 @@ public class NodoVarLocal extends NodoSentencia implements Elemento {
         if(tipo.equals(TipoPrimitivo.NULL)){
             throw new ExcepcionSemantica(nombre.getLexema(), nombre.getNroLinea(), "Tipo var nula");
         }
-
+        if(ladoDerecho instanceof NodoLlamadaMetodo && tipo.esCompatible(new TipoVoid())){
+            throw new ExcepcionSemantica(operador.getLexema(), operador.getNroLinea(), "El tipo "+tipo+" no es asignable");
+        }
     }
 
     @Override
     public void generar(ArchivoSalida archivo) {
-
+        System.out.println();
+        System.out.println("Generando codigo VarLocal "+nombre.getLexema());
+        System.out.println();
+        ladoDerecho.generar(archivo);
+        archivo.generar(Instrucciones.STORE+" "+offset);
     }
 
     public String getNombreVarLocal(){
@@ -77,5 +86,11 @@ public class NodoVarLocal extends NodoSentencia implements Elemento {
     @Override
     public Token getModificador() {
         return null;
+    }
+    public void setOffset(int n){
+        this.offset = n;
+    }
+    public int getOffset(){
+        return offset;
     }
 }
