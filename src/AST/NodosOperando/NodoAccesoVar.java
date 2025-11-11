@@ -44,6 +44,15 @@ public class NodoAccesoVar extends NodoOperando {
         }
         System.out.println();
     }
+
+    @Override
+    public boolean tieneEncadenado() {
+        if (!(encadenado instanceof NodoEncadenadoVacio)) {
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public String formatear() {
         if(encadenado instanceof NodoEncadenadoVacio){
@@ -61,6 +70,10 @@ public class NodoAccesoVar extends NodoOperando {
         NodoBloque bloqueActual = ts.getBloqueActual();
         Tipo tipoBase;
         NodoVarLocal varLocal = bloqueActual.getVariableLocal(nombre.getLexema());
+
+        if(metodoActual.esMetodoEstatico() && claseActual.atributoDeclarado(nombre.getLexema())){
+            throw new ExcepcionSemantica(nombre.getLexema(), nombre.getNroLinea(), "No se pueden usar variables de instancia en contextos estáticos");
+        }
         if(varLocal != null){
             referenciaTS = varLocal;
         }

@@ -1,4 +1,4 @@
-///[Error:=|14]
+///[Error:=|17]
 
 class A {}
 
@@ -11,6 +11,9 @@ class Init{
     B y;
 
     static void main(){
+
+    }
+    void m1(){
         y = new A();
     }
 }

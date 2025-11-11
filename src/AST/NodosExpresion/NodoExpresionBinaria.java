@@ -92,6 +92,12 @@ public class NodoExpresionBinaria extends NodoExpresionCompuesta {
             return new TipoPrimitivo("boolean");
         }else if(operador.getLexema().equals("==") || operador.getLexema().equals("!=")){
             //MANEJAR HERENCIA de TIPOS
+           /* if(tipoLadoIzquierdo.esReferencia() && tipoLadoDerecho.esReferencia()){
+                tipoLadoIzquierdo.esCompatible(tipoLadoDerecho);
+                return new TipoPrimitivo("boolean");
+            }
+
+            */
             if(!tipoLadoIzquierdo.esCompatible(tipoLadoDerecho)){
                 throw new ExcepcionSemantica(operador.getLexema(), operador.getNroLinea(),"El tipo "+tipoLadoIzquierdo+" no es compatible con el tipo "+tipoLadoDerecho);
             }
@@ -115,4 +121,5 @@ public class NodoExpresionBinaria extends NodoExpresionCompuesta {
     public void generar(ArchivoSalida archivo) {
 
     }
+
 }

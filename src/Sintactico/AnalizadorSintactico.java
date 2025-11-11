@@ -397,7 +397,7 @@ public class AnalizadorSintactico {
         }
         else if(primeros.estaEnPrimeros(NoTerminales.Expresion, tokenActual.getId())){
             NodoExpresion nodoExpresion = expresion();
-            NodoSentenciaExpresion nodoSentenciaExpresion = new NodoSentenciaExpresion(nodoExpresion);
+            NodoSentenciaExpresion nodoSentenciaExpresion = new NodoSentenciaExpresion(nodoExpresion,tokenActual.getNroLinea());
             match(";");
             return nodoSentenciaExpresion;
         }

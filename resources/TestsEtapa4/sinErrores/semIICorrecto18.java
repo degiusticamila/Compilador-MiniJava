@@ -37,17 +37,14 @@ class C {
 }
 
 class Init {
-    A a;
-    B b;
-    C c;
-    int z;
+
     static void main() {
 
 
-        a = new A();
-        b = a.m2();           // Método válido
-        c = b.m3();           // Método válido
-        z = a.m1(1,2);        // Parámetros correctos
+        var a = new A();
+        var b = a.m2();           // Método válido
+        var c = b.m3();           // Método válido
+        var z = a.m1(1,2);        // Parámetros correctos
 
         z = a.m2().m3().m4(); // Encadenado de métodos correcto
 

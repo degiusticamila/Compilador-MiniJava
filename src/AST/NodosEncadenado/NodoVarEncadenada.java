@@ -15,7 +15,6 @@ public class NodoVarEncadenada extends NodoEncadenado {
         TablaSimbolos tablaSimbolos = TablaSimbolos.getInstance();
         if(t.esReferencia() && tablaSimbolos.obtenerClase(t.getNombre()).atributoDeclarado(super.nombre.getLexema())){
             atributoEnTS = tablaSimbolos.obtenerClase(t.getNombre()).getAtributo(super.nombre.getLexema());
-
         }else{
             throw new ExcepcionSemantica(super.nombre.getLexema(),super.nombre.getNroLinea(),"No existe atributo "+super.nombre.getLexema());
         }

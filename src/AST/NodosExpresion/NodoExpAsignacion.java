@@ -52,12 +52,6 @@ public class NodoExpAsignacion extends NodoExpresion {
         if(!tipoLadoDerecho.esCompatible(tipoLadoIzquierdo)){
             throw new ExcepcionSemantica(operador.getLexema(),operador.getNroLinea(),"El tipo "+tipoLadoDerecho+" no conforma con "+tipoLadoIzquierdo);
         }
-        /*
-        if(ladoDerecho instanceof NodoLlamadaMetodo && tipoLadoDerecho.esCompatible(new TipoVoid())){
-            throw new ExcepcionSemantica(operador.getLexema(), operador.getNroLinea(), "El tipo "+tipoLadoDerecho+" no es asignable");
-        }
-        LO NECESITO PERO EN OTRO LADO
-         */
         return tipoLadoDerecho;
     }
 

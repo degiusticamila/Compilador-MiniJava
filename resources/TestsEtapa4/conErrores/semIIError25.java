@@ -1,4 +1,4 @@
-///[Error:metodoQueNoExiste|31]
+///[Error:metodoQueNoExiste|12]
 // Llamada metodo le sobran parametros
 class A{
     int a1;
@@ -7,7 +7,10 @@ class A{
 
     int m1(int x, int y){return x+y;}
 
-    B m2(){return new B();}
+    B m2(){
+        return new B();
+        b1.metodoQueNoExiste();
+    }
 }
 class B{
     int b2;
@@ -27,7 +30,6 @@ class Init{
     A a;
     int x;
     static void main(){
-        a = new A();
-        x = a.metodoQueNoExiste();
+
     }
 }

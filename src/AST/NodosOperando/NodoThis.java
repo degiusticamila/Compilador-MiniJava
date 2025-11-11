@@ -43,7 +43,15 @@ import Utils.Token;
         System.out.println();
     }
 
-    @Override
+        @Override
+        public boolean tieneEncadenado() {
+            if (!(encadenado instanceof NodoEncadenadoVacio)) {
+                return true;
+            }
+            return false;
+        }
+
+        @Override
     public String formatear() {
         if(encadenado instanceof NodoEncadenadoVacio){
             return tokenThis.getLexema();
@@ -55,6 +63,8 @@ import Utils.Token;
 
     @Override
     public Tipo chequear() throws ExcepcionSemantica {
+
+
         /*El tipo de this es el mismo que el de la clase en que se esta utilizando, y no es posible utilizarlo en
         metodos estaticos.*/
         TablaSimbolos tablaSimbolos = TablaSimbolos.getInstance();

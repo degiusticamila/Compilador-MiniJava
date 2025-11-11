@@ -1,4 +1,4 @@
-///[Error:m4|33]
+///[Error:m4|36]
 // Parametros de más
 class A{
     int a1;
@@ -29,6 +29,9 @@ class Init{
     A a;
     int x;
     static void main(){
+
+    }
+    void m1(){
         a = new A();
         x =a.m2().m3().m4(1);;
     }

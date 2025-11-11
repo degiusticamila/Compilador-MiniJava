@@ -46,4 +46,9 @@ public class NodoOperandoVacio extends NodoOperando{
     public void imprimir(String s) {
 
     }
+
+    @Override
+    public boolean tieneEncadenado() {
+        return false;
+    }
 }

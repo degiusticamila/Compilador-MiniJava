@@ -72,6 +72,15 @@ public class NodoLlamadaConstructor extends NodoOperando{
             encadenado.imprimir("");
         }
     }
+
+    @Override
+    public boolean tieneEncadenado() {
+        if (!(encadenado instanceof NodoEncadenadoVacio)) {
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public Tipo chequear() throws ExcepcionSemantica {
         //devuelvo el nombre de la clase

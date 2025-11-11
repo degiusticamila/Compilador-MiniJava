@@ -52,6 +52,14 @@ public class NodoLlamadaMetodoEstatico extends NodoOperando{
     }
 
     @Override
+    public boolean tieneEncadenado() {
+        if (!(encadenado instanceof NodoEncadenadoVacio)) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public String formatear() {
         StringBuilder s = new StringBuilder(nombreClase.getLexema() + "." + nombreMetodo.getLexema() + "(");
         for (int i = 0; i < argumentos.size(); i++) {

@@ -52,4 +52,9 @@ public class NodoString extends NodoOperando{
     public void imprimir(String prefijo) {
         System.out.print(prefijo+nombre.getLexema());
     }
+
+    @Override
+    public boolean tieneEncadenado() {
+        return false;
+    }
 }

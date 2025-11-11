@@ -12,4 +12,5 @@ public abstract class NodoOperando extends NodoExpresionCompuesta{
 
      */
     public abstract void imprimir(String s);
+    public abstract boolean tieneEncadenado();
 }

@@ -10,11 +10,14 @@ import ArchivoSalida.ArchivoSalida;
 import TablaDeSimbolos.ExcepcionSemantica;
 import TablaDeSimbolos.Tipo;
 import Utils.SourceManager;
+import com.sun.tools.javac.Main;
 
 public class NodoSentenciaExpresion extends NodoSentencia{
     private NodoExpresion expresion;
-    public NodoSentenciaExpresion(NodoExpresion nodoSentenciaExpresion){
+    private int linea;
+    public NodoSentenciaExpresion(NodoExpresion nodoSentenciaExpresion, int linea) {
         this.expresion = nodoSentenciaExpresion;
+        this.linea = linea;
     }
     @Override
     public void imprimir(String prefijo) {
@@ -27,6 +30,8 @@ public class NodoSentenciaExpresion extends NodoSentencia{
     @Override
     public void chequear() throws ExcepcionSemantica {
         //Tipo tipoExpresion = expresion.chequear();
+
+        /*
         if (expresion instanceof NodoExpAsignacion ||
                 expresion instanceof NodoOperadorUnario ||
                 expresion instanceof NodoLlamadaMetodo ||
@@ -36,7 +41,26 @@ public class NodoSentenciaExpresion extends NodoSentencia{
             return;
         }
 
-        throw new ExcepcionSemantica(expresion.formatear(),-1,"La expresión no produce efecto (resultado no utilizado)");
+         */
+        if (expresion instanceof NodoExpAsignacion ||
+                expresion instanceof NodoLlamadaMetodo ||
+                expresion instanceof NodoOperadorUnario ||
+                expresion instanceof NodoLlamadaMetodoEstatico ||
+                expresion instanceof NodoLlamadaConstructor) {
+
+            expresion.chequear();
+            return;
+        }
+        if(expresion instanceof NodoOperando){
+            NodoOperando op = (NodoOperando)expresion;
+            if(op.tieneEncadenado()){
+                expresion.chequear();
+                return;
+            }
+        }
+
+
+        throw new ExcepcionSemantica(expresion.formatear(),linea,"La expresión no produce efecto (resultado no utilizado)");
     }
 
     @Override

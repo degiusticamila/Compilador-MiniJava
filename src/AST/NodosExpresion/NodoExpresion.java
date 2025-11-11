@@ -1,6 +1,7 @@
 package AST.NodosExpresion;
 
 import ArchivoSalida.ArchivoSalida;
+import TablaDeSimbolos.Elemento;
 import TablaDeSimbolos.ExcepcionSemantica;
 import TablaDeSimbolos.Tipo;
 import Utils.Token;

@@ -1,4 +1,4 @@
-///[Error:atributoC|33]
+///[Error:atributoC|36]
 // Atributo no declarado en Clase C
 class A{
     int a1;
@@ -29,6 +29,9 @@ class Init{
     A a;
     int x;
     static void main(){
+
+    }
+    void m1(){
         a = new A();
         x = a.m2().c1.atributoC;
     }

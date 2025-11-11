@@ -38,6 +38,11 @@ public class NodoCharLiteral extends NodoOperando {
     }
 
     @Override
+    public boolean tieneEncadenado() {
+        return false;
+    }
+
+    @Override
     public String formatear() {
         return nombre.getLexema();
     }

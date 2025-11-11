@@ -59,6 +59,14 @@ public class NodoLlamadaMetodo extends NodoOperando{
     }
 
     @Override
+    public boolean tieneEncadenado() {
+        if (!(encadenado instanceof NodoEncadenadoVacio)) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public String formatear() {
         StringBuilder s = new StringBuilder(nombre.getLexema()+"(");
         for(int i = 0; i < argumentos.size(); i++){

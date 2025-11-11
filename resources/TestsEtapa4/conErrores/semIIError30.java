@@ -1,4 +1,4 @@
-///[Error:m1|33]
+///[Error:m1|36]
 // Tipo de parámetros incorrectos
 class A{
     int a1;
@@ -29,6 +29,9 @@ class Init{
     A a;
     int x;
     static void main(){
+
+    }
+    void m1(){
         a = new A();
         x = a.m1('a','b');
     }

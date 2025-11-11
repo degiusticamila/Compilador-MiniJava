@@ -38,6 +38,11 @@ public class NodoBoolean extends NodoOperando {
     }
 
     @Override
+    public boolean tieneEncadenado() {
+        return false;
+    }
+
+    @Override
     public String formatear() {
         return nombre.getLexema();
     }

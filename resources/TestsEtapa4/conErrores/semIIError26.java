@@ -1,4 +1,4 @@
-///[Error:m1|31]
+///[Error:m1|34]
 // Encadenado sobre un tipo primitivo int
 class A{
     int a1;
@@ -27,6 +27,9 @@ class Init{
     A a;
     int x;
     static void main(){
+
+    }
+    void m1(){
         a = new A();
         x = a.a1.m1(1,2);
     }

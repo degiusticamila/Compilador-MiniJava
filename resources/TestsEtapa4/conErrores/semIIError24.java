@@ -1,4 +1,4 @@
-///[Error:m1|31]
+///[Error:m1|12]
 // Llamada metodo le sobran parametros
 class A{
     int a1;
@@ -7,7 +7,10 @@ class A{
 
     int m1(int x, int y){return x+y;}
 
-    B m2(){return new B();}
+    B m2(){
+        return new B();
+        m1(1,2,3);
+    }
 }
 class B{
     int b2;
@@ -27,7 +30,5 @@ class Init{
     A a;
     int x;
     static void main(){
-        a = new A();
-        x = a.m1(1,2,3);
     }
 }

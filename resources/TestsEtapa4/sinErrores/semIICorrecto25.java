@@ -15,9 +15,11 @@ class Init{
     A a;
     static void main()
     {
-       a = new A(null);
-       a.m1(null);
-       a = new A(new B());
+    }
+    void m1(){
+        a = new A(null);
+        a.m1(null);
+        a = new A(new B());
 
     }
 }

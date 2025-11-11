@@ -1,4 +1,4 @@
-///[Error:metodoQueNoExiste|33]
+///[Error:metodoQueNoExiste|36]
 // Tipo de parámetros incorrectos
 class A{
     int a1;
@@ -29,7 +29,10 @@ class Init{
     A a;
     int x;
     static void main(){
+
+    }
+    void m1(){
         a = new A();
-       new A().metodoQueNoExiste();
+        new A().metodoQueNoExiste();
     }
 }
