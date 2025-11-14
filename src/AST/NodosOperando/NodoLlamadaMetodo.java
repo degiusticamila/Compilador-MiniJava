@@ -135,6 +135,7 @@ public class NodoLlamadaMetodo extends NodoOperando{
         TablaSimbolos ts = TablaSimbolos.getInstance();
 
     }
+
     public void setearReferenciaTs() throws ExcepcionSemantica {
         TablaSimbolos ts = TablaSimbolos.getInstance();
         Metodo metodoActual = ts.getMetodoActual();

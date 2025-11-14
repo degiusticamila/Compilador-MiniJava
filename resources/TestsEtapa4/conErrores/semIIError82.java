@@ -1,5 +1,5 @@
 ///[Error:this|7]
-// Si a1 es un atributo declarado, la sentencia a1;
+//
 
 class A{
     A a;

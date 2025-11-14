@@ -9,13 +9,23 @@ public class NodoVarEncadenada extends NodoEncadenado {
     public NodoVarEncadenada(Token nombre, NodoEncadenado encadenado) {
         super(nombre);
         this.encadenado = encadenado;
+        this.nombre = nombre;
     }
     @Override
     public Tipo chequear(Tipo t) throws ExcepcionSemantica {
         TablaSimbolos tablaSimbolos = TablaSimbolos.getInstance();
+        System.out.println();
+        System.out.println(t.getNombre());
+        System.out.println();
+        System.out.println();
+        System.out.println(super.nombre.getLexema());
+        System.out.println();
+        System.out.println("Chequeando atributo " + nombre.getLexema() + " sobre tipo " + t.getNombre());
         if(t.esReferencia() && tablaSimbolos.obtenerClase(t.getNombre()).atributoDeclarado(super.nombre.getLexema())){
+
             atributoEnTS = tablaSimbolos.obtenerClase(t.getNombre()).getAtributo(super.nombre.getLexema());
         }else{
+            //
             throw new ExcepcionSemantica(super.nombre.getLexema(),super.nombre.getNroLinea(),"No existe atributo "+super.nombre.getLexema());
         }
         if(!(encadenado instanceof NodoEncadenadoVacio)){
@@ -47,4 +57,6 @@ public class NodoVarEncadenada extends NodoEncadenado {
     public void setEncadenado(NodoEncadenado encadenado) {
         this.encadenado = encadenado;
     }
+
+
 }

@@ -48,7 +48,8 @@ public class NodoSentenciaExpresion extends NodoSentencia{
                 expresion instanceof NodoLlamadaMetodoEstatico ||
                 expresion instanceof NodoLlamadaConstructor) {
 
-            expresion.chequear();
+            Tipo tipo = expresion.chequear();
+
             return;
         }
         if(expresion instanceof NodoOperando){

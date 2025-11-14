@@ -43,6 +43,9 @@ public class NodoExpAsignacion extends NodoExpresion {
 
         Tipo tipoLadoDerecho = ladoDerecho.chequear();
         Tipo tipoLadoIzquierdo = ladoIzquierdo.chequear();
+        System.out.println();
+        System.out.println(tipoLadoIzquierdo.getNombre());
+        System.out.println();
 
         // Si se asigna null a una variable de tipo referencia, la expresión completa
         // adopta el tipo del lado izquierdo (destino), no el tipo null.
