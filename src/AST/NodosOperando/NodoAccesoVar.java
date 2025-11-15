@@ -118,6 +118,11 @@ public class NodoAccesoVar extends NodoOperando {
         }
     }
 
+    @Override
+    public String nombreSentencia() {
+        return nombre.getLexema();
+    }
+
     private boolean buscarEnBloques(String nombre) throws ExcepcionSemantica {
         NodoBloque bloque = TablaSimbolos.getInstance().getBloqueActual();
         while (bloque != null) {
@@ -143,5 +148,13 @@ public class NodoAccesoVar extends NodoOperando {
     }
     public Elemento getReferenciaTS(){
         return referenciaTS;
+    }
+    public NodoEncadenado getUltimoEncadenado() {
+        if(encadenado instanceof NodoEncadenadoVacio){
+            return encadenado;
+        }
+        else{
+            return encadenado.getUltimoEncadenado();
+        }
     }
 }

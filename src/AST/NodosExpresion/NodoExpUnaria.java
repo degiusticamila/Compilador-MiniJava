@@ -52,4 +52,9 @@ public class NodoExpUnaria extends NodoExpresionCompuesta {
 
     }
 
+    @Override
+    public String nombreSentencia() {
+        return operador.getLexema();
+    }
+
 }

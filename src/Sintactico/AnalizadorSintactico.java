@@ -710,27 +710,62 @@ public class AnalizadorSintactico {
         NodoEncadenado e = referenciaResto();
         if(var instanceof NodoAccesoVar){
             NodoAccesoVar varAcceso = (NodoAccesoVar)var;
-            varAcceso.setEncadenado(e);
+            if(!varAcceso.tieneEncadenado()){
+                varAcceso.setEncadenado(e);
+            }
+            else{
+                NodoEncadenado ultimoEncadenado = varAcceso.getUltimoEncadenado();
+                ultimoEncadenado.setEncadenado(e);
+            }
             return varAcceso;
         }
         if(var instanceof NodoThis){
             NodoThis varThis = (NodoThis)var;
-            varThis.setEncadenado(e);
+
+            if(!varThis.tieneEncadenado()){
+                varThis.setEncadenado(e);
+            }
+            else{
+                NodoEncadenado ultimoEncadenado = varThis.getUltimoEncadenado();
+                ultimoEncadenado.setEncadenado(e);
+            }
             return varThis;
+
         }
         if(var instanceof NodoLlamadaConstructor){
             NodoLlamadaConstructor constructor = (NodoLlamadaConstructor) var;
-            constructor.setEncadenado(e);
+            if(!constructor.tieneEncadenado()){
+                constructor.setEncadenado(e);
+            }
+            else{
+                NodoEncadenado ultimoEncadenado = constructor.getUltimoEncadenado();
+                ultimoEncadenado.setEncadenado(e);
+            }
             return constructor;
         }
         if(var instanceof NodoLlamadaMetodo){
             NodoLlamadaMetodo llamada = (NodoLlamadaMetodo) var;
-            llamada.setEncadenado(e);
+            if(!llamada.tieneEncadenado()){
+                llamada.setEncadenado(e);
+            }
+            else{
+                NodoEncadenado ultimoEncadenado = llamada.getUltimoEncadenado();
+
+                ultimoEncadenado.setEncadenado(e);
+            }
             return llamada;
         }
         if(var instanceof NodoLlamadaMetodoEstatico){
             NodoLlamadaMetodoEstatico metodoEstatico = (NodoLlamadaMetodoEstatico) var;
-            metodoEstatico.setEncadenado(e);
+
+            if(!metodoEstatico.tieneEncadenado()){
+                metodoEstatico.setEncadenado(e);
+            }
+            else{
+                NodoEncadenado ultimoEncadenado = metodoEstatico.getUltimoEncadenado();
+
+                ultimoEncadenado.setEncadenado(e);
+            }
             return metodoEstatico;
         }
         return var;
@@ -747,20 +782,54 @@ public class AnalizadorSintactico {
         }
         return encadenado;
         */
-        if(!primeros.estaEnPrimeros(NoTerminales.Encadenado, tokenActual.getId())){
+        /*if(!primeros.estaEnPrimeros(NoTerminales.Encadenado, tokenActual.getId())){
             return new NodoEncadenadoVacio();
         }
         NodoEncadenado primero = encadenado();
         NodoEncadenado resto = referenciaResto();
 
-        if(!(resto instanceof NodoEncadenadoVacio)){
-            if(primero instanceof NodoVarEncadenada){
-                ((NodoVarEncadenada) primero).setEncadenado(resto);
-            }else if(primero instanceof NodoLlamadaEncadenada){
-                ((NodoLlamadaEncadenada) primero).setEncadenado(resto);
+         */
+        if(primeros.estaEnPrimeros(NoTerminales.Encadenado, tokenActual.getId())){
+            NodoEncadenado primero = encadenado();
+            NodoEncadenado resto = referenciaResto();
+
+            if(!(resto instanceof NodoEncadenadoVacio)){
+                if(primero instanceof NodoVarEncadenada){
+                    if(!((NodoVarEncadenada) primero).tieneEncadenado()){
+                        primero.setEncadenado(resto);
+                    }
+                    else{
+                        NodoEncadenado ultimo = primero.getUltimoEncadenado();
+                        ultimo.setEncadenado(resto);
+                    }
+                   // ((NodoVarEncadenada) primero).setEncadenado(resto);
+                }else if(primero instanceof NodoLlamadaEncadenada){
+                    if(!((NodoLlamadaEncadenada) primero).tieneEncadenado()){
+                        primero.setEncadenado(resto);
+                    }
+                    else{
+                        NodoEncadenado ultimo = primero.getUltimoEncadenado();
+                        ultimo.setEncadenado(resto);
+                    }
+                   // ((NodoLlamadaEncadenada) primero).setEncadenado(resto);
+                }
             }
+
+            /*if(!(resto instanceof NodoEncadenadoVacio)){
+                if(primero instanceof NodoVarEncadenada){
+
+                    ((NodoVarEncadenada) primero).setEncadenado(resto);
+                }else if(primero instanceof NodoLlamadaEncadenada){
+
+                    ((NodoLlamadaEncadenada) primero).setEncadenado(resto);
+                }
+            }
+
+             */
+            return primero;
         }
-        return primero;
+
+        return new NodoEncadenadoVacio();
     }
     private NodoExpresion primario() throws ExcepcionLexica, IOException, ExcepcionSintactica {
         NodoOperando nodoOperando;
@@ -851,6 +920,7 @@ public class AnalizadorSintactico {
         match("(");
         NodoExpresion expresion = expresion();
         match(")");
+
         return expresion;
     }
     private NodoLlamadaMetodoEstatico llamadaMetodoEstatico() throws ExcepcionLexica, IOException, ExcepcionSintactica {
@@ -904,6 +974,29 @@ public class AnalizadorSintactico {
 
     }
     private NodoEncadenado restoEncadenado(Token nombreEncadenado,NodoEncadenado encadenado) throws ExcepcionLexica, IOException, ExcepcionSintactica {
+       /* NodoEncadenado toReturn = encadenado;
+        if(primeros.estaEnPrimeros(NoTerminales.ArgsActuales, tokenActual.getId())){
+            List<NodoExpresion> lista = argsActuales();
+            NodoEncadenado nodoLlamadaEncadenada = new NodoLlamadaEncadenada(nombreEncadenado,new NodoEncadenadoVacio(),lista);
+            toReturn = nodoLlamadaEncadenada;
+            NodoEncadenado nuevo = restoEncadenado(nodoLlamadaEncadenada.nombre, nodoLlamadaEncadenada);
+            if(nuevo != nodoLlamadaEncadenada){
+                toReturn.setEncadenado(nuevo);
+            }
+            return  toReturn;
+            //return nodoLlamadaEncadenada;
+        }
+        else{
+            NodoEncadenado nodoVariableEncadenada = new NodoVarEncadenada(nombreEncadenado,new NodoEncadenadoVacio());
+            NodoEncadenado nuevo = restoEncadenado(nodoVariableEncadenada.nombre, nodoVariableEncadenada);
+            if(!(toReturn instanceof NodoEncadenadoVacio)){
+                toReturn.setEncadenado(nuevo);
+            }
+            return encadenado;
+            //return nodoVariableEncadenada; //ver
+        }
+
+        */
         if(primeros.estaEnPrimeros(NoTerminales.ArgsActuales, tokenActual.getId())){
             List<NodoExpresion> lista = argsActuales();
             NodoEncadenado nodoLlamadaEncadenada = new NodoLlamadaEncadenada(nombreEncadenado,new NodoEncadenadoVacio(),lista);

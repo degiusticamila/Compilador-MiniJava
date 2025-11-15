@@ -105,10 +105,22 @@ public class NodoLlamadaMetodoEstatico extends NodoOperando{
         }
         return tipoRetorno;
     }
-
+    public NodoEncadenado getUltimoEncadenado() {
+        if(encadenado instanceof NodoEncadenadoVacio){
+            return encadenado;
+        }
+        else{
+            return encadenado.getUltimoEncadenado();
+        }
+    }
     @Override
     public void generar(ArchivoSalida archivo) {
 
+    }
+
+    @Override
+    public String nombreSentencia() {
+        return nombreMetodo.getLexema();
     }
 
     public void setEncadenado(NodoEncadenado encadenado){

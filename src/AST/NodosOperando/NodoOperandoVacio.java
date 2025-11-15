@@ -38,6 +38,11 @@ public class NodoOperandoVacio extends NodoOperando{
     }
 
     @Override
+    public String nombreSentencia() {
+        return "";
+    }
+
+    @Override
     public Token getNombre() {
         return null;
     }

@@ -15,4 +15,16 @@ public abstract class NodoEncadenado {
     public abstract void imprimir(String prefijo);
     public abstract String formatear();
     public abstract void setEncadenado(NodoEncadenado encadenado);
+    public NodoEncadenado getUltimoEncadenado() {
+        NodoEncadenado actual = this;
+        NodoEncadenado toReturn = this;
+        while(!(actual instanceof NodoEncadenadoVacio) && !(actual.getUltimoEncadenado() instanceof NodoEncadenadoVacio)){
+            actual = actual.getUltimoEncadenado();
+            if(!(actual instanceof NodoEncadenadoVacio)){
+                toReturn = actual;
+            }
+        }
+        return toReturn;
+
+    }
 }

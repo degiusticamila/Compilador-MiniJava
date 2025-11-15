@@ -7,7 +7,7 @@ import ArchivoSalida.ArchivoSalida;
 import TablaDeSimbolos.*;
 import Utils.Token;
 
-    public class NodoThis extends NodoOperando {
+    public class NodoThis extends NodoExpresion {
     private Token tokenThis;
     private NodoEncadenado encadenado;
     public NodoThis(Token tokenThis) {
@@ -29,7 +29,7 @@ import Utils.Token;
 
     }
 
-    @Override
+
     public Token getNombre() {
         return tokenThis;
     }
@@ -43,13 +43,13 @@ import Utils.Token;
         System.out.println();
     }
 
-        @Override
-        public boolean tieneEncadenado() {
-            if (!(encadenado instanceof NodoEncadenadoVacio)) {
-                return true;
-            }
-            return false;
+
+    public boolean tieneEncadenado() {
+        if (!(encadenado instanceof NodoEncadenadoVacio)) {
+            return true;
         }
+        return false;
+    }
 
         @Override
     public String formatear() {
@@ -60,7 +60,14 @@ import Utils.Token;
 
         return tokenThis.getLexema() + "." + encadenado.formatear();
     }
-
+    public NodoEncadenado getUltimoEncadenado() {
+        if(encadenado instanceof NodoEncadenadoVacio){
+            return encadenado;
+        }
+        else{
+            return encadenado.getUltimoEncadenado();
+        }
+    }
     @Override
     public Tipo chequear() throws ExcepcionSemantica {
 
@@ -87,6 +94,11 @@ import Utils.Token;
         @Override
         public void generar(ArchivoSalida archivo) {
 
+        }
+
+        @Override
+        public String nombreSentencia() {
+            return tokenThis.getLexema();
         }
 
         public void setEncadenado(NodoEncadenado nodoEncadenado) {

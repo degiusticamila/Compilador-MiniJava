@@ -67,6 +67,11 @@ public class NodoVarLocal extends NodoSentencia implements Elemento {
         archivo.generar(Instrucciones.STORE+" "+offset);
     }
 
+    @Override
+    public String nombreSentencia() {
+        return nombre.getLexema();
+    }
+
     public String getNombreVarLocal(){
         return nombre.getLexema();
     }

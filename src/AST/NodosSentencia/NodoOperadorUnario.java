@@ -53,6 +53,11 @@ public class NodoOperadorUnario extends NodoExpresion{
     }
 
     @Override
+    public String nombreSentencia() {
+        return nombre.getLexema();
+    }
+
+    @Override
     public void imprimir(String prefijo) {
         System.out.println(prefijo + "OperadorUnario (" + nombre.getLexema() + ")");
         System.out.println(prefijo + "  R -> " + ladoDerecho.formatear());

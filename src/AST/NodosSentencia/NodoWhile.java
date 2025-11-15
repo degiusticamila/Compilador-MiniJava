@@ -43,4 +43,9 @@ public class NodoWhile extends NodoSentencia {
     public void generar(ArchivoSalida archivo) {
 
     }
+
+    @Override
+    public String nombreSentencia() {
+        return tokenWhile.getLexema();
+    }
 }

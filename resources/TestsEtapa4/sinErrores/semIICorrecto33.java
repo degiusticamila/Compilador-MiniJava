@@ -6,6 +6,7 @@ class A {
     void m1(B p1)
     {
         var v1 = new B();
+
         (m2().a3).a2 = 4;
     }
     B m2(){

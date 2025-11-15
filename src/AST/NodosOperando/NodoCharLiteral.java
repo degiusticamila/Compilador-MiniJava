@@ -56,4 +56,9 @@ public class NodoCharLiteral extends NodoOperando {
     public void generar(ArchivoSalida archivo) {
 
     }
+
+    @Override
+    public String nombreSentencia() {
+        return nombre.getLexema();
+    }
 }

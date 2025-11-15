@@ -35,6 +35,12 @@ public class NodoVarEncadenada extends NodoEncadenado {
         return atributoEnTS.getTipo();
     }
 
+    public boolean tieneEncadenado(){
+       if(!(encadenado instanceof NodoEncadenadoVacio)){
+           return true;
+       }
+       return false;
+    }
     @Override
     public void imprimir(String prefijo) {
 
@@ -56,6 +62,16 @@ public class NodoVarEncadenada extends NodoEncadenado {
     @Override
     public void setEncadenado(NodoEncadenado encadenado) {
         this.encadenado = encadenado;
+    }
+
+    @Override
+    public NodoEncadenado getUltimoEncadenado() {
+        if(encadenado instanceof NodoEncadenadoVacio){
+            return this;
+        }
+        else{
+            return encadenado.getUltimoEncadenado();
+        }
     }
 
 

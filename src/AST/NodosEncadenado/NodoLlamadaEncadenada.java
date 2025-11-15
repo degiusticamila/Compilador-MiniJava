@@ -49,7 +49,12 @@ public class NodoLlamadaEncadenada extends NodoEncadenado {
         return tipoRetorno;
 
     }
-
+    public boolean tieneEncadenado(){
+        if(!(encadenado instanceof NodoEncadenadoVacio)){
+            return true;
+        }
+        return false;
+    }
     @Override
     public void imprimir(String prefijo) {
         System.out.println(prefijo + nombre.getLexema()+"(");
@@ -85,5 +90,15 @@ public class NodoLlamadaEncadenada extends NodoEncadenado {
     @Override
     public void setEncadenado(NodoEncadenado encadenado) {
         this.encadenado = encadenado;
+    }
+
+    @Override
+    public NodoEncadenado getUltimoEncadenado() {
+        if(encadenado instanceof NodoEncadenadoVacio){
+            return this;
+        }
+        else{
+            return encadenado.getUltimoEncadenado();
+        }
     }
 }

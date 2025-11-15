@@ -55,6 +55,11 @@ public class NodoIntLiteral extends NodoOperando {
 
     }
 
+    @Override
+    public String nombreSentencia() {
+        return nombre.getLexema();
+    }
+
     public Token getNombre(){
         return nombre;
     }

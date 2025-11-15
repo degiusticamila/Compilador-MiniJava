@@ -32,4 +32,9 @@ public class NodoAsignacion extends NodoSentencia {
     public void generar(ArchivoSalida archivo) {
 
     }
+
+    @Override
+    public String nombreSentencia() {
+        return "";
+    }
 }

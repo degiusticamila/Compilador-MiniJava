@@ -51,4 +51,9 @@ public class NodoExpresionBasica extends NodoExpresionCompuesta{
     public void generar(ArchivoSalida archivo) {
 
     }
+
+    @Override
+    public String nombreSentencia() {
+        return operando.nombreSentencia();
+    }
 }

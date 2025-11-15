@@ -112,10 +112,22 @@ public class NodoLlamadaConstructor extends NodoOperando{
         }
         return tipoConstructor;
     }
-
+    public NodoEncadenado getUltimoEncadenado() {
+        if(encadenado instanceof NodoEncadenadoVacio){
+            return encadenado;
+        }
+        else{
+            return encadenado.getUltimoEncadenado();
+        }
+    }
     @Override
     public void generar(ArchivoSalida archivo) {
         //es la que hace el .cir?
+    }
+
+    @Override
+    public String nombreSentencia() {
+        return nombre.getLexema();
     }
 
     public void setArgumentos(List<NodoExpresion> argumentos){

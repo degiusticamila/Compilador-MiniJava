@@ -122,4 +122,9 @@ public class NodoExpresionBinaria extends NodoExpresionCompuesta {
 
     }
 
+    @Override
+    public String nombreSentencia() {
+        return "";
+    }
+
 }

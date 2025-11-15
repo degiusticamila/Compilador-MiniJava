@@ -60,10 +60,7 @@ public class NodoLlamadaMetodo extends NodoOperando{
 
     @Override
     public boolean tieneEncadenado() {
-        if (!(encadenado instanceof NodoEncadenadoVacio)) {
-            return true;
-        }
-        return false;
+        return !(encadenado instanceof NodoEncadenadoVacio);
     }
 
     @Override
@@ -135,7 +132,14 @@ public class NodoLlamadaMetodo extends NodoOperando{
         TablaSimbolos ts = TablaSimbolos.getInstance();
 
     }
-
+    public NodoEncadenado getUltimoEncadenado() {
+        if(encadenado instanceof NodoEncadenadoVacio){
+            return encadenado;
+        }
+        else{
+            return encadenado.getUltimoEncadenado();
+        }
+    }
     public void setearReferenciaTs() throws ExcepcionSemantica {
         TablaSimbolos ts = TablaSimbolos.getInstance();
         Metodo metodoActual = ts.getMetodoActual();
@@ -153,5 +157,10 @@ public class NodoLlamadaMetodo extends NodoOperando{
         System.out.println("eentro aca y pongo a Object");
         archivo.generar("PUSH lbl_"+nombre.getLexema()+"@Object");
         archivo.generar(""+ Instrucciones.CALL);
+    }
+
+    @Override
+    public String nombreSentencia() {
+        return nombre.getLexema();
     }
 }

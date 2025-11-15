@@ -144,6 +144,12 @@ public class NodoBloque extends NodoSentencia {
         }
         //archivo.generar(Instrucciones.FMEM+" "+ variablesLocales.size()); //ojota
     }
+
+    @Override
+    public String nombreSentencia() {
+        return "";
+    }
+
     public List<NodoVarLocal> getTodasLasVariablesLocales(){
         List<NodoVarLocal> vars = new ArrayList<>(this.variablesLocales);
         for(NodoSentencia s : sentencias){

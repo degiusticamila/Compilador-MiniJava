@@ -31,7 +31,7 @@ public class Main {
         try {
             analisisSintactico();
             analizadorSintactico.consolidarTS();
-            analizadorSintactico.chequeoSemantico();
+           analizadorSintactico.chequeoSemantico();
             tablaSimbolos.calcularOffsets();
 
 //            generacionCodigo(args[1]);

@@ -30,4 +30,7 @@ public class NodoEncadenadoVacio extends NodoEncadenado {
     public void setEncadenado(NodoEncadenado encadenado) {
         //vacio
     }
+
+
+
 }

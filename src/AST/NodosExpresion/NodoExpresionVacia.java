@@ -40,4 +40,9 @@ public class NodoExpresionVacia extends NodoExpresion {
     public void generar(ArchivoSalida archivo) {
 
     }
+
+    @Override
+    public String nombreSentencia() {
+        return "";
+    }
 }

@@ -61,7 +61,7 @@ public class NodoSentenciaExpresion extends NodoSentencia{
         }
 
 
-        throw new ExcepcionSemantica(expresion.formatear(),linea,"La expresión no produce efecto (resultado no utilizado)");
+        throw new ExcepcionSemantica(expresion.nombreSentencia(),linea,"La expresión no produce efecto (resultado no utilizado)");
     }
 
     @Override
@@ -71,5 +71,9 @@ public class NodoSentenciaExpresion extends NodoSentencia{
                 expresion instanceof NodoLlamadaMetodoEstatico) {
             expresion.generar(archivo);
         }
+    }
+
+    public String nombreSentencia() {
+        return "";
     }
 }

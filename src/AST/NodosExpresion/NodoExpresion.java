@@ -14,5 +14,6 @@ public abstract class NodoExpresion {
     public abstract String formatear();
     public abstract Tipo chequear() throws ExcepcionSemantica;
     public abstract void generar(ArchivoSalida archivo);
+    public abstract String nombreSentencia();
 
 }

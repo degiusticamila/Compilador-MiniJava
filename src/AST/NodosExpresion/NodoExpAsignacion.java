@@ -86,6 +86,11 @@ public class NodoExpAsignacion extends NodoExpresion {
     }
 
     @Override
+    public String nombreSentencia() {
+        return operador.getLexema();
+    }
+
+    @Override
    public void imprimir(String prefijo) {
        System.out.println(prefijo + "ExpAsignacion (" + operador.getLexema() + ")");
        System.out.println(prefijo + "  L -> " + ladoIzquierdo.formatear());

@@ -44,6 +44,11 @@ public class NodoString extends NodoOperando{
     }
 
     @Override
+    public String nombreSentencia() {
+        return nombre.getLexema();
+    }
+
+    @Override
     public Token getNombre() {
         return nombre;
     }
