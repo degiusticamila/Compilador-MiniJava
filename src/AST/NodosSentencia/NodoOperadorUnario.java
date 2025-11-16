@@ -48,11 +48,6 @@ public class NodoOperadorUnario extends NodoExpresion{
     }
 
     @Override
-    public void generar(ArchivoSalida archivo) {
-
-    }
-
-    @Override
     public String nombreSentencia() {
         return nombre.getLexema();
     }
@@ -81,4 +76,24 @@ public class NodoOperadorUnario extends NodoExpresion{
     public void setLadoDerecho(NodoExpresion ladoDerecho){
         this.ladoDerecho = ladoDerecho;
     }
+    @Override
+    public void generar(ArchivoSalida archivo) {
+        if(nombre.getLexema().equals("!")){
+
+        }
+        else if(nombre.getLexema().equals("+")){
+
+        }
+        else if(nombre.getLexema().equals("-")){
+
+        }
+        else if(nombre.getLexema().equals("++")){
+
+        }
+        else if(nombre.getLexema().equals("--")){
+
+        }
+
+    }
+
 }
