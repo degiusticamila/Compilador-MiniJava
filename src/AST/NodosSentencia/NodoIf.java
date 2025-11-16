@@ -2,6 +2,7 @@ package AST.NodosSentencia;
 
 import AST.NodosExpresion.NodoExpresion;
 import ArchivoSalida.ArchivoSalida;
+import GeneracionCodigo.Instrucciones;
 import TablaDeSimbolos.ExcepcionSemantica;
 import TablaDeSimbolos.Tipo;
 import TablaDeSimbolos.TipoPrimitivo;
@@ -50,6 +51,19 @@ public class NodoIf extends NodoSentencia {
 
     @Override
     public void generar(ArchivoSalida archivo) {
+        String lblElse = "lbl_else@"+tokenif.getNroLinea();
+        String lblFin = "lbl_fin_if@"+tokenif.getNroLinea();
+
+        condicion.generar(archivo); //deja 0 o 1 en el tope
+        archivo.generar(Instrucciones.BF+" "+lblElse);
+        sentenciaIf.generar(archivo); //cuerpo del if
+        archivo.generar(Instrucciones.JUMP+" "+lblFin);
+        archivo.generar(lblElse+": NOP");
+
+        if(!(sentenciaElse instanceof NodoSentenciaVacia)){
+            sentenciaElse.generar(archivo);
+        }
+        archivo.generar(lblFin+": NOP");
 
     }
 
