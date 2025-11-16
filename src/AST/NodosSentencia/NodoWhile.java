@@ -2,6 +2,7 @@ package AST.NodosSentencia;
 
 import AST.NodosExpresion.NodoExpresion;
 import ArchivoSalida.ArchivoSalida;
+import GeneracionCodigo.Instrucciones;
 import TablaDeSimbolos.ExcepcionSemantica;
 import TablaDeSimbolos.Tipo;
 import TablaDeSimbolos.TipoPrimitivo;
@@ -41,7 +42,15 @@ public class NodoWhile extends NodoSentencia {
 
     @Override
     public void generar(ArchivoSalida archivo) {
+        String lblInicio = "lbl_while_inicio@"+tokenWhile.getNroLinea();
+        String lblFin = "lbl_while_fin@"+tokenWhile.getNroLinea();
 
+        archivo.generar(lblInicio+": NOP");
+        expresion.generar(archivo); //Deja 0/1 en el tope
+        archivo.generar(Instrucciones.BF+" "+lblFin);
+        sentencia.generar(archivo);
+        archivo.generar(Instrucciones.JUMP+" "+lblInicio);
+        archivo.generar(lblFin+": NOP");
     }
 
     @Override
