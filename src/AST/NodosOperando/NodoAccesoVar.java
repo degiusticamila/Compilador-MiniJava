@@ -108,7 +108,15 @@ public class NodoAccesoVar extends NodoOperando {
     @Override
     public void generar(ArchivoSalida archivo) {
         if(referenciaTS instanceof NodoVarLocal varLocal){
+            System.out.println(varLocal.getNombreVarLocal()+" "+varLocal.getOffset());
             archivo.generar(Instrucciones.LOAD+ " "+ varLocal.getOffset());
+
+        }
+        else if(referenciaTS instanceof Atributo atributo){
+            System.out.println("Desplazamiento de"+atributo.getNombre()+" "+atributo.getOffset());
+            archivo.generar(Instrucciones.LOAD+ " "+ atributo.getOffset());
+
+
         }
         else if(referenciaTS instanceof Parametro p){
             System.out.println();

@@ -453,7 +453,12 @@ public class TablaSimbolos {
         return claseMain;
     }
     public void calcularOffsets(){
+        int offsetPrimerAtributo = 1;
         for(Clase c: clases.values()){
+            for(Atributo a : c.getMapAtributos().values()){
+                a.setOffset(offsetPrimerAtributo);
+                offsetPrimerAtributo++;
+            }
             for(Metodo m : c.getMetodosPropios().values()){
                 m.calcularOffsets();
             }

@@ -148,14 +148,17 @@ public class NodoLlamadaMetodo extends NodoOperando{
     public void generar(ArchivoSalida archivo){
         Clase claseActual = TablaSimbolos.tablaSimbolos.getClaseActual();
         Metodo metodo = claseActual.getMetodo(nombre.getLexema());
+        Clase claseDelMetodo = metodo.esMetodoPredefinido(); //ME SIRVE POR AHORA NO MAS
+
         //Es un caso particular, CAMBIAR
         for(NodoExpresion parametro : argumentos){
             parametro.generar(archivo);
         }
         //Apilo la etiqueta del metodo estatico que quiero llamar
         // y lo llamo
-        System.out.println("eentro aca y pongo a Object");
-        archivo.generar("PUSH lbl_"+nombre.getLexema()+"@Object");
+
+
+        archivo.generar("PUSH lbl_"+nombre.getLexema()+"@"+claseDelMetodo.getNombre().getLexema());
         archivo.generar(""+ Instrucciones.CALL);
     }
 

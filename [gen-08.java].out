@@ -161,18 +161,23 @@ NOP
 lbl_main@Init: LOADFP
 LOADSP
 STOREFP
-RMEM 1
+RMEM 2
 PUSH 1
 STORE 0
 PUSH 33
 STORE 0
-LOAD 0
-PUSH lbl_debugPrint@Object
-CALL
+PUSH 12
+STORE -1
 PUSH 1234
 PUSH lbl_debugPrint@Object
 CALL
-FMEM 1
+LOAD -1
+PUSH lbl_debugPrint@Object
+CALL
+LOAD 0
+PUSH lbl_debugPrint@Object
+CALL
+FMEM 2
 STOREFP
 RET 0
 

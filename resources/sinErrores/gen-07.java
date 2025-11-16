@@ -5,8 +5,8 @@ class Init{
     {
         var x = 1;
         x = 33;
-        debugPrint(1234);
         debugPrint(x);
+        debugPrint(1234);
     }
 }
 

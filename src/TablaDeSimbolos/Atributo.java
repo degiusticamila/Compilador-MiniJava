@@ -5,7 +5,7 @@ import Utils.Token;
 public class Atributo implements Elemento{
     private Tipo tipo;
     private Token nombre;
-
+    private int offset;
     public Atributo(Tipo tipo, Token nombre) {
         this.tipo = tipo;
         this.nombre = nombre;
@@ -29,5 +29,12 @@ public class Atributo implements Elemento{
     @Override
     public Token getModificador() {
         return null;
+    }
+
+    public int getOffset(){
+        return offset;
+    }
+    public void setOffset(int offset){
+        this.offset = offset;
     }
 }

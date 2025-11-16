@@ -100,6 +100,9 @@ public class Clase {
             System.out.println(s+" Atributos : "+atributos.get(s));
         }
     }
+    public HashMap<String, Atributo> getMapAtributos(){
+        return atributos;
+    }
     public void getMetodos(){
         for(String s : metodos.keySet()){
             System.out.println(s+" : "+metodos.get(s).toString());

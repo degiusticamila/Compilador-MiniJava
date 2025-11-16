@@ -2,8 +2,6 @@
 
 class A{
     int x;
-    
-   
       void mc(){
         debugPrint(1234);
         x = 33;

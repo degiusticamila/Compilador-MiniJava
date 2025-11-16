@@ -130,15 +130,18 @@ public class Metodo implements Elemento{
         */
     }
     public void generarConstruirRA(ArchivoSalida archivo){
-        //archivo.generar(""+Instrucciones.LOADSP+" #Apila el valor del registro sp");
         archivo.generar(""+Instrucciones.LOADSP);
-        //archivo.generar(""+Instrucciones.STOREFP+" #Almacena el tope de la pila en el registro fp");
         archivo.generar(""+Instrucciones.STOREFP);
+        int cantidadVariablesLocales = bloque.getTodasLasVariablesLocales().size();
+        System.out.println("Cantidad de Variables locales en metodo "+nombre.getLexema()+": "+cantidadVariablesLocales);
+        archivo.generar(""+Instrucciones.RMEM+" "+cantidadVariablesLocales);
     }
     public void generarBloque(ArchivoSalida archivo){
         bloque.generar(archivo);
     }
     public void generarRetornoMetodo(ArchivoSalida archivo){
+        int cantidadVariablesLocales = bloque.getTodasLasVariablesLocales().size();
+        archivo.generar(Instrucciones.FMEM+" "+cantidadVariablesLocales); //NUEVO RECIEN
         archivo.generar(Instrucciones.STOREFP+"");
         archivo.generar(Instrucciones.RET +" "+this.getParametros().size());
         archivo.generar("");
@@ -146,7 +149,7 @@ public class Metodo implements Elemento{
     public void calcularOffsets(){
         int offsetParametro;
         if(!esMetodoEstatico()){
-            this.offsetThis = 2;
+            this.offsetThis = 3;
         }
         if(esMetodoEstatico()){
             offsetParametro = 2; // no tiene this

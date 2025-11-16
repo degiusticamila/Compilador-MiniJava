@@ -1,4 +1,4 @@
-///[Error:x + y|8]
+///[Error:|8]
 // Variable local duplicada en el metodo m2
 class A {
 
