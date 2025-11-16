@@ -1,4 +1,4 @@
-///20&exitosamente
+///20&10&exitosamente
 
 class Init extends System{
     static void main()
@@ -9,6 +9,10 @@ class Init extends System{
        }
        else{
            debugPrint(20);
+       }
+
+       if(1 == 1){
+           printIln(10);
        }
     }
 }

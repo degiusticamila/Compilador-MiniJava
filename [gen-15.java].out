@@ -177,6 +177,16 @@ PUSH 20
 PUSH lbl_debugPrint@Object
 CALL
 lbl_fin_if@7: NOP
+PUSH 1
+PUSH 1
+EQ
+BF lbl_else@14
+PUSH 10
+PUSH lbl_printIln@System
+CALL
+JUMP lbl_fin_if@14
+lbl_else@14: NOP
+lbl_fin_if@14: NOP
 FMEM 1
 STOREFP
 RET 0
