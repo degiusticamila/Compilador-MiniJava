@@ -65,6 +65,8 @@ public class NodoVarLocal extends NodoSentencia implements Elemento {
         System.out.println();
         ladoDerecho.generar(archivo);
         archivo.generar(Instrucciones.STORE+" "+offset);
+
+
     }
 
     @Override

@@ -106,27 +106,6 @@ public class NodoAccesoVar extends NodoOperando {
     }
 
     @Override
-    public void generar(ArchivoSalida archivo) {
-        if(referenciaTS instanceof NodoVarLocal varLocal){
-            System.out.println(varLocal.getNombreVarLocal()+" "+varLocal.getOffset());
-            archivo.generar(Instrucciones.LOAD+ " "+ varLocal.getOffset());
-
-        }
-        else if(referenciaTS instanceof Atributo atributo){
-            System.out.println("Desplazamiento de"+atributo.getNombre()+" "+atributo.getOffset());
-            archivo.generar(Instrucciones.LOAD+ " "+ atributo.getOffset());
-
-
-        }
-        else if(referenciaTS instanceof Parametro p){
-            System.out.println();
-            System.out.println("Desplazamiento de" +p.getNombre()+" "+ p.getOffset());
-            System.out.println();
-            archivo.generar(Instrucciones.LOAD+ " "+ p.getOffset());
-        }
-    }
-
-    @Override
     public String nombreSentencia() {
         return nombre.getLexema();
     }
@@ -163,6 +142,40 @@ public class NodoAccesoVar extends NodoOperando {
         }
         else{
             return encadenado.getUltimoEncadenado();
+        }
+    }
+    @Override
+    public void generar(ArchivoSalida archivo) {
+        System.out.println("Generando código en NodoAccesoVar");
+        if(referenciaTS instanceof NodoVarLocal varLocal){
+
+            System.out.println(varLocal.getNombreVarLocal()+" "+varLocal.getOffset());
+            if(esLadoIzq){
+                archivo.generar(Instrucciones.STORE+ " "+ varLocal.getOffset());
+            }
+            else{
+                archivo.generar(Instrucciones.LOAD+ " "+ varLocal.getOffset());
+            }
+
+        }
+        else if(referenciaTS instanceof Atributo atributo){
+            //TO-DO algo con el heap i guess
+            System.out.println("Desplazamiento de"+atributo.getNombre()+" "+atributo.getOffset());
+            archivo.generar(Instrucciones.LOAD+ " "+ atributo.getOffset());
+
+
+        }
+        else if(referenciaTS instanceof Parametro p){
+            System.out.println();
+            System.out.println("Desplazamiento de" +p.getNombre()+" "+ p.getOffset());
+            System.out.println();
+            if(esLadoIzq){
+                archivo.generar(Instrucciones.STORE+ " "+ p.getOffset());
+            }
+            else{
+                archivo.generar(Instrucciones.LOAD+ " "+ p.getOffset());
+            }
+
         }
     }
 }

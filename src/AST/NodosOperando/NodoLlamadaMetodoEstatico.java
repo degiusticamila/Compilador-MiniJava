@@ -4,6 +4,7 @@ import AST.NodosEncadenado.NodoEncadenado;
 import AST.NodosEncadenado.NodoEncadenadoVacio;
 import AST.NodosExpresion.NodoExpresion;
 import ArchivoSalida.ArchivoSalida;
+import GeneracionCodigo.Instrucciones;
 import TablaDeSimbolos.*;
 import Utils.Token;
 
@@ -115,7 +116,19 @@ public class NodoLlamadaMetodoEstatico extends NodoOperando{
     }
     @Override
     public void generar(ArchivoSalida archivo) {
+        System.out.println("Entro a generar NodoLlamadaMetodoEstatico "+nombreMetodo.getLexema());
+        Clase claseActual = TablaSimbolos.tablaSimbolos.getClaseActual();
+        Metodo metodo = claseActual.getMetodo(nombreMetodo.getLexema());
+        Clase claseDelMetodo = metodo.esMetodoPredefinido();
+        if(claseDelMetodo == null){
+            claseDelMetodo = metodo.obtenerClase();
+        }
+        for(NodoExpresion parametro : argumentos){
+            parametro.generar(archivo);
+        }
 
+        archivo.generar(Instrucciones.PUSH+" lbl_"+nombreMetodo.getLexema()+"@"+claseDelMetodo.getNombre().getLexema());
+        archivo.generar(Instrucciones.CALL+"");
     }
 
     @Override

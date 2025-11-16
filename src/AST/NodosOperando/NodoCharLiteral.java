@@ -2,6 +2,7 @@ package AST.NodosOperando;
 
 import AST.NodosExpresion.NodoExpresion;
 import ArchivoSalida.ArchivoSalida;
+import GeneracionCodigo.Instrucciones;
 import TablaDeSimbolos.Tipo;
 import TablaDeSimbolos.TipoPrimitivo;
 import Utils.Token;
@@ -54,7 +55,7 @@ public class NodoCharLiteral extends NodoOperando {
 
     @Override
     public void generar(ArchivoSalida archivo) {
-
+        archivo.generar(Instrucciones.PUSH+" "+nombre.getLexema());
     }
 
     @Override

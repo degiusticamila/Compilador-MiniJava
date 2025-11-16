@@ -1,6 +1,7 @@
 package AST.NodosExpresion;
 
 import ArchivoSalida.ArchivoSalida;
+import GeneracionCodigo.Instrucciones;
 import TablaDeSimbolos.ExcepcionSemantica;
 import TablaDeSimbolos.Tipo;
 import TablaDeSimbolos.TipoPrimitivo;
@@ -119,7 +120,48 @@ public class NodoExpresionBinaria extends NodoExpresionCompuesta {
 
     @Override
     public void generar(ArchivoSalida archivo) {
+        ladoIzquierdo.generar(archivo);
+        ladoDerecho.generar(archivo);
 
+        if(operador.getLexema().equals("==")){
+            archivo.generar(Instrucciones.EQ+"");
+        }
+        else if(operador.getLexema().equals("||")){
+            archivo.generar(Instrucciones.OR+"");
+        }
+        else if(operador.getLexema().equals("&&")){
+            archivo.generar(Instrucciones.AND+"");
+        }
+        else if(operador.getLexema().equals("!=")){
+            archivo.generar(Instrucciones.NE+"");
+        }
+        else if(operador.getLexema().equals("<")){
+            archivo.generar(Instrucciones.LT+"");
+        }
+        else if(operador.getLexema().equals(">")){
+            archivo.generar(Instrucciones.GT+"");
+        }
+        else if(operador.getLexema().equals(">=")){
+            archivo.generar(Instrucciones.GE+"");
+        }
+        else if(operador.getLexema().equals("<=")){
+            archivo.generar(Instrucciones.LE+"");
+        }
+        else if(operador.getLexema().equals("%")){
+            archivo.generar(Instrucciones.MOD+"");
+        }
+        else if (operador.getLexema().equals("+")){
+            archivo.generar(Instrucciones.ADD+"");
+        }
+        else if (operador.getLexema().equals("-")){
+            archivo.generar(Instrucciones.SUB+"");
+        }
+        else if(operador.getLexema().equals("*")){
+            archivo.generar(Instrucciones.MUL+"");
+        }
+        else if(operador.getLexema().equals("/")){
+            archivo.generar(Instrucciones.DIV+"");
+        }
     }
 
     @Override

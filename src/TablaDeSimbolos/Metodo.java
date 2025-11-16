@@ -59,6 +59,16 @@ public class Metodo implements Elemento{
         }
         return null;
     }
+    public Clase obtenerClase(){
+        for(Clase clase : TablaSimbolos.tablaSimbolos.getClases().values()){
+            for(Metodo metodo : clase.getMetodosPropios().values()){
+                if(metodo.getNombre().equals(nombre.getLexema())){
+                    return clase;
+                }
+            }
+        }
+        return null;
+    }
     public LinkedList<Parametro> getParametros() {
         return parametros;
     }
@@ -132,6 +142,12 @@ public class Metodo implements Elemento{
     public void generarConstruirRA(ArchivoSalida archivo){
         archivo.generar(""+Instrucciones.LOADSP);
         archivo.generar(""+Instrucciones.STOREFP);
+
+        int cantidadParametros = parametros.size();
+
+        System.out.println("Cantidad de Parametros en metodo "+nombre.getLexema()+": "+cantidadParametros);
+
+
         int cantidadVariablesLocales = bloque.getTodasLasVariablesLocales().size();
         System.out.println("Cantidad de Variables locales en metodo "+nombre.getLexema()+": "+cantidadVariablesLocales);
         archivo.generar(""+Instrucciones.RMEM+" "+cantidadVariablesLocales);
@@ -148,9 +164,16 @@ public class Metodo implements Elemento{
     }
     public void calcularOffsets(){
         int offsetParametro;
+        int cantidadParametros = parametros.size();
+
         if(!esMetodoEstatico()){
             this.offsetThis = 3;
+
         }
+        else{
+            this.offsetThis = 2;
+        }
+
         if(esMetodoEstatico()){
             offsetParametro = 2; // no tiene this
         }
@@ -158,9 +181,11 @@ public class Metodo implements Elemento{
             offsetParametro = 3;
         }
         for(Parametro p : parametros){
-            p.setOffset(offsetParametro);
-            offsetParametro++;
+
+            p.setOffset(offsetParametro++);
+            //offsetParametro++;
         }
+
 
         int offsetVariablesLocales = 0;
         for(NodoVarLocal variableLocal : this.bloque.getTodasLasVariablesLocales()){

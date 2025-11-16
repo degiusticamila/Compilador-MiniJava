@@ -2,6 +2,7 @@ package AST.NodosSentencia;
 
 import AST.NodosExpresion.NodoExpresion;
 import ArchivoSalida.ArchivoSalida;
+import GeneracionCodigo.Instrucciones;
 import TablaDeSimbolos.ExcepcionSemantica;
 import TablaDeSimbolos.Tipo;
 import TablaDeSimbolos.TipoPrimitivo;
@@ -78,20 +79,30 @@ public class NodoOperadorUnario extends NodoExpresion{
     }
     @Override
     public void generar(ArchivoSalida archivo) {
-        if(nombre.getLexema().equals("!")){
+        System.out.println("Generando codigo en Unarios");
 
+        ladoDerecho.generar(archivo);
+        if(nombre.getLexema().equals("!")){
+            archivo.generar(Instrucciones.NOT+"");
         }
         else if(nombre.getLexema().equals("+")){
+          //TO-DO
 
         }
         else if(nombre.getLexema().equals("-")){
-
+           //TO-DO
         }
         else if(nombre.getLexema().equals("++")){
+            archivo.generar(Instrucciones.PUSH+" 1");
+            archivo.generar(Instrucciones.ADD+"");
 
+            ladoDerecho.setEsLadoIzq();
+            ladoDerecho.generar(archivo);
+            ladoDerecho.setEsLadoIzq();
         }
         else if(nombre.getLexema().equals("--")){
-
+            archivo.generar(Instrucciones.PUSH+" 1");
+            archivo.generar(Instrucciones.SUB+"");
         }
 
     }

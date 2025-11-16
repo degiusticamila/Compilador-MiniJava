@@ -149,12 +149,15 @@ public class NodoLlamadaMetodo extends NodoOperando{
         Clase claseActual = TablaSimbolos.tablaSimbolos.getClaseActual();
         Metodo metodo = claseActual.getMetodo(nombre.getLexema());
         Clase claseDelMetodo = metodo.esMetodoPredefinido(); //ME SIRVE POR AHORA NO MAS
-
+        if(claseDelMetodo == null){
+            //busco la otra clase donde se declara
+            claseDelMetodo = metodo.obtenerClase();
+        }
         //Es un caso particular, CAMBIAR
         for(NodoExpresion parametro : argumentos){
             parametro.generar(archivo);
         }
-        //Apilo la etiqueta del metodo estatico que quiero llamar
+        //Apilo la etiqueta del metodo estatico? que quiero llamar
         // y lo llamo
 
 

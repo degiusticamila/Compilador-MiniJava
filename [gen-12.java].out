@@ -122,3 +122,92 @@ RET 1
 lbl_printIln@System: LOADFP
 LOADSP
 STOREFP
+RMEM 0
+LOAD 3
+IPRINT
+PRNLN
+FMEM 0
+STOREFP
+RET 1
+
+lbl_printI@System: LOADFP
+LOADSP
+STOREFP
+RMEM 0
+LOAD 3
+IPRINT
+FMEM 0
+STOREFP
+RET 1
+
+lbl_printBln@System: LOADFP
+LOADSP
+STOREFP
+RMEM 0
+LOAD 3
+BPRINT
+PRNLN
+FMEM 0
+STOREFP
+RET 1
+
+
+lbl_constructor@System: NOP
+.DATA
+VT@A: 
+DW lbl_mc1@A
+DW lbl_mc3@A
+DW lbl_mc2@A
+
+.CODE
+lbl_mc1@A: LOADFP
+LOADSP
+STOREFP
+RMEM 0
+PUSH 1234
+PUSH lbl_debugPrint@Object
+CALL
+FMEM 0
+STOREFP
+RET 0
+
+lbl_mc3@A: LOADFP
+LOADSP
+STOREFP
+RMEM 0
+PUSH 8888
+PUSH lbl_debugPrint@Object
+CALL
+FMEM 0
+STOREFP
+RET 0
+
+lbl_mc2@A: LOADFP
+LOADSP
+STOREFP
+RMEM 0
+PUSH 1111
+PUSH lbl_debugPrint@Object
+CALL
+FMEM 0
+STOREFP
+RET 0
+
+
+lbl_constructor@A: NOP
+.DATA
+VT@Init: 
+NOP
+
+.CODE
+lbl_main@Init: LOADFP
+LOADSP
+STOREFP
+RMEM 1
+STORE 0
+FMEM 1
+STOREFP
+RET 0
+
+
+lbl_constructor@Init: NOP

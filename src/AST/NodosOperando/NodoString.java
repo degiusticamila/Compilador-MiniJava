@@ -2,6 +2,7 @@ package AST.NodosOperando;
 
 import AST.NodosExpresion.NodoExpresion;
 import ArchivoSalida.ArchivoSalida;
+import GeneracionCodigo.Instrucciones;
 import TablaDeSimbolos.Tipo;
 import TablaDeSimbolos.TipoReferencia;
 import TablaDeSimbolos.TipoUniversal;
@@ -9,7 +10,7 @@ import Utils.Token;
 
 public class NodoString extends NodoOperando{
     private Token nombre;
-
+    private String label;
     public NodoString(Token token) {
         this.nombre= token;
     }
@@ -38,10 +39,7 @@ public class NodoString extends NodoOperando{
         return new TipoReferencia("String");
     }
 
-    @Override
-    public void generar(ArchivoSalida archivo) {
 
-    }
 
     @Override
     public String nombreSentencia() {
@@ -61,5 +59,16 @@ public class NodoString extends NodoOperando{
     @Override
     public boolean tieneEncadenado() {
         return false;
+    }
+    @Override
+    public void generar(ArchivoSalida archivo) {
+        setLabel();
+        archivo.generar(Instrucciones.PUSH+" "+this.label);
+    }
+    public void setLabel(){
+        this.label = "label_str"+nombre.getNroLinea();
+    }
+    public String getLabel(){
+        return this.label;
     }
 }

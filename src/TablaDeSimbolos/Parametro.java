@@ -1,6 +1,10 @@
 package TablaDeSimbolos;
 
+import ArchivoSalida.ArchivoSalida;
+import GeneracionCodigo.Instrucciones;
 import Utils.Token;
+
+import java.sql.SQLOutput;
 
 public class Parametro extends OffsetElemento implements Elemento{
     private Tipo tipo;
@@ -56,5 +60,10 @@ public class Parametro extends OffsetElemento implements Elemento{
     @Override
     public void setOffset(int n) {
         this.offset = n;
+    }
+
+    public void generar(ArchivoSalida archivoSalida){
+        System.out.println("Generando codigo del Parametro "+nombre.getLexema());
+        archivoSalida.generar(Instrucciones.STORE+ " "+offset);
     }
 }
