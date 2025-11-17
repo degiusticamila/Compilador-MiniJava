@@ -74,7 +74,10 @@ public class NodoExpAsignacion extends NodoExpresion {
                 archivo.generar(Instrucciones.STORE+ " "+p.getOffset());
             }
             else if(referencia instanceof Atributo a){
-                //to-do
+                int offsetAtributo = a.getOffset();
+                archivo.generar(Instrucciones.LOAD+" 3");
+                archivo.generar(Instrucciones.SWAP+"");
+                archivo.generar(Instrucciones.STOREREF+" "+offsetAtributo);
             }
         }
        // archivo.generar(""+ Instrucciones.STORE+ );

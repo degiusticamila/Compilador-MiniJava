@@ -388,6 +388,15 @@ public class Clase {
 
     }
     public void calcularOffsetMetodos(){
+        int offset = 0;
+
+        for(Metodo m : metodos.values()){
+            if(!m.esMetodoEstatico()){
+                m.setOffsetMetodo(offset);
+                offset++;
+            }
+        }
+
 
     }
     public List<Metodo> mapeoAlista(HashMap<String, Metodo> metodos){
@@ -397,23 +406,33 @@ public class Clase {
     }
     public void generarCodigoConstructor(ArchivoSalida archivo){
 
+        archivo.generar("lbl_constructor@"+nombre.getLexema()+": LOADFP");
+        archivo.generar("LOADSP");
+        archivo.generar("STOREFP");
+        //int cantLocales = constructor != null ? constructor.getBloque().getVariablesLocales().size() : 0;
+        //archivo.generar("FMEM "+cantLocales);
+
+        archivo.generar("STOREFP");
+        archivo.generar("RET 1");
+
         //ESTA HARDCODEADO DE MOMENTO!
+        /*
         if(nombre.getLexema().equals("Object") || nombre.getLexema().equals("System") || nombre.getLexema().equals("String")){
             archivo.generar("lbl_constructor@"+nombre.getLexema()+": "+Instrucciones.NOP);
         }
-        else if(constructor == null){
-            archivo.generar("lbl_constructor@"+nombre.getLexema()+": "+Instrucciones.NOP);
-        }
+
         else{
             archivo.generar("lbl_constructor@"+nombre.getLexema()+": LOADFP");
             archivo.generar("LOADSP");
             archivo.generar("STOREFP");
             generarRetornoConstructor(archivo);
         }
+
+         */
     }
     public void generarRetornoConstructor(ArchivoSalida archivo){
-        archivo.generar("FMEM 0");
+        //archivo.generar("FMEM 0");
         archivo.generar("STOREFP");
-        archivo.generar("RET 1");
+        archivo.generar("RET 0"); //OJO
     }
 }

@@ -1,5 +1,6 @@
 package AST.NodosEncadenado;
 
+import ArchivoSalida.ArchivoSalida;
 import TablaDeSimbolos.Tipo;
 import TablaDeSimbolos.TipoUniversal;
 import Utils.Token;
@@ -8,6 +9,11 @@ public class NodoEncadenadoVacio extends NodoEncadenado {
 
     public NodoEncadenadoVacio() {
         super(new Token("null", "null", -1));
+
+    }
+
+    @Override
+    public void generar(ArchivoSalida archivo) {
 
     }
 

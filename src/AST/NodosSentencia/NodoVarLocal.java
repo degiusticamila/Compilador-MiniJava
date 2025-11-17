@@ -61,7 +61,7 @@ public class NodoVarLocal extends NodoSentencia implements Elemento {
     @Override
     public void generar(ArchivoSalida archivo) {
         System.out.println();
-        System.out.println("Generando codigo VarLocal "+nombre.getLexema());
+        System.out.println("Generando codigo VarLocal "+nombre.getLexema()+" con offset "+offset);
         System.out.println();
         ladoDerecho.generar(archivo);
         archivo.generar(Instrucciones.STORE+" "+offset);

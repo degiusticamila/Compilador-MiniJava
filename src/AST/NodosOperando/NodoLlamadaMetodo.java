@@ -146,6 +146,8 @@ public class NodoLlamadaMetodo extends NodoOperando{
         NodoBloque bloqueActual = metodoActual.getBloque();
     }
     public void generar(ArchivoSalida archivo){
+        System.out.println("Generando codigo para NodoLlamadaMetodo");
+
         Clase claseActual = TablaSimbolos.tablaSimbolos.getClaseActual();
         Metodo metodo = claseActual.getMetodo(nombre.getLexema());
         Clase claseDelMetodo = metodo.esMetodoPredefinido(); //ME SIRVE POR AHORA NO MAS

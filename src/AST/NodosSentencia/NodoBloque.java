@@ -138,12 +138,7 @@ public class NodoBloque extends NodoSentencia {
     public NodoBloque getNodoBloquePadre(){
         return nodoBloquePadre;
     }
-    public void generar(ArchivoSalida archivo){
-        for(NodoSentencia sentencia: sentencias){
-            sentencia.generar(archivo);
-        }
-        //archivo.generar(Instrucciones.FMEM+" "+ variablesLocales.size()); //ojota
-    }
+
 
     @Override
     public String nombreSentencia() {
@@ -158,5 +153,16 @@ public class NodoBloque extends NodoSentencia {
             }
         }
         return vars;
+    }
+    public void generar(ArchivoSalida archivo){
+        System.out.println();
+
+        for(NodoSentencia sentencia: sentencias){
+            System.out.println("Generando codigo de sentencia: ");
+            sentencia.imprimir("");
+            sentencia.generar(archivo);
+
+        }
+        //archivo.generar(Instrucciones.FMEM+" "+ variablesLocales.size()); //ojota
     }
 }

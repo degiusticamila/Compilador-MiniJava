@@ -398,6 +398,7 @@ public class TablaSimbolos {
     public void generarCodigoLlamadaMain(ArchivoSalida archivo) throws ExcepcionSemantica {
         archivo.generar(".CODE");
         Clase nombreClaseMain = obtenerClaseMain();
+
         archivo.generar(Instrucciones.PUSH+" lbl_main@"+nombreClaseMain.getNombre().getLexema());
         archivo.generar(""+Instrucciones.CALL);
         archivo.generar("");

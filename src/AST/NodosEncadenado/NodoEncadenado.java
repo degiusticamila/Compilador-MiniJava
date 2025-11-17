@@ -1,5 +1,6 @@
 package AST.NodosEncadenado;
 
+import ArchivoSalida.ArchivoSalida;
 import TablaDeSimbolos.ExcepcionSemantica;
 import TablaDeSimbolos.Tipo;
 import Utils.Token;
@@ -10,7 +11,7 @@ public abstract class NodoEncadenado {
     public NodoEncadenado(Token nombre) {
         this.nombre = nombre;
     }
-
+    public abstract void generar(ArchivoSalida archivo);
     public abstract Tipo chequear(Tipo t) throws ExcepcionSemantica;
     public abstract void imprimir(String prefijo);
     public abstract String formatear();

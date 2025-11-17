@@ -160,9 +160,20 @@ public class NodoAccesoVar extends NodoOperando {
         }
         else if(referenciaTS instanceof Atributo atributo){
             //TO-DO algo con el heap i guess
-            System.out.println("Desplazamiento de"+atributo.getNombre()+" "+atributo.getOffset());
-            archivo.generar(Instrucciones.LOAD+ " "+ atributo.getOffset());
 
+            int offsetAttr = atributo.getOffset(); //offset adentro del CIR
+
+            System.out.println("Desplazamiento de "+atributo.getNombre()+" "+atributo.getOffset());
+            archivo.generar(Instrucciones.LOAD+ " "+ atributo.getOffset());
+            if(esLadoIzq){
+                archivo.generar(Instrucciones.LOAD+" 3"); //this
+                archivo.generar(Instrucciones.SWAP+"");
+                archivo.generar(Instrucciones.STOREREF+" "+ offsetAttr);
+            }
+            else{
+                archivo.generar(Instrucciones.LOAD+" 3");
+                archivo.generar(Instrucciones.LOADREF+" "+ offsetAttr);
+            }
 
         }
         else if(referenciaTS instanceof Parametro p){
@@ -176,6 +187,11 @@ public class NodoAccesoVar extends NodoOperando {
                 archivo.generar(Instrucciones.LOAD+ " "+ p.getOffset());
             }
 
+        }
+
+        if(!(encadenado instanceof NodoEncadenadoVacio)){
+            System.out.println("Generando codigo del encadenado "+encadenado.nombre.getLexema());
+            encadenado.generar(archivo);
         }
     }
 }

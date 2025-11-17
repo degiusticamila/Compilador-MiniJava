@@ -4,6 +4,7 @@ import AST.NodosEncadenado.NodoEncadenado;
 import AST.NodosEncadenado.NodoEncadenadoVacio;
 import AST.NodosExpresion.NodoExpresion;
 import ArchivoSalida.ArchivoSalida;
+import GeneracionCodigo.Instrucciones;
 import TablaDeSimbolos.*;
 import Utils.Token;
 
@@ -120,10 +121,6 @@ public class NodoLlamadaConstructor extends NodoOperando{
             return encadenado.getUltimoEncadenado();
         }
     }
-    @Override
-    public void generar(ArchivoSalida archivo) {
-        //es la que hace el .cir?
-    }
 
     @Override
     public String nombreSentencia() {
@@ -136,4 +133,10 @@ public class NodoLlamadaConstructor extends NodoOperando{
     public void setEncadenado(NodoEncadenado nodoEncadenado){
         this.encadenado = nodoEncadenado;
     }
+
+
+    @Override
+    public void generar(ArchivoSalida archivo) {
+    }
+
 }

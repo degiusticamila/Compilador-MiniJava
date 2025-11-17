@@ -1,4 +1,5 @@
 package AST.NodosEncadenado;
+import ArchivoSalida.ArchivoSalida;
 import TablaDeSimbolos.*;
 import Utils.Token;
 
@@ -11,6 +12,12 @@ public class NodoVarEncadenada extends NodoEncadenado {
         this.encadenado = encadenado;
         this.nombre = nombre;
     }
+
+    @Override
+    public void generar(ArchivoSalida archivo) {
+        System.out.println("Generando código de NodoVarEncadenada");
+    }
+
     @Override
     public Tipo chequear(Tipo t) throws ExcepcionSemantica {
         TablaSimbolos tablaSimbolos = TablaSimbolos.getInstance();

@@ -1,6 +1,8 @@
 package AST.NodosEncadenado;
 
 import AST.NodosExpresion.NodoExpresion;
+import ArchivoSalida.ArchivoSalida;
+import GeneracionCodigo.Instrucciones;
 import TablaDeSimbolos.*;
 import Utils.Token;
 import java.util.List;
@@ -8,13 +10,18 @@ import java.util.List;
 public class NodoLlamadaEncadenada extends NodoEncadenado {
     private List<NodoExpresion> parametros;
     private NodoEncadenado encadenado;
+    protected Tipo tipoBase;
     public NodoLlamadaEncadenada(Token nombre, NodoEncadenado encadenado, List<NodoExpresion> parametros) {
         super(nombre);
         this.parametros = parametros;
         this.encadenado = encadenado;
     }
+
+
+
     @Override
     public Tipo chequear(Tipo t) throws ExcepcionSemantica {
+        this.tipoBase = t;
         if(!t.esReferencia()){
             throw new ExcepcionSemantica(super.nombre.getLexema(), super.nombre.getNroLinea(), "Encadenado sobre tipo no definido o primitivo: "+ t.getNombre());
         }
@@ -101,4 +108,11 @@ public class NodoLlamadaEncadenada extends NodoEncadenado {
             return encadenado.getUltimoEncadenado();
         }
     }
+
+
+    @Override
+    public void generar(ArchivoSalida archivo) {
+        System.out.println("Generando codigo NodoLlamadaEncadenada " + nombre.getLexema());
+    }
+
 }

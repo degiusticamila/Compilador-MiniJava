@@ -17,7 +17,7 @@ public class Metodo implements Elemento{
     private Token modificador;
     private NodoBloque bloque;
     private int offsetThis;
-
+    private int offsetMetodo;
 
     public Metodo(Token modificador,Tipo tipoRetorno, Token nombreMetodo){
         parametros = new LinkedList<>();
@@ -150,14 +150,20 @@ public class Metodo implements Elemento{
 
         int cantidadVariablesLocales = bloque.getTodasLasVariablesLocales().size();
         System.out.println("Cantidad de Variables locales en metodo "+nombre.getLexema()+": "+cantidadVariablesLocales);
-        archivo.generar(""+Instrucciones.RMEM+" "+cantidadVariablesLocales);
+        if(cantidadVariablesLocales != 0){
+            archivo.generar(""+Instrucciones.RMEM+" "+cantidadVariablesLocales);
+        }
+
     }
     public void generarBloque(ArchivoSalida archivo){
         bloque.generar(archivo);
     }
     public void generarRetornoMetodo(ArchivoSalida archivo){
         int cantidadVariablesLocales = bloque.getTodasLasVariablesLocales().size();
-        archivo.generar(Instrucciones.FMEM+" "+cantidadVariablesLocales); //NUEVO RECIEN
+        if(cantidadVariablesLocales != 0){
+            archivo.generar(Instrucciones.FMEM+" "+cantidadVariablesLocales); //NUEVO RECIEN
+        }
+
         archivo.generar(Instrucciones.STOREFP+"");
         archivo.generar(Instrucciones.RET +" "+this.getParametros().size());
         archivo.generar("");
@@ -199,5 +205,10 @@ public class Metodo implements Elemento{
     public void setOffsetThis(int offsetThis){
         this.offsetThis = offsetThis;
     }
-
+    public int getOffsetMetodo(){
+        return offsetMetodo;
+    }
+    public void setOffsetMetodo(int offsetMetodo){
+        this.offsetMetodo = offsetMetodo;
+    }
 }
