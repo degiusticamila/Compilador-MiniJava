@@ -117,18 +117,16 @@ public class NodoLlamadaEncadenada extends NodoEncadenado {
         TablaSimbolos ts = TablaSimbolos.tablaSimbolos;
         Clase clase = ts.obtenerClase(tipoBase.getNombre());
         Metodo metodo = clase.getMetodo(super.nombre.getLexema());
-        int offset = metodo.getOffsetMetodo(); // asumimos ya calculado por Clase.calcularOffsetMetodos()
-
+        int offset = metodo.getOffsetMetodo();
 
         archivo.generar(Instrucciones.DUP + "");
         archivo.generar(Instrucciones.LOADREF + " 0");
         archivo.generar(Instrucciones.LOADREF + " " + offset);
 
-
         for (NodoExpresion parametro : parametros) {
-            archivo.generar(Instrucciones.SWAP + ""); // pone 'this' debajo para que parametro vaya arriba
+            archivo.generar(Instrucciones.SWAP + "");
             parametro.generar(archivo);
-            archivo.generar(Instrucciones.SWAP + ""); // restaura orden: ... this lbl param...
+            archivo.generar(Instrucciones.SWAP + "");
         }
         int a = parametros.size() + 3;
         //archivo.generar(Instrucciones.DUP+"");

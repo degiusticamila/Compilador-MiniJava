@@ -1,4 +1,4 @@
-///5&true&a&exitosamente
+///5&true&exitosamente
 
 class Init extends System{
     static void main()

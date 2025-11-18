@@ -152,7 +152,7 @@ public class NodoLlamadaMetodo extends NodoOperando{
         Metodo metodo = claseActual.getMetodo(nombre.getLexema());
         Clase claseDelMetodo = metodo.esMetodoPredefinido(); //ME SIRVE POR AHORA NO MAS
         if(claseDelMetodo == null){
-            //busco la otra clase donde se declara
+
             claseDelMetodo = metodo.obtenerClase();
         }
         //Es un caso particular, CAMBIAR
@@ -161,7 +161,6 @@ public class NodoLlamadaMetodo extends NodoOperando{
         }
         //Apilo la etiqueta del metodo estatico? que quiero llamar
         // y lo llamo
-
 
         archivo.generar("PUSH lbl_"+nombre.getLexema()+"@"+claseDelMetodo.getNombre().getLexema());
         archivo.generar(""+ Instrucciones.CALL);

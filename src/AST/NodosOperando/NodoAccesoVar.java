@@ -159,7 +159,6 @@ public class NodoAccesoVar extends NodoOperando {
 
         }
         else if(referenciaTS instanceof Atributo atributo){
-            //TO-DO algo con el heap i guess
 
             int offsetAttr = atributo.getOffset(); //offset adentro del CIR
 
@@ -188,7 +187,6 @@ public class NodoAccesoVar extends NodoOperando {
             }
 
         }
-
         if(!(encadenado instanceof NodoEncadenadoVacio)){
             System.out.println("Generando codigo del encadenado "+encadenado.nombre.getLexema());
             encadenado.generar(archivo);

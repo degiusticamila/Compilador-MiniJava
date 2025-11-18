@@ -147,39 +147,31 @@ public class NodoLlamadaConstructor extends NodoOperando{
         //Retorno de malloc
         //archivo.generar(Instrucciones.RMEM + " 1");
 
-
         for (NodoExpresion arg : argumentos) {
             arg.generar(archivo);
-            archivo.generar(Instrucciones.SWAP + ""); // deja el `this` (que tendremos) abajo para luego
+            archivo.generar(Instrucciones.SWAP + "");
         }
 
-        // Otra celda temporal para manipular this / activar constructor sin romper RA
         archivo.generar(Instrucciones.RMEM + " 1");
 
-        // Llamada a malloc: deja en tope la referencia al CIR (base del objeto)
         archivo.generar(Instrucciones.PUSH + " " + tamanioObjeto);
         archivo.generar(Instrucciones.PUSH+ " simple_malloc");
         archivo.generar(Instrucciones.CALL + "");
 
-        // Inicializo VT: objeto en tope, duplico para no perderlo
         archivo.generar(Instrucciones.DUP + "");
         archivo.generar(Instrucciones.PUSH + " VT@" + clase.getNombre().getLexema());
         archivo.generar(Instrucciones.STOREREF + " 0");
 
-        // Preparo this para el constructor: duplico y lo guardo en la RA reservada
-        archivo.generar(Instrucciones.DUP + "");        // tengo: ... result params? CIR CIR
-        archivo.generar(Instrucciones.LOADSP + "");     // apilo SP
-        archivo.generar(Instrucciones.SWAP + "");       // pongo CIR arriba de SP
-        // guardar referencia a this en la posición adecuada del RA del constructor:
-        // la convención: offset = 3 + #parametros (ver apunte) => usamos (3 + argumentos.size())
+        archivo.generar(Instrucciones.DUP + "");
+        archivo.generar(Instrucciones.LOADSP + "");
+        archivo.generar(Instrucciones.SWAP + "");
+
         archivo.generar(Instrucciones.STOREREF + " " + (3 + argumentos.size()));
 
-        // ahora invoco al constructor (su etiqueta)
         archivo.generar(Instrucciones.PUSH + " lbl_constructor@" + clase.getNombre().getLexema());
         archivo.generar(Instrucciones.CALL + "");
 
-        // recupero/limpio las temporarias reservadas para los parametros/this
-        archivo.generar(Instrucciones.FMEM + " 1"); // libera la RMEM anterior (la 2da)
+        archivo.generar(Instrucciones.FMEM + " 1");
         //archivo.generar(Instrucciones.FMEM + " 1"); // libera la RMEM inicial usada para argumentos
 
         // Si hay encadenado, la referencia al objeto está en tope: delego
@@ -189,6 +181,5 @@ public class NodoLlamadaConstructor extends NodoOperando{
 
         System.out.println("Finalizando NodoLlamadaConstructor");
     }
-
 
 }
