@@ -159,44 +159,23 @@ VT@Init:
 NOP
 
 .CODE
+lbl_m1@Init: LOADFP
+LOADSP
+STOREFP
+PUSH 15
+STORE 2
+RMEM 1
+LOAD 2
+PUSH lbl_printIln@System
+CALL
+lbl_final_m1@Init: NOP
+STOREFP
+RET 1
+
 lbl_main@Init: LOADFP
 LOADSP
 STOREFP
-RMEM 4
-PUSH 1
-STORE 0
-PUSH 1
-STORE -1
-PUSH 1
-PUSH 1
-ADD
-STORE -2
-LOAD -2
-PUSH lbl_debugPrint@Object
-CALL
-LOAD 0
-LOAD -1
-EQ
-STORE -3
-LOAD -3
-PUSH lbl_printBln@System
-CALL
-LOAD 0
-LOAD -2
-EQ
-STORE -3
-LOAD -3
-PUSH lbl_printBln@System
-CALL
-LOAD 0
-PUSH 3
-MUL
-STORE 0
-LOAD 0
-PUSH lbl_debugPrint@Object
-CALL
 lbl_final_main@Init: NOP
-FMEM 4
 STOREFP
 RET 0
 

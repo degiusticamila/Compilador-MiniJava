@@ -18,6 +18,7 @@ public class Metodo implements Elemento{
     private NodoBloque bloque;
     private int offsetThis;
     private int offsetMetodo;
+    private Clase claseDeclarada;
 
     public Metodo(Token modificador,Tipo tipoRetorno, Token nombreMetodo){
         parametros = new LinkedList<>();
@@ -160,6 +161,8 @@ public class Metodo implements Elemento{
     }
     public void generarRetornoMetodo(ArchivoSalida archivo){
         int cantidadVariablesLocales = bloque.getTodasLasVariablesLocales().size();
+
+        archivo.generar("lbl_final_"+nombre.getLexema()+"@"+claseDeclarada.getNombre().getLexema()+": "+Instrucciones.NOP);
         if(cantidadVariablesLocales != 0){
             archivo.generar(Instrucciones.FMEM+" "+cantidadVariablesLocales); //NUEVO RECIEN
         }
@@ -211,4 +214,12 @@ public class Metodo implements Elemento{
     public void setOffsetMetodo(int offsetMetodo){
         this.offsetMetodo = offsetMetodo;
     }
+
+    public void setClaseDeclarada(Clase c) {
+        this.claseDeclarada = c;
+    }
+    public Clase getClaseDeclarada() {
+        return claseDeclarada;
+    }
+
 }

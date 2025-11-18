@@ -117,7 +117,20 @@ public class NodoLlamadaMetodoEstatico extends NodoOperando{
     @Override
     public void generar(ArchivoSalida archivo) {
         System.out.println("Entro a generar NodoLlamadaMetodoEstatico "+nombreMetodo.getLexema());
-        Clase claseActual = TablaSimbolos.tablaSimbolos.getClaseActual();
+        TablaSimbolos ts = TablaSimbolos.tablaSimbolos;
+        Clase clase = ts.obtenerClase(nombreClase.getLexema());
+        Metodo metodo = clase.getMetodo(nombreMetodo.getLexema());
+
+        archivo.generar(Instrucciones.RMEM+" 1");
+        for(NodoExpresion parametro : argumentos){
+            parametro.generar(archivo);
+        }
+        archivo.generar(Instrucciones.PUSH+" lbl_"+metodo.getNombreMetodo().getLexema()+"@"+clase.getNombre().getLexema());
+        archivo.generar(Instrucciones.CALL+"");
+
+
+
+       /* Clase claseActual = TablaSimbolos.tablaSimbolos.getClaseActual();
         Metodo metodo = claseActual.getMetodo(nombreMetodo.getLexema());
         Clase claseDelMetodo = metodo.esMetodoPredefinido();
         if(claseDelMetodo == null){
@@ -129,6 +142,9 @@ public class NodoLlamadaMetodoEstatico extends NodoOperando{
 
         archivo.generar(Instrucciones.PUSH+" lbl_"+nombreMetodo.getLexema()+"@"+claseDelMetodo.getNombre().getLexema());
         archivo.generar(Instrucciones.CALL+"");
+
+         */
+
     }
 
     @Override

@@ -155,6 +155,27 @@ STOREFP
 STOREFP
 RET 0
 .DATA
+VT@A: 
+DW lbl_mc1@A
+
+.CODE
+lbl_mc1@A: LOADFP
+LOADSP
+STOREFP
+PUSH 1234
+PUSH lbl_debugPrint@Object
+CALL
+lbl_final_mc1@A: NOP
+STOREFP
+RET 0
+
+
+lbl_constructor@A: LOADFP
+LOADSP
+STOREFP
+STOREFP
+RET 0
+.DATA
 VT@Init: 
 NOP
 
@@ -162,41 +183,30 @@ NOP
 lbl_main@Init: LOADFP
 LOADSP
 STOREFP
-RMEM 4
-PUSH 1
-STORE 0
-PUSH 1
-STORE -1
-PUSH 1
-PUSH 1
-ADD
-STORE -2
-LOAD -2
-PUSH lbl_debugPrint@Object
+RMEM 1
+RMEM 1
+PUSH 2
+PUSH simple_malloc
 CALL
-LOAD 0
-LOAD -1
-EQ
-STORE -3
-LOAD -3
-PUSH lbl_printBln@System
+DUP
+PUSH VT@A
+STOREREF 0
+DUP
+LOADSP
+SWAP
+STOREREF 3
+PUSH lbl_constructor@A
 CALL
-LOAD 0
-LOAD -2
-EQ
-STORE -3
-LOAD -3
-PUSH lbl_printBln@System
-CALL
-LOAD 0
-PUSH 3
-MUL
+FMEM 1
 STORE 0
 LOAD 0
-PUSH lbl_debugPrint@Object
+DUP
+LOADREF 0
+LOADREF 0
 CALL
+LOADREF 1
 lbl_final_main@Init: NOP
-FMEM 4
+FMEM 1
 STOREFP
 RET 0
 

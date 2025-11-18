@@ -159,8 +159,6 @@ public class NodoLlamadaMetodo extends NodoOperando{
         for(NodoExpresion parametro : argumentos){
             parametro.generar(archivo);
         }
-        //Apilo la etiqueta del metodo estatico? que quiero llamar
-        // y lo llamo
 
         archivo.generar("PUSH lbl_"+nombre.getLexema()+"@"+claseDelMetodo.getNombre().getLexema());
         archivo.generar(""+ Instrucciones.CALL);
@@ -170,4 +168,5 @@ public class NodoLlamadaMetodo extends NodoOperando{
     public String nombreSentencia() {
         return nombre.getLexema();
     }
+
 }

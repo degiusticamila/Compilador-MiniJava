@@ -3,6 +3,7 @@ package AST.NodosSentencia;
 import AST.NodosExpresion.NodoExpresion;
 import AST.NodosExpresion.NodoExpresionVacia;
 import ArchivoSalida.ArchivoSalida;
+import GeneracionCodigo.Instrucciones;
 import TablaDeSimbolos.*;
 import Utils.Token;
 
@@ -51,7 +52,27 @@ public class NodoReturn extends NodoSentencia {
 
     @Override
     public void generar(ArchivoSalida archivo) {
+        System.out.println("Generar de NodoReturn");
 
+        TablaSimbolos ts = TablaSimbolos.tablaSimbolos;
+        Metodo metodoActual = ts.getMetodoActual();
+        Tipo tipoRetorno = metodoActual.getTipoRetorno();
+
+        //si NO es void, tengo que guardar el valor de retorno
+        if(!(tipoRetorno instanceof TipoVoid)){
+            expresionOpcional.generar(archivo);
+            int cantidadParametros = metodoActual.getParametros().size();
+            int offsetRetorno = cantidadParametros + 2;
+            archivo.generar(Instrucciones.STORE+" "+offsetRetorno);
+        }
+        generarSaltoAlFinalDelMetodo(archivo);
+    }
+    private void generarSaltoAlFinalDelMetodo(ArchivoSalida archivoSalida){
+        Metodo metodoActual = TablaSimbolos.tablaSimbolos.getMetodoActual();
+        String nombreMetodo = metodoActual.getNombre();
+        String nombreClase = metodoActual.getClaseDeclarada().getNombre().getLexema();
+        String label = "lbl_final_"+nombreMetodo+"@"+nombreClase;
+        archivoSalida.generar(Instrucciones.JUMP+" "+label);
     }
 
     @Override

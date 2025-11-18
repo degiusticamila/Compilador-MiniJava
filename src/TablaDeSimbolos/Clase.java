@@ -40,6 +40,7 @@ public class Clase {
         if(!metodoDeclarado(nombreMetodo.getLexema())){
             metodos.put(nombreMetodo.getLexema(), m);
             metodosPropios.put(nombreMetodo.getLexema(), m);
+            m.setClaseDeclarada(this);
             metodosOrdenados.addFirst(m);
         }
         else{
