@@ -164,7 +164,7 @@ public class NodoAccesoVar extends NodoOperando {
             int offsetAttr = atributo.getOffset(); //offset adentro del CIR
 
             System.out.println("Desplazamiento de "+atributo.getNombre()+" "+atributo.getOffset());
-            archivo.generar(Instrucciones.LOAD+ " "+ atributo.getOffset());
+            //archivo.generar(Instrucciones.LOAD+ " "+ atributo.getOffset());
             if(esLadoIzq){
                 archivo.generar(Instrucciones.LOAD+" 3"); //this
                 archivo.generar(Instrucciones.SWAP+"");

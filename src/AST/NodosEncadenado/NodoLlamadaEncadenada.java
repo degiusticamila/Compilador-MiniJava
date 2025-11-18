@@ -112,7 +112,42 @@ public class NodoLlamadaEncadenada extends NodoEncadenado {
 
     @Override
     public void generar(ArchivoSalida archivo) {
-        System.out.println("Generando codigo NodoLlamadaEncadenada " + nombre.getLexema());
+        System.out.println("Generando codigo NodoLlamadaEncadenada "+nombre.getLexema());
+
+        TablaSimbolos ts = TablaSimbolos.tablaSimbolos;
+        Clase clase = ts.obtenerClase(tipoBase.getNombre());
+        Metodo metodo = clase.getMetodo(super.nombre.getLexema());
+        int offset = metodo.getOffsetMetodo(); // asumimos ya calculado por Clase.calcularOffsetMetodos()
+
+
+        archivo.generar(Instrucciones.DUP + "");
+        archivo.generar(Instrucciones.LOADREF + " 0");
+        archivo.generar(Instrucciones.LOADREF + " " + offset);
+
+
+        for (NodoExpresion parametro : parametros) {
+            archivo.generar(Instrucciones.SWAP + ""); // pone 'this' debajo para que parametro vaya arriba
+            parametro.generar(archivo);
+            archivo.generar(Instrucciones.SWAP + ""); // restaura orden: ... this lbl param...
+        }
+        int a = parametros.size() + 3;
+        //archivo.generar(Instrucciones.DUP+"");
+        //archivo.generar(Instrucciones.LOADSP+"");
+        //archivo.generar(Instrucciones.SWAP+"");
+        //archivo.generar(Instrucciones.STOREREF+" "+a);
+
+        archivo.generar(Instrucciones.CALL + "");
+
+        // si hay encadenado
+        if (!(encadenado instanceof NodoEncadenadoVacio)) {
+            encadenado.generar(archivo);
+        }
+        generarRetorno(archivo);
     }
+    public void generarRetorno(ArchivoSalida archivo) {
+        //TO-DO
+        archivo.generar(Instrucciones.LOADREF + " 1");
+    }
+
 
 }

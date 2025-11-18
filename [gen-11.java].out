@@ -38,7 +38,7 @@ lbl_constructor@Object: LOADFP
 LOADSP
 STOREFP
 STOREFP
-RET 1
+RET 0
 .DATA
 VT@String: 
 NOP
@@ -49,7 +49,7 @@ lbl_constructor@String: LOADFP
 LOADSP
 STOREFP
 STOREFP
-RET 1
+RET 0
 .DATA
 VT@System: 
 NOP
@@ -142,7 +142,7 @@ lbl_constructor@System: LOADFP
 LOADSP
 STOREFP
 STOREFP
-RET 1
+RET 0
 .DATA
 VT@Init: 
 NOP
@@ -177,4 +177,4 @@ lbl_constructor@Init: LOADFP
 LOADSP
 STOREFP
 STOREFP
-RET 1
+RET 0

@@ -38,7 +38,7 @@ lbl_constructor@Object: LOADFP
 LOADSP
 STOREFP
 STOREFP
-RET 1
+RET 0
 .DATA
 VT@String: 
 NOP
@@ -49,7 +49,7 @@ lbl_constructor@String: LOADFP
 LOADSP
 STOREFP
 STOREFP
-RET 1
+RET 0
 .DATA
 VT@System: 
 NOP
@@ -142,7 +142,7 @@ lbl_constructor@System: LOADFP
 LOADSP
 STOREFP
 STOREFP
-RET 1
+RET 0
 .DATA
 VT@A: 
 DW lbl_mc@A
@@ -158,7 +158,6 @@ PUSH 33
 LOAD 3
 SWAP
 STOREREF 1
-LOAD 1
 LOAD 3
 LOADREF 1
 PUSH lbl_debugPrint@Object
@@ -171,7 +170,7 @@ lbl_constructor@A: LOADFP
 LOADSP
 STOREFP
 STOREFP
-RET 1
+RET 0
 .DATA
 VT@Init: 
 NOP
@@ -181,7 +180,27 @@ lbl_main@Init: LOADFP
 LOADSP
 STOREFP
 RMEM 1
+RMEM 1
+PUSH 2
+PUSH simple_malloc
+CALL
+DUP
+PUSH VT@A
+STOREREF 0
+DUP
+LOADSP
+SWAP
+STOREREF 3
+PUSH lbl_constructor@A
+CALL
+FMEM 1
 STORE 0
+LOAD 0
+DUP
+LOADREF 0
+LOADREF 0
+CALL
+LOADREF 1
 FMEM 1
 STOREFP
 RET 0
@@ -191,4 +210,4 @@ lbl_constructor@Init: LOADFP
 LOADSP
 STOREFP
 STOREFP
-RET 1
+RET 0

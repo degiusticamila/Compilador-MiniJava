@@ -1,4 +1,4 @@
-///1234&33&3&exitosamente
+///1234&33&exitosamente
 
 class A{
     int x;
@@ -17,8 +17,6 @@ class Init{
     static void main()
     {
         var a = new A();
-        var b = 3;
-        debugPrint(b);
         a.mc();
         
     }

@@ -413,7 +413,7 @@ public class Clase {
         //archivo.generar("FMEM "+cantLocales);
 
         archivo.generar("STOREFP");
-        archivo.generar("RET 1");
+        archivo.generar("RET 0");
 
         //ESTA HARDCODEADO DE MOMENTO!
         /*

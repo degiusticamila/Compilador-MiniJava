@@ -66,10 +66,17 @@ public class NodoSentenciaExpresion extends NodoSentencia{
 
     @Override
     public void generar(ArchivoSalida archivo) {
-        if (expresion instanceof NodoExpAsignacion || expresion instanceof NodoOperadorUnario ||
+        if (expresion instanceof NodoExpAsignacion || expresion instanceof NodoOperadorUnario ||  expresion instanceof NodoLlamadaConstructor ||
                 expresion instanceof NodoLlamadaMetodo ||
                 expresion instanceof NodoLlamadaMetodoEstatico) {
             expresion.generar(archivo);
+        }
+        if(expresion instanceof NodoOperando){
+            NodoOperando op = (NodoOperando)expresion;
+            if(op.tieneEncadenado()){
+                expresion.generar(archivo);
+
+            }
         }
     }
 
