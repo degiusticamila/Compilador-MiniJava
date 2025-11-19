@@ -6,6 +6,7 @@ class A{
         debugPrint(1234);
         x = 33;
         debugPrint(x);
+
       }
 }
 

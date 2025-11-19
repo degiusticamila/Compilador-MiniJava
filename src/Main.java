@@ -103,4 +103,5 @@ public class Main {
         tablaSimbolos.generarCodigo(archivoSalida);
         archivoSalida.close();
     }
+
 }

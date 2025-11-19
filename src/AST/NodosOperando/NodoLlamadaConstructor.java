@@ -145,15 +145,7 @@ public class NodoLlamadaConstructor extends NodoOperando{
         int tamanioObjeto = cantAtributos + 1;
 
         //Retorno de malloc
-        //archivo.generar(Instrucciones.RMEM + " 1");
-
-        for (NodoExpresion arg : argumentos) {
-            arg.generar(archivo);
-            archivo.generar(Instrucciones.SWAP + "");
-        }
-
         archivo.generar(Instrucciones.RMEM + " 1");
-
         archivo.generar(Instrucciones.PUSH + " " + tamanioObjeto);
         archivo.generar(Instrucciones.PUSH+ " simple_malloc");
         archivo.generar(Instrucciones.CALL + "");
@@ -161,25 +153,22 @@ public class NodoLlamadaConstructor extends NodoOperando{
         archivo.generar(Instrucciones.DUP + "");
         archivo.generar(Instrucciones.PUSH + " VT@" + clase.getNombre().getLexema());
         archivo.generar(Instrucciones.STOREREF + " 0");
-
         archivo.generar(Instrucciones.DUP + "");
-        archivo.generar(Instrucciones.LOADSP + "");
-        archivo.generar(Instrucciones.SWAP + "");
 
-        archivo.generar(Instrucciones.STOREREF + " " + (3 + argumentos.size()));
+
+        for (NodoExpresion arg : argumentos) {
+            arg.generar(archivo);
+            archivo.generar(Instrucciones.SWAP + "");
+        }
 
         archivo.generar(Instrucciones.PUSH + " lbl_constructor@" + clase.getNombre().getLexema());
         archivo.generar(Instrucciones.CALL + "");
-
-        archivo.generar(Instrucciones.FMEM + " 1");
-        //archivo.generar(Instrucciones.FMEM + " 1"); // libera la RMEM inicial usada para argumentos
 
         // Si hay encadenado, la referencia al objeto está en tope: delego
         if (!(encadenado instanceof NodoEncadenadoVacio)) {
             encadenado.generar(archivo);
         }
-
         System.out.println("Finalizando NodoLlamadaConstructor");
+        archivo.generar(Instrucciones.FMEM+" 1");
     }
-
 }

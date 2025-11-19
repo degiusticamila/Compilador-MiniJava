@@ -155,14 +155,8 @@ public class NodoBloque extends NodoSentencia {
         return vars;
     }
     public void generar(ArchivoSalida archivo){
-        System.out.println();
-
         for(NodoSentencia sentencia: sentencias){
-            System.out.println("Generando codigo de sentencia: ");
-            sentencia.imprimir("");
             sentencia.generar(archivo);
-
         }
-        //archivo.generar(Instrucciones.FMEM+" "+ variablesLocales.size()); //ojota
     }
 }

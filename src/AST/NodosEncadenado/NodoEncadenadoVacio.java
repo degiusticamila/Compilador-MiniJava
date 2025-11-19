@@ -37,6 +37,4 @@ public class NodoEncadenadoVacio extends NodoEncadenado {
         //vacio
     }
 
-
-
 }

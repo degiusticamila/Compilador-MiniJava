@@ -163,13 +163,11 @@ lbl_m1@Init: LOADFP
 LOADSP
 STOREFP
 PUSH 5
-STORE 2
-RMEM 1
-LOAD 2
+STORE 3
+LOAD 3
 PUSH lbl_printIln@System
 CALL
-RMEM 1
-LOAD 3
+LOAD 2
 PUSH lbl_printBln@System
 CALL
 lbl_final_m1@Init: NOP
@@ -179,6 +177,7 @@ RET 2
 lbl_main@Init: LOADFP
 LOADSP
 STOREFP
+RMEM 1
 PUSH 1
 PUSH 1
 PUSH lbl_m1@Init

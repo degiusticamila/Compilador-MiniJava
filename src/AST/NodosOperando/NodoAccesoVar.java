@@ -146,7 +146,7 @@ public class NodoAccesoVar extends NodoOperando {
     }
     @Override
     public void generar(ArchivoSalida archivo) {
-        System.out.println("Generando código en NodoAccesoVar");
+        System.out.println("Generando código en NodoAccesoVar "+nombre.getLexema());
         if(referenciaTS instanceof NodoVarLocal varLocal){
 
             System.out.println(varLocal.getNombreVarLocal()+" "+varLocal.getOffset());

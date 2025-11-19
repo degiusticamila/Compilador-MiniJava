@@ -11,6 +11,7 @@ public class NodoLlamadaEncadenada extends NodoEncadenado {
     private List<NodoExpresion> parametros;
     private NodoEncadenado encadenado;
     protected Tipo tipoBase;
+    protected Tipo tipoRetorno;
     public NodoLlamadaEncadenada(Token nombre, NodoEncadenado encadenado, List<NodoExpresion> parametros) {
         super(nombre);
         this.parametros = parametros;
@@ -53,6 +54,7 @@ public class NodoLlamadaEncadenada extends NodoEncadenado {
         if(!(encadenado instanceof NodoEncadenadoVacio)){
             return encadenado.chequear(tipoRetorno);
         }
+        this.tipoRetorno = tipoRetorno;
         return tipoRetorno;
 
     }
@@ -114,37 +116,53 @@ public class NodoLlamadaEncadenada extends NodoEncadenado {
     public void generar(ArchivoSalida archivo) {
         System.out.println("Generando codigo NodoLlamadaEncadenada "+nombre.getLexema());
 
+
         TablaSimbolos ts = TablaSimbolos.tablaSimbolos;
         Clase clase = ts.obtenerClase(tipoBase.getNombre());
         Metodo metodo = clase.getMetodo(super.nombre.getLexema());
         int offset = metodo.getOffsetMetodo();
+        boolean esVoid = tipoRetorno instanceof TipoVoid;
+        boolean esEstatico = metodo.esMetodoEstatico();
 
-        archivo.generar(Instrucciones.DUP + "");
-        archivo.generar(Instrucciones.LOADREF + " 0");
-        archivo.generar(Instrucciones.LOADREF + " " + offset);
+        if(!esVoid){
+           archivo.generar(Instrucciones.DUP+"");          //hago hueco para el retorno
+        }
 
+        archivo.generar(Instrucciones.SWAP+"");
         for (NodoExpresion parametro : parametros) {
-            archivo.generar(Instrucciones.SWAP + "");
             parametro.generar(archivo);
             archivo.generar(Instrucciones.SWAP + "");
         }
-        int a = parametros.size() + 3;
-        //archivo.generar(Instrucciones.DUP+"");
-        //archivo.generar(Instrucciones.LOADSP+"");
-        //archivo.generar(Instrucciones.SWAP+"");
-        //archivo.generar(Instrucciones.STOREREF+" "+a);
 
-        archivo.generar(Instrucciones.CALL + "");
+        if(esEstatico){
+            archivo.generar(Instrucciones.POP+" ");         //tiro el this
+            archivo.generar(Instrucciones.PUSH+" lbl_"+nombre.getLexema()+"@"+clase.getNombre().getLexema());
+            archivo.generar(Instrucciones.CALL+"");
+        }
+        else{
+            archivo.generar(Instrucciones.DUP + "");
+            archivo.generar(Instrucciones.LOADREF + " 0");
+            archivo.generar(Instrucciones.LOADREF + " " + offset); //Desplazamiento dentro de la VT
+            archivo.generar(Instrucciones.CALL + "");
+        }
 
-        // si hay encadenado
         if (!(encadenado instanceof NodoEncadenadoVacio)) {
             encadenado.generar(archivo);
         }
-        generarRetorno(archivo);
+        else{
+            generarRetorno(archivo);
+        }
+
     }
     public void generarRetorno(ArchivoSalida archivo) {
-        //TO-DO
-        archivo.generar(Instrucciones.LOADREF + " 1");
+
+        System.out.println("Tipo de retorno de la llamada "+nombre.getLexema()+" "+tipoRetorno.getNombre());
+        if(tipoRetorno instanceof TipoVoid){
+            System.out.println("La llamada es void entonces retorna "+nombre.getLexema());
+            return;
+        }
+
+        //archivo.generar(Instrucciones.LOADREF + " 1");
     }
 
 

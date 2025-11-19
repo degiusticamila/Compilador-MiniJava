@@ -163,11 +163,11 @@ lbl_f@TestReturn: LOADFP
 LOADSP
 STOREFP
 PUSH 5
-STORE 2
-JUMP lbl_final_main@TestReturn
+STORE 3
+JUMP lbl_final_f@TestReturn
 lbl_final_f@TestReturn: NOP
 STOREFP
-RET 0
+RET 1
 
 lbl_main@TestReturn: LOADFP
 LOADSP

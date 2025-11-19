@@ -20,6 +20,7 @@ public class Clase {
     private Token nombre;
     private Token herencia;
 
+
     public Clase(Token nombre,Token modificador){
         atributos = new HashMap<>();
         metodos = new HashMap<>();
@@ -40,8 +41,9 @@ public class Clase {
         if(!metodoDeclarado(nombreMetodo.getLexema())){
             metodos.put(nombreMetodo.getLexema(), m);
             metodosPropios.put(nombreMetodo.getLexema(), m);
+            metodosOrdenados.add(m);
             m.setClaseDeclarada(this);
-            metodosOrdenados.addFirst(m);
+
         }
         else{
             throw new ExcepcionSemantica(nombreMetodo.getLexema(), nombreMetodo.getNroLinea(), "Metodo ya declarado");
@@ -227,6 +229,7 @@ public class Clase {
             String nombreMetodoPadre = metodoPadre.getNombreMetodo().getLexema();
             if(!this.metodos.containsKey(metodoPadre.getNombreMetodo().getLexema())){
                 this.metodos.put(nombreMetodoPadre, metodoPadre);
+                this.metodosOrdenados.add(metodoPadre); //OJOTA
                 //System.out.println("→ Heredado metodo "+nombreMetodoPadre+" de "+padre.getNombre().getLexema()+" en "+this.nombre.getLexema());
             }
             else{
@@ -360,7 +363,7 @@ public class Clase {
     public void generarCodigo(ArchivoSalida archivo) throws ExcepcionSemantica {
         //ordenarMetodos
         //ordenarAtributos
-
+        calcularOffsetMetodos();
         archivo.generar(".DATA");
         archivo.generar("VT@"+nombre.getLexema()+": ");
 
@@ -369,7 +372,7 @@ public class Clase {
         }
         else{
             //Clase definida por el usuario
-            for(Metodo m : metodos.values()){
+            for(Metodo m : metodosOrdenados){
                 if(!m.esMetodoEstatico()){
                     archivo.generar(Instrucciones.DW+" lbl_"+m.getNombreMetodo().getLexema()+"@"+nombre.getLexema());
                 }
@@ -391,13 +394,12 @@ public class Clase {
     public void calcularOffsetMetodos(){
         int offset = 0;
 
-        for(Metodo m : metodos.values()){
+        for(Metodo m : metodosOrdenados){
             if(!m.esMetodoEstatico()){
                 m.setOffsetMetodo(offset);
                 offset++;
             }
         }
-
 
     }
     public List<Metodo> mapeoAlista(HashMap<String, Metodo> metodos){

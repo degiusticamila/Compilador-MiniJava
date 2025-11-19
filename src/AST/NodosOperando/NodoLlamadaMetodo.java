@@ -146,22 +146,46 @@ public class NodoLlamadaMetodo extends NodoOperando{
         NodoBloque bloqueActual = metodoActual.getBloque();
     }
     public void generar(ArchivoSalida archivo){
-        System.out.println("Generando codigo para NodoLlamadaMetodo");
-
+        System.out.println("Generando codigo para NodoLlamadaMetodo "+nombre.getLexema());
         Clase claseActual = TablaSimbolos.tablaSimbolos.getClaseActual();
         Metodo metodo = claseActual.getMetodo(nombre.getLexema());
-        Clase claseDelMetodo = metodo.esMetodoPredefinido(); //ME SIRVE POR AHORA NO MAS
-        if(claseDelMetodo == null){
+        Clase claseDelMetodo = metodo.getClaseDeclarada();
+        Tipo tipoRetorno = metodo.getTipoRetorno();
 
-            claseDelMetodo = metodo.obtenerClase();
-        }
-        //Es un caso particular, CAMBIAR
-        for(NodoExpresion parametro : argumentos){
-            parametro.generar(archivo);
+        boolean esVoid = tipoRetorno instanceof TipoVoid;
+        boolean esEstatico = metodo.esMetodoEstatico();
+
+
+        if(!esVoid){
+            archivo.generar(Instrucciones.RMEM+" 1");
         }
 
-        archivo.generar("PUSH lbl_"+nombre.getLexema()+"@"+claseDelMetodo.getNombre().getLexema());
-        archivo.generar(""+ Instrucciones.CALL);
+        if(!esEstatico){
+            archivo.generar(Instrucciones.LOAD+" 3"); //cargo this
+        }
+
+        for(NodoExpresion arg : argumentos){
+            arg.generar(archivo);
+            if(!esEstatico){
+                archivo.generar(Instrucciones.SWAP+"");
+            }
+        }
+
+        if(esEstatico){
+            archivo.generar("PUSH lbl_"+nombre.getLexema()+"@"+claseDelMetodo.getNombre().getLexema());
+            archivo.generar(""+ Instrucciones.CALL);
+        }
+        else{
+            archivo.generar(Instrucciones.DUP+"");                  //duplico this
+            archivo.generar(Instrucciones.LOADREF+" 0");            //Cargo VT
+            int offsetMetodo = metodo.getOffsetMetodo();
+            archivo.generar(Instrucciones.LOADREF+" "+offsetMetodo); //Acceso al metodo en la VT
+            archivo.generar(Instrucciones.CALL+"");
+        }
+
+        if(!(encadenado instanceof NodoEncadenadoVacio)){
+            encadenado.generar(archivo);
+        }
     }
 
     @Override

@@ -6,6 +6,6 @@ class Init {
         System.printIln(p1);
     }
     static void main(){
-
+        m1(2);
     }
 }

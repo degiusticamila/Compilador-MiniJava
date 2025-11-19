@@ -120,10 +120,12 @@ public class Metodo implements Elemento{
         return nombre.getNroLinea();
     }
     public void generar(ArchivoSalida archivo){
+        TablaSimbolos.tablaSimbolos.setMetodoActual(this);
         generarEtiquetaMetodo(archivo);
         generarConstruirRA(archivo);
         generarBloque(archivo);
         generarRetornoMetodo(archivo);
+        TablaSimbolos.tablaSimbolos.setMetodoActual(null);
     }
     public void generarEtiquetaMetodo(ArchivoSalida archivo){
         //si es metodo de una clase predefinida (System, String, Object)
@@ -160,39 +162,48 @@ public class Metodo implements Elemento{
         bloque.generar(archivo);
     }
     public void generarRetornoMetodo(ArchivoSalida archivo){
-        int cantidadVariablesLocales = bloque.getTodasLasVariablesLocales().size();
-
         archivo.generar("lbl_final_"+nombre.getLexema()+"@"+claseDeclarada.getNombre().getLexema()+": "+Instrucciones.NOP);
+
+
+        int cantidadVariablesLocales = bloque.getTodasLasVariablesLocales().size();
         if(cantidadVariablesLocales != 0){
             archivo.generar(Instrucciones.FMEM+" "+cantidadVariablesLocales); //NUEVO RECIEN
         }
 
         archivo.generar(Instrucciones.STOREFP+"");
-        archivo.generar(Instrucciones.RET +" "+this.getParametros().size());
+
+
+        int nParams = this.getParametros().size();
+        if(!this.esMetodoEstatico()){
+            archivo.generar(Instrucciones.RET +" "+(nParams+1)); //Pruebo removiendo el this
+
+        }
+        else{
+            //no hay this
+            archivo.generar(Instrucciones.RET +" "+nParams);
+        }
         archivo.generar("");
     }
     public void calcularOffsets(){
-        int offsetParametro;
+
         int cantidadParametros = parametros.size();
 
         if(!esMetodoEstatico()){
             this.offsetThis = 3;
+            for(Parametro p : parametros){
+                int i = p.getPosicion();
+                int offset = cantidadParametros + 3 - i;
+                p.setOffset(offset);
+            }
 
         }
         else{
             this.offsetThis = 2;
-        }
-
-        if(esMetodoEstatico()){
-            offsetParametro = 2; // no tiene this
-        }
-        else{
-            offsetParametro = 3;
-        }
-        for(Parametro p : parametros){
-
-            p.setOffset(offsetParametro++);
-            //offsetParametro++;
+            for(Parametro p : parametros){
+                int i = p.getPosicion();
+                int offset = cantidadParametros + 2 - i;
+                p.setOffset(offset);
+            }
         }
 
 

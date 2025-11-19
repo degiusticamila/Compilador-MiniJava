@@ -62,15 +62,21 @@ public class NodoReturn extends NodoSentencia {
         if(!(tipoRetorno instanceof TipoVoid)){
             expresionOpcional.generar(archivo);
             int cantidadParametros = metodoActual.getParametros().size();
-            int offsetRetorno = cantidadParametros + 2;
+            int offsetRetorno = metodoActual.esMetodoEstatico() ? cantidadParametros + 2 : cantidadParametros + 3;
             archivo.generar(Instrucciones.STORE+" "+offsetRetorno);
+            System.out.println("Offset del retorno del metodo "+metodoActual.getNombre()+": "+offsetRetorno);
         }
-        generarSaltoAlFinalDelMetodo(archivo);
+
+        String lbl = "lbl_final_"+metodoActual.getNombre()+"@"+metodoActual.getClaseDeclarada().getNombre().getLexema();
+        archivo.generar(Instrucciones.JUMP+" "+lbl);
+
+
     }
     private void generarSaltoAlFinalDelMetodo(ArchivoSalida archivoSalida){
         Metodo metodoActual = TablaSimbolos.tablaSimbolos.getMetodoActual();
         String nombreMetodo = metodoActual.getNombre();
         String nombreClase = metodoActual.getClaseDeclarada().getNombre().getLexema();
+
         String label = "lbl_final_"+nombreMetodo+"@"+nombreClase;
         archivoSalida.generar(Instrucciones.JUMP+" "+label);
     }

@@ -51,8 +51,9 @@ public class NodoIntLiteral extends NodoOperando {
 
     @Override
     public void generar(ArchivoSalida archivo) {
+        System.out.println("Generando código NodoIntLiteral "+nombre.getLexema());
         archivo.generar(Instrucciones.PUSH+" "+nombre.getLexema());
-
+        System.out.println();
     }
 
     @Override
