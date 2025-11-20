@@ -169,7 +169,6 @@ LOAD 0
 PUSH 1
 ADD
 STORE 0
-POP
 LOAD 0
 PUSH lbl_debugPrint@Object
 CALL

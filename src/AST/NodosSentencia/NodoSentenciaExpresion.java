@@ -84,12 +84,20 @@ public class NodoSentenciaExpresion extends NodoSentencia{
 
             }
         }
-        if(tipoExpresion != null && !(tipoExpresion instanceof TipoVoid)){
-            if(!(expresion instanceof NodoExpAsignacion)){
-                System.out.println("TIRO EL RESULTADO PORQUE NO SE USA!");
-                archivo.generar(Instrucciones.POP+"");
+        if (tipoExpresion != null) {
+            if (!(tipoExpresion instanceof TipoVoid)) {
+                if (!(expresion instanceof NodoExpAsignacion)) {
+
+                    if (expresion instanceof NodoLlamadaMetodo ||
+                            expresion instanceof NodoLlamadaMetodoEstatico ||
+                            (expresion instanceof NodoOperando && ((NodoOperando)expresion).tieneEncadenado())) {
+                        System.out.println("TIRO EL RESULTADO PORQUE NO SE USA!");
+                        archivo.generar(Instrucciones.POP + "");
+                    }
+                }
             }
         }
+
 
     }
 
