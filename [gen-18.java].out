@@ -174,7 +174,6 @@ RET 1
 lbl_main@Init: LOADFP
 LOADSP
 STOREFP
-RMEM 1
 PUSH 2
 PUSH lbl_m1@Init
 CALL

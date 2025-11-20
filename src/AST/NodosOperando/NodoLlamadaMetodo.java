@@ -167,7 +167,7 @@ public class NodoLlamadaMetodo extends NodoOperando{
 
 
 
-        boolean esVoid = tipoRetorno instanceof TipoVoid;
+        boolean esVoid = (tipoRetorno instanceof TipoVoid) || ("void".equals(tipoRetorno.getNombre()));
         boolean esEstatico = metodo.esMetodoEstatico();
 
 
