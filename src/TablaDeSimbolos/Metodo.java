@@ -192,7 +192,7 @@ public class Metodo implements Elemento{
             this.offsetThis = 3;
             for(Parametro p : parametros){
                 int i = p.getPosicion();
-                int offset = cantidadParametros + 3 - i;
+                int offset = cantidadParametros + 4 - i;
                 p.setOffset(offset);
             }
 
@@ -201,7 +201,7 @@ public class Metodo implements Elemento{
             this.offsetThis = 2;
             for(Parametro p : parametros){
                 int i = p.getPosicion();
-                int offset = cantidadParametros + 2 - i;
+                int offset = cantidadParametros + 3 - i;
                 p.setOffset(offset);
             }
         }

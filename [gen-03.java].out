@@ -163,7 +163,7 @@ DW lbl_m2@A
 lbl_m1@A: LOADFP
 LOADSP
 STOREFP
-LOAD 3
+LOAD 4
 PUSH lbl_debugPrint@Object
 CALL
 lbl_final_m1@A: NOP

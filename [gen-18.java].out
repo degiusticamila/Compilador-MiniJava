@@ -163,8 +163,8 @@ lbl_m1@Init: LOADFP
 LOADSP
 STOREFP
 PUSH 15
-STORE 2
-LOAD 2
+STORE 3
+LOAD 3
 PUSH lbl_printIln@System
 CALL
 lbl_final_m1@Init: NOP

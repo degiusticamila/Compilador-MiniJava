@@ -10,6 +10,5 @@ class Init {
         p1 = 5;
         System.printIln(p1);
         System.printBln(p2);
-
     }
 }
