@@ -58,18 +58,24 @@ public class NodoReturn extends NodoSentencia {
         Metodo metodoActual = ts.getMetodoActual();
         Tipo tipoRetorno = metodoActual.getTipoRetorno();
 
+
         //si NO es void, tengo que guardar el valor de retorno
         if(!(tipoRetorno instanceof TipoVoid)){
             expresionOpcional.generar(archivo);
             int cantidadParametros = metodoActual.getParametros().size();
-            int offsetRetorno = metodoActual.esMetodoEstatico() ? cantidadParametros + 2 : cantidadParametros + 3;
+            int offsetRetorno = metodoActual.esMetodoEstatico() ? cantidadParametros + 3 : cantidadParametros + 4;
             archivo.generar(Instrucciones.STORE+" "+offsetRetorno);
             System.out.println("Offset del retorno del metodo "+metodoActual.getNombre()+": "+offsetRetorno);
+
+
         }
 
         String lbl = "lbl_final_"+metodoActual.getNombre()+"@"+metodoActual.getClaseDeclarada().getNombre().getLexema();
         archivo.generar(Instrucciones.JUMP+" "+lbl);
 
+
+    }
+    private void generarRetorno(ArchivoSalida archivo) {
 
     }
     private void generarSaltoAlFinalDelMetodo(ArchivoSalida archivoSalida){
