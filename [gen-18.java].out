@@ -178,6 +178,7 @@ RMEM 1
 PUSH 2
 PUSH lbl_m1@Init
 CALL
+POP
 lbl_final_main@Init: NOP
 STOREFP
 RET 0

@@ -9,14 +9,12 @@ class A{
     }
 }
 
-
 class Init{
     static void main()
 
-    { 
-        
+    {
         var x = new A();
-        x.m2();        
+        x.m2();
         debugPrint(x.m2());
     }
 }

@@ -7,14 +7,18 @@ import AST.NodosOperando.NodoLlamadaMetodo;
 import AST.NodosOperando.NodoLlamadaMetodoEstatico;
 import AST.NodosOperando.NodoOperando;
 import ArchivoSalida.ArchivoSalida;
+import GeneracionCodigo.Instrucciones;
 import TablaDeSimbolos.ExcepcionSemantica;
 import TablaDeSimbolos.Tipo;
+import TablaDeSimbolos.TipoUniversal;
+import TablaDeSimbolos.TipoVoid;
 import Utils.SourceManager;
 import com.sun.tools.javac.Main;
 
 public class NodoSentenciaExpresion extends NodoSentencia{
     private NodoExpresion expresion;
     private int linea;
+    private Tipo tipoExpresion;
     public NodoSentenciaExpresion(NodoExpresion nodoSentenciaExpresion, int linea) {
         this.expresion = nodoSentenciaExpresion;
         this.linea = linea;
@@ -48,14 +52,14 @@ public class NodoSentenciaExpresion extends NodoSentencia{
                 expresion instanceof NodoLlamadaMetodoEstatico ||
                 expresion instanceof NodoLlamadaConstructor) {
 
-            Tipo tipo = expresion.chequear();
+            tipoExpresion = expresion.chequear();
 
             return;
         }
         if(expresion instanceof NodoOperando){
             NodoOperando op = (NodoOperando)expresion;
             if(op.tieneEncadenado()){
-                expresion.chequear();
+                tipoExpresion = expresion.chequear();
                 return;
             }
         }
@@ -66,7 +70,9 @@ public class NodoSentenciaExpresion extends NodoSentencia{
 
     @Override
     public void generar(ArchivoSalida archivo) {
-        if (expresion instanceof NodoExpAsignacion || expresion instanceof NodoOperadorUnario ||  expresion instanceof NodoLlamadaConstructor ||
+        if (expresion instanceof NodoExpAsignacion ||
+                expresion instanceof NodoOperadorUnario ||
+                expresion instanceof NodoLlamadaConstructor ||
                 expresion instanceof NodoLlamadaMetodo ||
                 expresion instanceof NodoLlamadaMetodoEstatico) {
             expresion.generar(archivo);
@@ -78,6 +84,13 @@ public class NodoSentenciaExpresion extends NodoSentencia{
 
             }
         }
+        if(tipoExpresion != null && !(tipoExpresion instanceof TipoVoid)){
+            if(!(expresion instanceof NodoExpAsignacion)){
+                System.out.println("TIRO EL RESULTADO PORQUE NO SE USA!");
+                archivo.generar(Instrucciones.POP+"");
+            }
+        }
+
     }
 
     public String nombreSentencia() {
