@@ -1,6 +1,6 @@
 ///5&true&exitosamente
 
-class Init extends System{
+class Init {
     static void main()
     {
         m1(1, true);

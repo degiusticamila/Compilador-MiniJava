@@ -34,7 +34,6 @@ public class AnalizadorSintactico {
         listaClases();
         match("EOF");
 
-        //debug
        // tablaSimbolos.imprimirClases();
     }
     private void listaClases() throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {

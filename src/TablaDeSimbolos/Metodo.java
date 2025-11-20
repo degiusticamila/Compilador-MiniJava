@@ -232,5 +232,7 @@ public class Metodo implements Elemento{
     public Clase getClaseDeclarada() {
         return claseDeclarada;
     }
-
+    public void setTipoRetorno(Tipo tipoRetorno){
+        this.tipoRetorno = tipoRetorno;
+    }
 }

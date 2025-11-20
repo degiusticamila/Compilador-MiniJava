@@ -17,6 +17,7 @@ public class NodoLlamadaMetodo extends NodoOperando{
     private List<NodoExpresion> argumentos;
     private NodoEncadenado encadenado;
     private Elemento referenciaTS;
+    private Tipo tipoExpresion;
     public NodoLlamadaMetodo(Token nombre, List<NodoExpresion> argumentos) {
         this.nombre = nombre;
         this.argumentos = argumentos;
@@ -72,7 +73,7 @@ public class NodoLlamadaMetodo extends NodoOperando{
                 s.append(", ");
             }
         }
-         s.append(")");
+        s.append(")");
 
         if(!(encadenado instanceof NodoEncadenadoVacio)){
             s.append(".").append(encadenado.formatear());
@@ -120,10 +121,18 @@ public class NodoLlamadaMetodo extends NodoOperando{
             }
         }
         Tipo tipoRetorno = metodo.getTipoRetorno();
-        if(!(encadenado instanceof NodoEncadenadoVacio)){
-            return encadenado.chequear(tipoRetorno);
+        if(tipoRetorno instanceof TipoReferencia && "void".equals(tipoRetorno.getNombre()))
+        {
+            tipoRetorno = new TipoVoid();
         }
-        return tipoRetorno;
+        tipoExpresion = tipoRetorno;
+        if(!(encadenado instanceof NodoEncadenadoVacio)){
+            tipoExpresion = encadenado.chequear(tipoRetorno);
+        }
+        return tipoExpresion;
+    }
+    public Tipo getTipo(){
+        return tipoExpresion;
     }
     public void setEncadenado(NodoEncadenado nodoEncadenado) {
         this.encadenado = nodoEncadenado;
@@ -151,6 +160,12 @@ public class NodoLlamadaMetodo extends NodoOperando{
         Metodo metodo = claseActual.getMetodo(nombre.getLexema());
         Clase claseDelMetodo = metodo.getClaseDeclarada();
         Tipo tipoRetorno = metodo.getTipoRetorno();
+
+
+
+        System.out.println("Tipo de retorno del método "+nombre+" "+tipoRetorno);
+
+
 
         boolean esVoid = tipoRetorno instanceof TipoVoid;
         boolean esEstatico = metodo.esMetodoEstatico();
@@ -192,5 +207,4 @@ public class NodoLlamadaMetodo extends NodoOperando{
     public String nombreSentencia() {
         return nombre.getLexema();
     }
-
 }

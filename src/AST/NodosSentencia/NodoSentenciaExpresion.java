@@ -84,6 +84,7 @@ public class NodoSentenciaExpresion extends NodoSentencia{
 
             }
         }
+        System.out.println("CLase de tipoExpresion "+tipoExpresion.getClass().getName());
         if (tipoExpresion != null) {
             if (!(tipoExpresion instanceof TipoVoid)) {
                 if (!(expresion instanceof NodoExpAsignacion)) {
