@@ -142,8 +142,8 @@ public class NodoLlamadaConstructor extends NodoOperando{
         TablaSimbolos ts = TablaSimbolos.tablaSimbolos;
         Clase clase = ts.obtenerClase(nombre.getLexema());
         int cantAtributos = clase.getMapAtributos().size();
-       int tamanioObjeto = cantAtributos + 1;
-
+        //int tamanioObjeto = cantAtributos + 1;
+        int tamanioObjeto = calcularTamanioObjeto(clase);
 
         //Retorno de malloc
         archivo.generar(Instrucciones.RMEM + " 1");
@@ -173,4 +173,11 @@ public class NodoLlamadaConstructor extends NodoOperando{
         archivo.generar(Instrucciones.FMEM+" 1");
     }
 
+    private int calcularTamanioObjeto(Clase clase) {
+        int max = 0;
+        for (Atributo a : clase.getMapAtributos().values()) {
+            max = Math.max(max, a.getOffset());
+        }
+        return 1 + max;
+    }
 }

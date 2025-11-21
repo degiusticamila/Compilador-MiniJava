@@ -146,6 +146,7 @@ public class Clase {
         }
         chequearAtributos();
         consolidarMetodos();
+        calcularOffsetMetodos();
     }
     private void chequearAtributos() throws ExcepcionSemantica {
         TablaSimbolos ts = TablaSimbolos.getInstance();
@@ -186,6 +187,7 @@ public class Clase {
         chequearTipoRetornoMetodo();
         chequearTipoParametroMetodo();
         chequearRedefinicionMetodosAbstractos();
+
         for(Metodo m : metodos.values()){
             Metodo metodoPadre = padre.metodos.get(m.getNombreMetodo().getLexema());
             if(metodoPadre != null){
@@ -225,7 +227,41 @@ public class Clase {
             }
 
         }
-        for(Metodo metodoPadre : padre.metodos.values()){
+        for (Metodo metodoPadre : padre.metodos.values()) {
+            String nombreMetodoPadre = metodoPadre.getNombreMetodo().getLexema();
+            if (!this.metodos.containsKey(nombreMetodoPadre)) {
+                this.metodos.put(nombreMetodoPadre, metodoPadre);
+            }
+        }
+
+        // 2) Reconstruir metodosOrdenados PRESERVANDO orden del padre y luego propios no heredados
+        List<Metodo> nuevoOrden = new ArrayList<>();
+
+        // Primero, en el mismo orden del padre
+        for (Metodo mPadreOrdenado : padre.metodosOrdenados) {
+            String nom = mPadreOrdenado.getNombreMetodo().getLexema();
+            Metodo redef = this.metodosPropios.get(nom);
+            if (redef != null) {
+                // Si está redefinido en la hija, en el orden del padre va la versión hija
+                nuevoOrden.add(redef);
+            } else {
+                // Heredado tal cual
+                nuevoOrden.add(mPadreOrdenado);
+            }
+        }
+
+        // Luego, anexar los métodos propios de esta clase que NO existían en el padre (manteniendo su orden de inserción)
+        for (Metodo mPropio : this.metodosOrdenados) {
+            String nom = mPropio.getNombreMetodo().getLexema();
+            boolean existiaEnPadre = padre.metodos.containsKey(nom);
+            if (!existiaEnPadre) {
+                nuevoOrden.add(mPropio);
+            }
+        }
+
+        // Reemplazar el orden por el reconstruido
+        this.metodosOrdenados = nuevoOrden;
+       /* for(Metodo metodoPadre : padre.metodos.values()){
             String nombreMetodoPadre = metodoPadre.getNombreMetodo().getLexema();
             if(!this.metodos.containsKey(metodoPadre.getNombreMetodo().getLexema())){
                 this.metodos.put(nombreMetodoPadre, metodoPadre);
@@ -236,6 +272,8 @@ public class Clase {
                 //System.out.println("→ Metodo "+nombreMetodoPadre+ "redefinido en "+this.nombre.getLexema());
             }
         }
+
+        */
 
 
 
@@ -366,7 +404,7 @@ public class Clase {
     public void generarCodigo(ArchivoSalida archivo) throws ExcepcionSemantica {
         //ordenarMetodos
         //ordenarAtributos
-        calcularOffsetMetodos();
+       // calcularOffsetMetodos();
 
 
 

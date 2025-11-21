@@ -144,6 +144,7 @@ public class NodoLlamadaEncadenada extends NodoEncadenado {
             archivo.generar(Instrucciones.DUP + "");
             archivo.generar(Instrucciones.LOADREF + " 0");
             archivo.generar(Instrucciones.LOADREF + " " + offset); //Desplazamiento dentro de la VT
+            System.out.println("CALL " + nombre.getLexema() + " offset=" + offset + " params=" + parametros.size());
             archivo.generar(Instrucciones.CALL + "");
         }
 
