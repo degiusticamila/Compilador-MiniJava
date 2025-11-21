@@ -364,10 +364,13 @@ public class Clase {
         //ordenarMetodos
         //ordenarAtributos
         calcularOffsetMetodos();
+
+
+
         archivo.generar(".DATA");
         archivo.generar("VT@"+nombre.getLexema()+": ");
 
-        if(TablaSimbolos.tablaSimbolos.getClasesPredefinidas().containsKey(nombre.getLexema()) || this.equals(TablaSimbolos.tablaSimbolos.obtenerClaseMain())){
+        /*if(TablaSimbolos.tablaSimbolos.getClasesPredefinidas().containsKey(nombre.getLexema()) || this.equals(TablaSimbolos.tablaSimbolos.obtenerClaseMain())){
             archivo.generar(""+Instrucciones.NOP);
         }
         else{
@@ -378,6 +381,57 @@ public class Clase {
                 }
             }
         }
+
+         */
+        TablaSimbolos ts = TablaSimbolos.tablaSimbolos;
+
+        if(ts.getClasesPredefinidas().containsKey(nombre.getLexema()) || this.equals(ts.obtenerClaseMain())){
+            archivo.generar(Instrucciones.NOP+"");
+        }
+        else{
+            //Heredo VT del padre
+            if(herencia != null){
+                Clase padre = ts.obtenerClase(herencia.getLexema());
+                if(padre != null){
+                    for(Metodo mPadre : padre.metodosOrdenados){
+                        if(!mPadre.esMetodoEstatico()){
+                            Metodo redefinido = metodosPropios.get(mPadre.getNombreMetodo().getLexema());
+                            if(redefinido != null){
+                                //Redefinido en clase hija
+                                archivo.generar(Instrucciones.DW+" lbl_"+redefinido.getNombreMetodo().getLexema()+"@"+nombre.getLexema());
+                            }
+                            else{
+                                //Heredado de clase padre
+                                archivo.generar(Instrucciones.DW+" lbl_"+mPadre.getNombreMetodo().getLexema()+"@"+padre.getNombre().getLexema());
+                            }
+                        }
+
+                    }
+                }
+            }
+            archivo.generar("");
+
+
+            for(Metodo m : metodosOrdenados){
+                if(!m.esMetodoEstatico()){
+
+                    String nombreMetodo = m.getNombreMetodo().getLexema();
+                    if(herencia != null){
+                        Clase padre = ts.obtenerClase(herencia.getLexema());
+                        boolean declaradoEnPadre = padre != null && padre.metodos.containsKey(nombreMetodo);
+                        if(!declaradoEnPadre){
+                            archivo.generar(Instrucciones.DW+" lbl_"+m.getNombreMetodo().getLexema()+"@"+nombre.getLexema());
+                        }
+                    }
+
+                }
+            }
+        }
+
+
+
+
+
 
 
         archivo.generar("");
@@ -391,7 +445,7 @@ public class Clase {
         generarCodigoConstructor(archivo);
 
     }
-    public void calcularOffsetMetodos(){
+    /*public void calcularOffsetMetodos(){
         int offset = 0;
 
         for(Metodo m : metodosOrdenados){
@@ -402,6 +456,51 @@ public class Clase {
         }
 
     }
+
+     */
+    public void calcularOffsetMetodos() {
+        List<Metodo> vtOrden = new ArrayList<>();
+
+        // 1) heredar orden del padre
+        Clase padre = null;
+        if (herencia != null) {
+            padre = TablaSimbolos.tablaSimbolos.obtenerClase(herencia.getLexema());
+            if (padre != null) {
+                for (Metodo mPadre : padre.metodosOrdenados) {
+                    if (!mPadre.esMetodoEstatico()) {
+                        vtOrden.add(mPadre); // conserva posición
+                    }
+                }
+            }
+        }
+
+        // 2) anexar métodos propios que no existían en el padre
+        for (Metodo mPropio : metodosOrdenados) {
+            if (!mPropio.esMetodoEstatico()) {
+                boolean existiaEnPadre = padre != null
+                        && padre.metodos.containsKey(mPropio.getNombreMetodo().getLexema())
+                        && !padre.metodos.get(mPropio.getNombreMetodo().getLexema()).esMetodoEstatico();
+                if (!existiaEnPadre) {
+                    vtOrden.add(mPropio);
+                }
+            }
+        }
+
+        // 3) asignar offsets según vtOrden
+        int offset = 0;
+        for (Metodo mVT : vtOrden) {
+            String nombreMet = mVT.getNombreMetodo().getLexema();
+            Metodo redef = metodosPropios.get(nombreMet);
+            if (redef != null && !redef.esMetodoEstatico()) {
+                // redefinido en esta clase → usa offset del padre
+                redef.setOffsetMetodo(offset);
+            } else {
+                mVT.setOffsetMetodo(offset);
+            }
+            offset++;
+        }
+    }
+
     public List<Metodo> mapeoAlista(HashMap<String, Metodo> metodos){
         List<Metodo> lista;
         lista = new ArrayList<>(metodos.values());
@@ -438,4 +537,6 @@ public class Clase {
         archivo.generar("STOREFP");
         archivo.generar("RET 0"); //OJO
     }
+
+
 }

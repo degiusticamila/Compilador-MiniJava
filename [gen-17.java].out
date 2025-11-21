@@ -156,6 +156,7 @@ STOREFP
 RET 0
 .DATA
 VT@A: 
+
 DW lbl_mc@A
 
 .CODE

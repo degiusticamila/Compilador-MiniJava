@@ -1,5 +1,6 @@
 package TablaDeSimbolos;
 
+import AST.NodosOperando.NodoString;
 import AST.NodosSentencia.Bloques.*;
 import AST.NodosSentencia.NodoBloque;
 import AST.NodosSentencia.NodoBloqueVacio;
@@ -22,6 +23,7 @@ public class TablaSimbolos {
     private Clase claseActual;
     private Metodo metodoActual;
     private NodoBloque bloqueActual;
+    private List<NodoString> literalesString = new ArrayList<>();
     private TablaSimbolos() throws ExcepcionSemantica {
         clasesPredefinidas = new HashMap<>();
         insertarClasesPredefinidas();
@@ -388,12 +390,19 @@ public class TablaSimbolos {
        return true;
     }
     public void generarCodigo(ArchivoSalida archivo) throws ExcepcionSemantica {
+        generarCodigoStrings(archivo);
         generarCodigoLlamadaMain(archivo);
         generarCodigoHalt(archivo);
         generarPrimitivasMalloc_HeapInit(archivo);
         generarCodigoClasesPredefinidas(archivo);
         generarCodigoClases(archivo);
 
+    }
+    private void generarCodigoStrings(ArchivoSalida archivo){
+        //archivo.generar(".DATA");
+        for(NodoString str : literalesString){
+            str.generarData(archivo);
+        }
     }
     public void generarCodigoLlamadaMain(ArchivoSalida archivo) throws ExcepcionSemantica {
         archivo.generar(".CODE");
@@ -464,5 +473,11 @@ public class TablaSimbolos {
                 m.calcularOffsets();
             }
         }
+    }
+    public void insertarString(NodoString nodo){
+        literalesString.add(nodo);
+    }
+    public List<NodoString> getLiteralesString(){
+        return literalesString;
     }
 }

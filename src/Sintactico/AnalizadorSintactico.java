@@ -433,7 +433,7 @@ public class AnalizadorSintactico {
             throw new ExcepcionSintactica(tokenActual, "; | Expresion | Variable local| return | if | while | bloque");
         }
     }
-    private NodoVarLocal varLocal() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private NodoVarLocal varLocal() throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
 
         match("var");
         tipoParametricoOpcional();
@@ -449,14 +449,14 @@ public class AnalizadorSintactico {
 
         return nodoVar;
     }
-    private NodoSentencia Return() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private NodoSentencia Return() throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
         NodoReturn nodoReturn = new NodoReturn(tokenActual);
         match("return");
         NodoExpresion expresionReturn = expresionOpcional();
         nodoReturn.setExpresionOpcional(expresionReturn);
         return nodoReturn;
     }
-    private NodoExpresion expresionOpcional() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private NodoExpresion expresionOpcional() throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
         if(primeros.estaEnPrimeros(NoTerminales.Expresion, tokenActual.getId())){
             NodoExpresion nodoExpresion = expresion();
             return nodoExpresion;
@@ -496,12 +496,12 @@ public class AnalizadorSintactico {
         NodoSentencia nodoWhile = new NodoWhile(tokenWhile,expresionWhile, sentenciaWhile);
         return nodoWhile;
     }
-    private NodoExpresion expresion() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private NodoExpresion expresion() throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
         NodoExpresion nodoExpresionCompuesta = expresionCompuesta();
         nodoExpresionCompuesta = expresionResto(nodoExpresionCompuesta);
         return nodoExpresionCompuesta;
     }
-    private NodoExpresion expresionResto(NodoExpresion ladoIzquierdo) throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private NodoExpresion expresionResto(NodoExpresion ladoIzquierdo) throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
         NodoExpresion expresion = ladoIzquierdo;
         if(primeros.estaEnPrimeros(NoTerminales.OperadorAsignacion, tokenActual.getId())){
             Token operador = operadorAsignacion();
@@ -522,12 +522,12 @@ public class AnalizadorSintactico {
             throw new ExcepcionSintactica(tokenActual,"=");
         }
     }
-    private NodoExpresion expresionCompuesta() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private NodoExpresion expresionCompuesta() throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
         NodoExpresion nodoExpresion = expresionBasica();
         nodoExpresion = expresionCompuestaResto(nodoExpresion);
         return nodoExpresion;
     }
-    private NodoExpresion expresionCompuestaResto(NodoExpresion ladoIzquierdo) throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private NodoExpresion expresionCompuestaResto(NodoExpresion ladoIzquierdo) throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
         if(primeros.estaEnPrimeros(NoTerminales.OperadorBinario, tokenActual.getId())){
             Token operador = operadorBinario();
             NodoExpresion ladoDerecho = expresionBasica();
@@ -616,7 +616,7 @@ public class AnalizadorSintactico {
             throw new ExcepcionSintactica(tokenActual, "Operador Binario");
         }
     }
-    private NodoExpresion expresionBasica() throws ExcepcionSintactica, ExcepcionLexica, IOException {
+    private NodoExpresion expresionBasica() throws ExcepcionSintactica, ExcepcionLexica, IOException, ExcepcionSemantica {
         if(primeros.estaEnPrimeros(NoTerminales.OperadorUnario, tokenActual.getId())){
             NodoOperadorUnario operadorUnario = operadorUnario();
             NodoExpresion operando = operando();
@@ -661,7 +661,7 @@ public class AnalizadorSintactico {
             throw new ExcepcionSintactica(tokenActual,  "operador unario");
         }
     }
-    private NodoExpresion operando() throws ExcepcionSintactica, ExcepcionLexica, IOException {
+    private NodoExpresion operando() throws ExcepcionSintactica, ExcepcionLexica, IOException, ExcepcionSemantica {
         if(primeros.estaEnPrimeros(NoTerminales.Primitivo, tokenActual.getId())){
             NodoOperando nodoOperando = primitivo();
             return nodoOperando;
@@ -704,7 +704,7 @@ public class AnalizadorSintactico {
             throw new ExcepcionSintactica(tokenActual,"primitivo");
         }
     }
-    private NodoExpresion referencia() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private NodoExpresion referencia() throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
         NodoExpresion var = primario();
         NodoEncadenado e = referenciaResto();
         if(var instanceof NodoAccesoVar){
@@ -769,7 +769,7 @@ public class AnalizadorSintactico {
         }
         return var;
     }
-    private NodoEncadenado referenciaResto() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private NodoEncadenado referenciaResto() throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
        /* NodoEncadenado encadenado = new NodoEncadenadoVacio();
         if(primeros.estaEnPrimeros(NoTerminales.Encadenado, tokenActual.getId())){
             encadenado = encadenado();
@@ -830,7 +830,7 @@ public class AnalizadorSintactico {
 
         return new NodoEncadenadoVacio();
     }
-    private NodoExpresion primario() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private NodoExpresion primario() throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
         NodoOperando nodoOperando;
         if(tokenActual.getId().equals("this")){
             NodoExpresion nodoOp = new NodoThis(tokenActual);
@@ -864,7 +864,7 @@ public class AnalizadorSintactico {
             throw new ExcepcionSintactica(tokenActual, "identificador metodo variable | constructor | llamada metodo estatico | expresion parentizada");
         }
     }
-    private NodoOperando llamadaMetodoResto(NodoOperando nodo) throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private NodoOperando llamadaMetodoResto(NodoOperando nodo) throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
         if(primeros.estaEnPrimeros(NoTerminales.ArgsActuales, tokenActual.getId())){
             List<NodoExpresion> lista = argsActuales();
             NodoLlamadaMetodo nodoLlamadaMetodo = new NodoLlamadaMetodo(nodo.getNombre(),lista);
@@ -874,7 +874,7 @@ public class AnalizadorSintactico {
             return nodo;
         }
     }
-    private NodoLlamadaConstructor llamadaConstructor() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private NodoLlamadaConstructor llamadaConstructor() throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
         match("new");
         NodoLlamadaConstructor nodoLlamadaConstructor = new NodoLlamadaConstructor(tokenActual, new LinkedList<>(), new NodoEncadenadoVacio());
         match("idClase");
@@ -915,14 +915,14 @@ public class AnalizadorSintactico {
             throw new ExcepcionSintactica(tokenActual,  "> | identificador de clase");
         }
     }
-    private NodoExpresion expresionParentizada() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private NodoExpresion expresionParentizada() throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
         match("(");
         NodoExpresion expresion = expresion();
         match(")");
 
         return expresion;
     }
-    private NodoLlamadaMetodoEstatico llamadaMetodoEstatico() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private NodoLlamadaMetodoEstatico llamadaMetodoEstatico() throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
         Token nombreClase = tokenActual;
         match("idClase");
         match(".");
@@ -933,13 +933,13 @@ public class AnalizadorSintactico {
         return nodoLlamadaMetodoEstatico;
 
     }
-    private List<NodoExpresion> argsActuales() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private List<NodoExpresion> argsActuales() throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
         match("(");
         List<NodoExpresion> lista = listaExpsOpcional();
         match(")");
         return lista;
     }
-    private List<NodoExpresion> listaExpsOpcional() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private List<NodoExpresion> listaExpsOpcional() throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
         if(primeros.estaEnPrimeros(NoTerminales.ListaExps, tokenActual.getId())){
             List<NodoExpresion> lista = new ArrayList<>();
             lista = listaExps(lista);
@@ -949,13 +949,13 @@ public class AnalizadorSintactico {
             return new ArrayList<>();
         }
     }
-    private List<NodoExpresion> listaExps(List<NodoExpresion> lista) throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private List<NodoExpresion> listaExps(List<NodoExpresion> lista) throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
         NodoExpresion expresion = expresion();
         lista.add(expresion);
         listaExpsResto(lista);
         return lista;
     }
-    private void listaExpsResto(List<NodoExpresion> lista) throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private void listaExpsResto(List<NodoExpresion> lista) throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
         if(tokenActual.getId().equals(",")){
             match(",");
             listaExps(lista);
@@ -963,7 +963,7 @@ public class AnalizadorSintactico {
         }
         else{/*$*/}
     }
-    private NodoEncadenado encadenado() throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private NodoEncadenado encadenado() throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
         NodoEncadenado encadenado = new NodoEncadenadoVacio();
         match(".");
         Token tokenNombreEncadenado = tokenActual;
@@ -972,7 +972,7 @@ public class AnalizadorSintactico {
         return encadenado;
 
     }
-    private NodoEncadenado restoEncadenado(Token nombreEncadenado,NodoEncadenado encadenado) throws ExcepcionLexica, IOException, ExcepcionSintactica {
+    private NodoEncadenado restoEncadenado(Token nombreEncadenado,NodoEncadenado encadenado) throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
        /* NodoEncadenado toReturn = encadenado;
         if(primeros.estaEnPrimeros(NoTerminales.ArgsActuales, tokenActual.getId())){
             List<NodoExpresion> lista = argsActuales();

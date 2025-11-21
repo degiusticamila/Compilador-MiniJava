@@ -3,31 +3,26 @@ package AST.NodosOperando;
 import AST.NodosExpresion.NodoExpresion;
 import ArchivoSalida.ArchivoSalida;
 import GeneracionCodigo.Instrucciones;
-import TablaDeSimbolos.Tipo;
-import TablaDeSimbolos.TipoReferencia;
-import TablaDeSimbolos.TipoUniversal;
+import TablaDeSimbolos.*;
 import Utils.Token;
 
-public class NodoString extends NodoOperando{
+public class NodoString extends NodoOperando {
     private Token nombre;
     private String label;
-    public NodoString(Token token) {
-        this.nombre= token;
-    }
-    @Override
-    public void setOperador(Token operador) {
 
+    public NodoString(Token token) throws ExcepcionSemantica {
+        this.nombre = token;
+        TablaSimbolos.tablaSimbolos.insertarString(this);
     }
 
     @Override
-    public void setLadoIzquierdo(NodoExpresion nodoExpresion) {
-
-    }
+    public void setOperador(Token operador) { }
 
     @Override
-    public void setLadoDerecho(NodoExpresion nodoExpresion) {
+    public void setLadoIzquierdo(NodoExpresion nodoExpresion) { }
 
-    }
+    @Override
+    public void setLadoDerecho(NodoExpresion nodoExpresion) { }
 
     @Override
     public String formatear() {
@@ -38,8 +33,6 @@ public class NodoString extends NodoOperando{
     public Tipo chequear() {
         return new TipoReferencia("String");
     }
-
-
 
     @Override
     public String nombreSentencia() {
@@ -53,22 +46,39 @@ public class NodoString extends NodoOperando{
 
     @Override
     public void imprimir(String prefijo) {
-        System.out.print(prefijo+nombre.getLexema());
+        System.out.print(prefijo + nombre.getLexema());
     }
 
     @Override
     public boolean tieneEncadenado() {
         return false;
     }
+
     @Override
     public void generar(ArchivoSalida archivo) {
+        System.out.println("Generando código para NodoString");
         setLabel();
-        archivo.generar(Instrucciones.PUSH+" "+this.label);
+        archivo.generar(Instrucciones.PUSH + " " + this.label);
     }
-    public void setLabel(){
-        this.label = "label_str"+nombre.getNroLinea();
+
+    public void generarData(ArchivoSalida archivo) {
+        archivo.generar(".DATA");
+        setLabel();
+        archivo.generar(this.label + ":");
+        generarPalabra(archivo);
     }
-    public String getLabel(){
+
+    public void generarPalabra(ArchivoSalida archivo) {
+        String lexema = nombre.getLexema();
+
+        archivo.generar(Instrucciones.DW + " " + lexema + ",0");
+    }
+
+    public void setLabel() {
+        this.label = "label_str" + nombre.getNroLinea();
+    }
+
+    public String getLabel() {
         return this.label;
     }
 }

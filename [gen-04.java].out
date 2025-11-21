@@ -1,3 +1,6 @@
+.DATA
+label_str13:
+DW "hola",0
 .CODE
 PUSH lbl_main@Init
 CALL
@@ -156,6 +159,7 @@ STOREFP
 RET 0
 .DATA
 VT@A: 
+
 DW lbl_setall@A
 DW lbl_m1@A
 
@@ -209,10 +213,11 @@ STOREFP
 RET 0
 .DATA
 VT@B: 
+DW lbl_setall@A
+DW lbl_m1@A
+
 DW lbl_seta4@B
 DW lbl_m2@B
-DW lbl_m1@B
-DW lbl_setall@B
 
 .CODE
 lbl_seta4@B: LOADFP
@@ -276,7 +281,7 @@ LOAD 0
 SWAP
 DUP
 LOADREF 0
-LOADREF 0
+LOADREF 2
 CALL
 LOAD 0
 SWAP
@@ -284,19 +289,19 @@ PUSH 1234
 SWAP
 DUP
 LOADREF 0
-LOADREF 3
-CALL
-LOAD 0
-SWAP
-DUP
 LOADREF 0
-LOADREF 2
 CALL
 LOAD 0
 SWAP
 DUP
 LOADREF 0
 LOADREF 1
+CALL
+LOAD 0
+SWAP
+DUP
+LOADREF 0
+LOADREF 3
 CALL
 lbl_final_main@Init: NOP
 FMEM 1
