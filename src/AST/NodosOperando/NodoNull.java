@@ -55,7 +55,7 @@ public class NodoNull extends NodoOperando {
 
     @Override
     public void generar(ArchivoSalida archivo) {
-
+        archivo.generar("PUSH 0");
     }
 
     @Override

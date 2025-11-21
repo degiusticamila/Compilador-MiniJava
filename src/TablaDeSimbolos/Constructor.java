@@ -2,6 +2,7 @@ package TablaDeSimbolos;
 
 import AST.NodosSentencia.NodoBloque;
 import AST.NodosSentencia.NodoBloqueVacio;
+import ArchivoSalida.ArchivoSalida;
 import Utils.Token;
 
 import java.util.HashMap;
@@ -12,8 +13,10 @@ public class Constructor {
     private Token nombre;
     private LinkedList<Parametro> parametros;
     private NodoBloque bloque;
-    public Constructor(Token nombre){
+    private Clase claseDeclarada;
+    public Constructor(Token nombre,Clase claseDeclarada){
         parametros = new LinkedList<>();
+        this.claseDeclarada = claseDeclarada;
         this.nombre = nombre;
         this.bloque = new NodoBloqueVacio();
     }
@@ -25,6 +28,19 @@ public class Constructor {
         else{
             throw new ExcepcionSemantica(lexema,numLine,"Parametro ya declarado");
         }
+    }
+    public void generar(ArchivoSalida archivo) throws ExcepcionSemantica {
+        System.out.println("Clase constructor");
+        archivo.generar("LOADFP");
+        archivo.generar("LOADSP");
+        archivo.generar("STOREFP");
+
+        if (!(bloque instanceof NodoBloqueVacio)) {
+            bloque.generar(archivo);
+        }
+
+        archivo.generar("STOREFP");
+        archivo.generar("RET 0");
     }
    public boolean parametroDeclarado(String lexema){
 
@@ -55,5 +71,8 @@ public class Constructor {
             return bloque;
         }
         return new NodoBloqueVacio();
+    }
+    public NodoBloque getBloqueConstructor(){
+        return bloque;
     }
 }

@@ -119,7 +119,7 @@ public class Metodo implements Elemento{
     public int getLinea(){
         return nombre.getNroLinea();
     }
-    public void generar(ArchivoSalida archivo){
+    public void generar(ArchivoSalida archivo) throws ExcepcionSemantica {
         TablaSimbolos.tablaSimbolos.setMetodoActual(this);
         generarEtiquetaMetodo(archivo);
         generarConstruirRA(archivo);
@@ -158,7 +158,7 @@ public class Metodo implements Elemento{
         }
 
     }
-    public void generarBloque(ArchivoSalida archivo){
+    public void generarBloque(ArchivoSalida archivo) throws ExcepcionSemantica {
         bloque.generar(archivo);
     }
     public void generarRetornoMetodo(ArchivoSalida archivo){

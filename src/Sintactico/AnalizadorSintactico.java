@@ -220,7 +220,8 @@ public class AnalizadorSintactico {
         if(tokenActual.getId().equals(";")){
             Tipo tipo = construirTipoDesdeToken(tokenTipo);
             tipo.setToken(tokenTipo);
-            Atributo a = new Atributo(tipo, nombreIdMetVar);
+            Clase claseActual = tablaSimbolos.getClaseActual();
+            Atributo a = new Atributo(tipo,claseActual, nombreIdMetVar);
             match(";");
             tablaSimbolos.getClaseActual().insertarAtributo(nombreIdMetVar,a);
         }
@@ -253,7 +254,7 @@ public class AnalizadorSintactico {
     private void constructor() throws ExcepcionLexica, IOException, ExcepcionSintactica, ExcepcionSemantica {
         match("public");
         Token tokenConstructor = tokenActual;
-        Constructor c = new Constructor(tokenConstructor);
+        Constructor c = new Constructor(tokenConstructor, tablaSimbolos.getClaseActual());
         match("idClase");
         tablaSimbolos.getClaseActual().insertarConstructor(tokenConstructor,c);
         argsFormales(tokenConstructor);

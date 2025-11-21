@@ -41,7 +41,7 @@ public class NodoWhile extends NodoSentencia {
     }
 
     @Override
-    public void generar(ArchivoSalida archivo) {
+    public void generar(ArchivoSalida archivo) throws ExcepcionSemantica {
         String lblInicio = "lbl_while_inicio@"+tokenWhile.getNroLinea();
         String lblFin = "lbl_while_fin@"+tokenWhile.getNroLinea();
 

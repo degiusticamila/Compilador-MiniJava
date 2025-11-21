@@ -154,7 +154,7 @@ public class NodoLlamadaMetodo extends NodoOperando{
         Metodo metodoActual = ts.getMetodoActual();
         NodoBloque bloqueActual = metodoActual.getBloque();
     }
-    public void generar(ArchivoSalida archivo){
+    public void generar(ArchivoSalida archivo) throws ExcepcionSemantica {
         System.out.println("Generando codigo para NodoLlamadaMetodo "+nombre.getLexema());
         Clase claseActual = TablaSimbolos.tablaSimbolos.getClaseActual();
         Metodo metodo = claseActual.getMetodo(nombre.getLexema());

@@ -59,7 +59,7 @@ public class NodoVarLocal extends NodoSentencia implements Elemento {
     }
 
     @Override
-    public void generar(ArchivoSalida archivo) {
+    public void generar(ArchivoSalida archivo) throws ExcepcionSemantica {
         System.out.println();
         System.out.println("Generando codigo VarLocal "+nombre.getLexema()+" con offset "+offset);
         System.out.println();

@@ -175,6 +175,7 @@ CALL
 JUMP lbl_fin_if@7
 lbl_else@7: NOP
 PUSH 20
+NEG
 PUSH lbl_debugPrint@Object
 CALL
 lbl_fin_if@7: NOP

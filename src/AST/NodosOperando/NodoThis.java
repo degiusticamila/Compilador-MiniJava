@@ -92,8 +92,11 @@ import Utils.Token;
     }
 
         @Override
-        public void generar(ArchivoSalida archivo) {
-
+        public void generar(ArchivoSalida archivo) throws ExcepcionSemantica {
+            archivo.generar("LOAD 3");
+            if(!(encadenado instanceof NodoEncadenadoVacio)){
+                encadenado.generar(archivo);
+            }
         }
 
         @Override

@@ -59,7 +59,7 @@ public class NodoExpAsignacion extends NodoExpresion {
     }
 
     @Override
-    public void generar(ArchivoSalida archivo) {
+    public void generar(ArchivoSalida archivo) throws ExcepcionSemantica {
         System.out.println();
         System.out.println("Entro a generar codigo de NodoExpAsignacion");
         System.out.println();

@@ -402,109 +402,77 @@ public class Clase {
         return atributos.get(lexema);
     }
     public void generarCodigo(ArchivoSalida archivo) throws ExcepcionSemantica {
-        //ordenarMetodos
-        //ordenarAtributos
-       // calcularOffsetMetodos();
-
-
 
         archivo.generar(".DATA");
-        archivo.generar("VT@"+nombre.getLexema()+": ");
+        archivo.generar("VT@" + nombre.getLexema() + ": ");
 
-        /*if(TablaSimbolos.tablaSimbolos.getClasesPredefinidas().containsKey(nombre.getLexema()) || this.equals(TablaSimbolos.tablaSimbolos.obtenerClaseMain())){
-            archivo.generar(""+Instrucciones.NOP);
-        }
-        else{
-            //Clase definida por el usuario
-            for(Metodo m : metodosOrdenados){
-                if(!m.esMetodoEstatico()){
-                    archivo.generar(Instrucciones.DW+" lbl_"+m.getNombreMetodo().getLexema()+"@"+nombre.getLexema());
-                }
-            }
-        }
-
-         */
         TablaSimbolos ts = TablaSimbolos.tablaSimbolos;
 
-        if(ts.getClasesPredefinidas().containsKey(nombre.getLexema()) || this.equals(ts.obtenerClaseMain())){
-            archivo.generar(Instrucciones.NOP+"");
-        }
-        else{
-            //Heredo VT del padre
-            //Heredo VT del padre
-            if (herencia != null) {
-                Clase padre = ts.obtenerClase(herencia.getLexema());
-                if (padre != null) {
-                    for (Metodo mPadre : padre.metodosOrdenados) {
-                        if (!mPadre.esMetodoEstatico()) {
-                            String nom = mPadre.getNombreMetodo().getLexema();
-                            Metodo redef = metodosPropios.get(nom);
-                            if (redef != null && !redef.esMetodoEstatico()) {
-                                // Redefinido en clase hija → etiqueta de la hija
-                                archivo.generar(Instrucciones.DW + " lbl_" + nom + "@" + nombre.getLexema());
-                            } else {
-                                // Heredado tal cual → etiqueta de la clase donde fue declarado
-                                String claseDecl = mPadre.getClaseDeclarada().getNombre().getLexema();
-                                archivo.generar(Instrucciones.DW + " lbl_" + nom + "@" + claseDecl);
+        // Clases predefinidas o la clase Init VT con NOP
+        if (ts.getClasesPredefinidas().containsKey(nombre.getLexema())
+                || this.equals(ts.obtenerClaseMain())) {
+            archivo.generar(Instrucciones.NOP + "");
+        } else {
+            // Si la clase no tiene métodos de instancia (todos estáticos),poner NOP
+            boolean soloEstaticos = metodosOrdenados.stream().allMatch(Metodo::esMetodoEstatico);
+            if (soloEstaticos) {
+                archivo.generar(Instrucciones.NOP + "");
+            } else {
+                // Heredar VT del padre
+                if (herencia != null) {
+                    Clase padre = ts.obtenerClase(herencia.getLexema());
+                    if (padre != null) {
+                        for (Metodo mPadre : padre.metodosOrdenados) {
+                            if (!mPadre.esMetodoEstatico()) {
+                                String nom = mPadre.getNombreMetodo().getLexema();
+                                Metodo redef = metodosPropios.get(nom);
+                                if (redef != null && !redef.esMetodoEstatico()) {
+                                    // Redefinido en clase hija
+                                    archivo.generar(Instrucciones.DW + " lbl_" + nom + "@" + nombre.getLexema());
+                                } else {
+                                    // Heredado tal cual
+                                    String claseDecl = mPadre.getClaseDeclarada().getNombre().getLexema();
+                                    archivo.generar(Instrucciones.DW + " lbl_" + nom + "@" + claseDecl);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                archivo.generar("");
+
+                // Métodos propios no heredados
+                for (Metodo m : metodosOrdenados) {
+                    if (!m.esMetodoEstatico()) {
+                        String nombreMetodo = m.getNombreMetodo().getLexema();
+                        if (herencia != null) {
+                            Clase padre = ts.obtenerClase(herencia.getLexema());
+                            boolean declaradoEnPadre = padre != null
+                                    && padre.metodos.containsKey(nombreMetodo)
+                                    && !padre.metodos.get(nombreMetodo).esMetodoEstatico();
+                            if (!declaradoEnPadre) {
+                                archivo.generar(Instrucciones.DW + " lbl_" + nombreMetodo + "@" + nombre.getLexema());
                             }
                         }
                     }
                 }
             }
-
-            archivo.generar("");
-
-
-            for(Metodo m : metodosOrdenados){
-                if(!m.esMetodoEstatico()){
-
-                    String nombreMetodo = m.getNombreMetodo().getLexema();
-                    if(herencia != null){
-                        Clase padre = ts.obtenerClase(herencia.getLexema());
-                        boolean declaradoEnPadre = padre != null && padre.metodos.containsKey(nombreMetodo) && !padre.metodos.get(nombreMetodo).esMetodoEstatico();
-                        if(!declaradoEnPadre){
-                            archivo.generar(Instrucciones.DW+" lbl_"+m.getNombreMetodo().getLexema()+"@"+nombre.getLexema());
-                        }
-                    }
-
-                }
-            }
         }
-
-
-
-
-
-
 
         archivo.generar("");
         archivo.generar(".CODE");
-        for(Metodo m : metodosPropios.values()){
-            System.out.println(m.getNombre()+" de clase "+nombre.getLexema());
+        for (Metodo m : metodosPropios.values()) {
+            System.out.println(m.getNombre() + " de clase " + nombre.getLexema());
             archivo.generar("lbl_" + m.getNombreMetodo().getLexema() + "@" + nombre.getLexema() + ": " + Instrucciones.LOADFP);
             m.generar(archivo);
         }
         archivo.generar("");
         generarCodigoConstructor(archivo);
-
-    }
-    /*public void calcularOffsetMetodos(){
-        int offset = 0;
-
-        for(Metodo m : metodosOrdenados){
-            if(!m.esMetodoEstatico()){
-                m.setOffsetMetodo(offset);
-                offset++;
-            }
-        }
-
     }
 
-     */
     public void calcularOffsetMetodos() {
         List<Metodo> vtOrden = new ArrayList<>();
 
-        // 1) heredar orden del padre
         Clase padre = null;
         if (herencia != null) {
             padre = TablaSimbolos.tablaSimbolos.obtenerClase(herencia.getLexema());
@@ -517,7 +485,6 @@ public class Clase {
             }
         }
 
-        // 2) anexar métodos propios que no existían en el padre
         for (Metodo mPropio : metodosOrdenados) {
             if (!mPropio.esMetodoEstatico()) {
                 boolean existiaEnPadre = padre != null
@@ -529,13 +496,12 @@ public class Clase {
             }
         }
 
-        // 3) asignar offsets según vtOrden
         int offset = 0;
         for (Metodo mVT : vtOrden) {
             String nombreMet = mVT.getNombreMetodo().getLexema();
             Metodo redef = metodosPropios.get(nombreMet);
             if (redef != null && !redef.esMetodoEstatico()) {
-                // redefinido en esta clase → usa offset del padre
+
                 redef.setOffsetMetodo(offset);
             } else {
                 mVT.setOffsetMetodo(offset);
@@ -543,43 +509,23 @@ public class Clase {
             offset++;
         }
     }
-
-    public List<Metodo> mapeoAlista(HashMap<String, Metodo> metodos){
-        List<Metodo> lista;
-        lista = new ArrayList<>(metodos.values());
-        return lista;
-    }
-    public void generarCodigoConstructor(ArchivoSalida archivo){
+    public void generarCodigoConstructor(ArchivoSalida archivo) throws ExcepcionSemantica {
 
        archivo.generar("lbl_constructor@"+nombre.getLexema()+": LOADFP");
         archivo.generar("LOADSP");
         archivo.generar("STOREFP");
+        if (constructor != null) {
 
-        archivo.generar("STOREFP");
-        archivo.generar("RET 0");
-
-
-
-        //ESTA HARDCODEADO DE MOMENTO!
-        /*
-        if(nombre.getLexema().equals("Object") || nombre.getLexema().equals("System") || nombre.getLexema().equals("String")){
-            archivo.generar("lbl_constructor@"+nombre.getLexema()+": "+Instrucciones.NOP);
-        }
-
-        else{
-            archivo.generar("lbl_constructor@"+nombre.getLexema()+": LOADFP");
-            archivo.generar("LOADSP");
+            constructor.getBloque().generar(archivo);
             archivo.generar("STOREFP");
-            generarRetornoConstructor(archivo);
+            archivo.generar("RET " + constructor.getParametros().size());
+        }else{
+            archivo.generar("STOREFP");
+            archivo.generar("RET 0");
         }
 
-         */
     }
-    public void generarRetornoConstructor(ArchivoSalida archivo){
-        //archivo.generar("FMEM 0");
-        archivo.generar("STOREFP");
-        archivo.generar("RET 0"); //OJO
-    }
+
 
 
 }

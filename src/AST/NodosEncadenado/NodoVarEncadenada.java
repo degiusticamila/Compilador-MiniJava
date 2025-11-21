@@ -1,9 +1,11 @@
 package AST.NodosEncadenado;
 import ArchivoSalida.ArchivoSalida;
+import GeneracionCodigo.Instrucciones;
 import TablaDeSimbolos.*;
 import Utils.Token;
 
 public class NodoVarEncadenada extends NodoEncadenado {
+    protected boolean esLadoIzq = false;
     Token nombre;
     private NodoEncadenado encadenado;
     Atributo atributoEnTS;
@@ -14,8 +16,22 @@ public class NodoVarEncadenada extends NodoEncadenado {
     }
 
     @Override
-    public void generar(ArchivoSalida archivo) {
-        System.out.println("Generando código de NodoVarEncadenada");
+    public void generar(ArchivoSalida archivo) throws ExcepcionSemantica {
+        System.out.println("Generando código de NodoVarEncadenada " + nombre.getLexema());
+
+        int offsetAttr = atributoEnTS.getOffset();
+
+        if (esLadoIzq) {
+            archivo.generar(Instrucciones.SWAP + "");
+            archivo.generar(Instrucciones.STOREREF + " " + offsetAttr);
+        } else {
+
+            archivo.generar(Instrucciones.LOADREF + " " + offsetAttr);
+        }
+
+        if (!(encadenado instanceof NodoEncadenadoVacio)) {
+            encadenado.generar(archivo);
+        }
     }
 
     @Override
@@ -81,5 +97,10 @@ public class NodoVarEncadenada extends NodoEncadenado {
         }
     }
 
-
+    public boolean getLadoIzq(){
+        return esLadoIzq;
+    }
+    public void setEsLadoIzq(){
+        esLadoIzq = !esLadoIzq;
+    }
 }

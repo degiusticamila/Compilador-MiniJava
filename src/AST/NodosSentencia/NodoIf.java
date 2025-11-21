@@ -50,7 +50,7 @@ public class NodoIf extends NodoSentencia {
     }
 
     @Override
-    public void generar(ArchivoSalida archivo) {
+    public void generar(ArchivoSalida archivo) throws ExcepcionSemantica {
         String lblElse = "lbl_else@"+tokenif.getNroLinea();
         String lblFin = "lbl_fin_if@"+tokenif.getNroLinea();
 

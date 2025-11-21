@@ -154,7 +154,7 @@ public class NodoBloque extends NodoSentencia {
         }
         return vars;
     }
-    public void generar(ArchivoSalida archivo){
+    public void generar(ArchivoSalida archivo) throws ExcepcionSemantica {
         for(NodoSentencia sentencia: sentencias){
             sentencia.generar(archivo);
         }

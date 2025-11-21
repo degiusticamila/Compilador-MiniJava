@@ -1,0 +1,187 @@
+.DATA
+label_str7:
+DW "hola",0
+.CODE
+PUSH lbl_main@Init
+CALL
+
+HALT
+
+simple_heap_init: RET 0
+
+simple_malloc: 
+LOADFP
+LOADSP
+STOREFP
+LOADHL
+DUP
+PUSH 1
+ADD
+STORE 4
+LOAD 3
+ADD
+STOREHL
+STOREFP
+RET 1
+.DATA
+VT@Object: 
+NOP
+
+.CODE
+lbl_debugPrint@Object: LOADFP
+LOADSP
+STOREFP
+LOAD 3
+IPRINT
+lbl_final_debugPrint@Object: NOP
+STOREFP
+RET 1
+
+
+lbl_constructor@Object: LOADFP
+LOADSP
+STOREFP
+STOREFP
+RET 0
+.DATA
+VT@String: 
+NOP
+
+.CODE
+
+lbl_constructor@String: LOADFP
+LOADSP
+STOREFP
+STOREFP
+RET 0
+.DATA
+VT@System: 
+NOP
+
+.CODE
+lbl_printC@System: LOADFP
+LOADSP
+STOREFP
+LOAD 3
+CPRINT
+lbl_final_printC@System: NOP
+STOREFP
+RET 1
+
+lbl_printS@System: LOADFP
+LOADSP
+STOREFP
+LOAD 3
+SPRINT
+lbl_final_printS@System: NOP
+STOREFP
+RET 1
+
+lbl_println@System: LOADFP
+LOADSP
+STOREFP
+PRNLN
+lbl_final_println@System: NOP
+STOREFP
+RET 0
+
+lbl_printCln@System: LOADFP
+LOADSP
+STOREFP
+LOAD 3
+CPRINT
+PRNLN
+lbl_final_printCln@System: NOP
+STOREFP
+RET 1
+
+lbl_printSln@System: LOADFP
+LOADSP
+STOREFP
+LOAD 3
+SPRINT
+PRNLN
+lbl_final_printSln@System: NOP
+STOREFP
+RET 1
+
+lbl_read@System: LOADFP
+LOADSP
+STOREFP
+READ
+lbl_final_read@System: NOP
+STOREFP
+RET 0
+
+lbl_printB@System: LOADFP
+LOADSP
+STOREFP
+LOAD 3
+BPRINT
+lbl_final_printB@System: NOP
+STOREFP
+RET 1
+
+lbl_printIln@System: LOADFP
+LOADSP
+STOREFP
+LOAD 3
+IPRINT
+PRNLN
+lbl_final_printIln@System: NOP
+STOREFP
+RET 1
+
+lbl_printI@System: LOADFP
+LOADSP
+STOREFP
+LOAD 3
+IPRINT
+lbl_final_printI@System: NOP
+STOREFP
+RET 1
+
+lbl_printBln@System: LOADFP
+LOADSP
+STOREFP
+LOAD 3
+BPRINT
+PRNLN
+lbl_final_printBln@System: NOP
+STOREFP
+RET 1
+
+
+lbl_constructor@System: LOADFP
+LOADSP
+STOREFP
+STOREFP
+RET 0
+.DATA
+VT@Init: 
+NOP
+
+.CODE
+lbl_main@Init: LOADFP
+LOADSP
+STOREFP
+RMEM 1
+PUSH 'c'
+STORE 0
+LOAD 0
+PUSH lbl_printCln@System
+CALL
+PUSH label_str7
+PUSH lbl_printSln@System
+CALL
+lbl_final_main@Init: NOP
+FMEM 1
+STOREFP
+RET 0
+
+
+lbl_constructor@Init: LOADFP
+LOADSP
+STOREFP
+STOREFP
+RET 0

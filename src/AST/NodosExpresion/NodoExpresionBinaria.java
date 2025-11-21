@@ -119,51 +119,69 @@ public class NodoExpresionBinaria extends NodoExpresionCompuesta {
     }
 
     @Override
-    public void generar(ArchivoSalida archivo) {
+    public void generar(ArchivoSalida archivo) throws ExcepcionSemantica {
+        String op = operador.getLexema();
+
+        if (op.equals("&&")) {
+            String lFalse = "lbl_and_false_" + hashCode();
+            String lEnd   = "lbl_and_end_" + hashCode();
+
+            //  con cortocircuito
+            ladoIzquierdo.generar(archivo);
+            archivo.generar(Instrucciones.DUP + "");
+            archivo.generar(Instrucciones.BF + " " + lFalse);
+            archivo.generar(Instrucciones.POP + "");
+
+
+            ladoDerecho.generar(archivo);
+            archivo.generar(Instrucciones.JUMP + " " + lEnd);
+
+            // camino false: deja false en pila
+            archivo.generar(lFalse + ": " + Instrucciones.POP);
+            archivo.generar(Instrucciones.PUSH + " 0");
+
+            archivo.generar(lEnd + ": NOP");
+            return;
+        }
+
+        if (op.equals("||")) {
+            String lTrue = "lbl_or_true_" + hashCode();
+            String lEnd  = "lbl_or_end_" + hashCode();
+
+            // cortocircuito
+            ladoIzquierdo.generar(archivo);
+            archivo.generar(Instrucciones.DUP + "");
+            archivo.generar(Instrucciones.BT + " " + lTrue);
+            archivo.generar(Instrucciones.POP + "");
+
+            ladoDerecho.generar(archivo);
+            archivo.generar(Instrucciones.JUMP + " " + lEnd);
+
+            // camino true: deja true en pila
+            archivo.generar(lTrue + ": " + Instrucciones.POP);
+            archivo.generar(Instrucciones.PUSH + " 1");
+
+            archivo.generar(lEnd + ": NOP");
+            return;
+        }
+
         ladoIzquierdo.generar(archivo);
         ladoDerecho.generar(archivo);
 
-        if(operador.getLexema().equals("==")){
-            archivo.generar(Instrucciones.EQ+"");
-        }
-        else if(operador.getLexema().equals("||")){
-            archivo.generar(Instrucciones.OR+"");
-        }
-        else if(operador.getLexema().equals("&&")){
-            archivo.generar(Instrucciones.AND+"");
-        }
-        else if(operador.getLexema().equals("!=")){
-            archivo.generar(Instrucciones.NE+"");
-        }
-        else if(operador.getLexema().equals("<")){
-            archivo.generar(Instrucciones.LT+"");
-        }
-        else if(operador.getLexema().equals(">")){
-            archivo.generar(Instrucciones.GT+"");
-        }
-        else if(operador.getLexema().equals(">=")){
-            archivo.generar(Instrucciones.GE+"");
-        }
-        else if(operador.getLexema().equals("<=")){
-            archivo.generar(Instrucciones.LE+"");
-        }
-        else if(operador.getLexema().equals("%")){
-            archivo.generar(Instrucciones.MOD+"");
-        }
-        else if (operador.getLexema().equals("+")){
-            archivo.generar(Instrucciones.ADD+"");
-        }
-        else if (operador.getLexema().equals("-")){
-            archivo.generar(Instrucciones.SUB+"");
-        }
-        else if(operador.getLexema().equals("*")){
-            archivo.generar(Instrucciones.MUL+"");
-        }
-        else if(operador.getLexema().equals("/")){
-            archivo.generar(Instrucciones.DIV+"");
+        switch (op) {
+            case "==": archivo.generar(Instrucciones.EQ + ""); break;
+            case "!=": archivo.generar(Instrucciones.NE + ""); break;
+            case "<":  archivo.generar(Instrucciones.LT + ""); break;
+            case ">":  archivo.generar(Instrucciones.GT + ""); break;
+            case "<=": archivo.generar(Instrucciones.LE + ""); break;
+            case ">=": archivo.generar(Instrucciones.GE + ""); break;
+            case "%":  archivo.generar(Instrucciones.MOD + ""); break;
+            case "+":  archivo.generar(Instrucciones.ADD + ""); break;
+            case "-":  archivo.generar(Instrucciones.SUB + ""); break;
+            case "*":  archivo.generar(Instrucciones.MUL + ""); break;
+            case "/":  archivo.generar(Instrucciones.DIV + ""); break;
         }
     }
-
     @Override
     public String nombreSentencia() {
         return "";

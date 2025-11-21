@@ -136,7 +136,7 @@ public class NodoLlamadaConstructor extends NodoOperando{
 
 
     @Override
-    public void generar(ArchivoSalida archivo) {
+    public void generar(ArchivoSalida archivo) throws ExcepcionSemantica {
         System.out.println("Generando codigo NodoLlamadaConstructor "+nombre.getLexema());
 
         TablaSimbolos ts = TablaSimbolos.tablaSimbolos;

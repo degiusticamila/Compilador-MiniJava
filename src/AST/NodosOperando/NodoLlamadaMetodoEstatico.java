@@ -115,17 +115,27 @@ public class NodoLlamadaMetodoEstatico extends NodoOperando{
         }
     }
     @Override
-    public void generar(ArchivoSalida archivo) {
+    public void generar(ArchivoSalida archivo) throws ExcepcionSemantica {
         System.out.println("Entro a generar NodoLlamadaMetodoEstatico "+nombreMetodo.getLexema());
         TablaSimbolos ts = TablaSimbolos.tablaSimbolos;
         Clase clase = ts.obtenerClase(nombreClase.getLexema());
         Metodo metodo = clase.getMetodo(nombreMetodo.getLexema());
 
+        boolean esVoid = metodo.getTipo() instanceof TipoVoid || "void".equals(metodo.getTipo().getNombre());
+
+
+
         for(NodoExpresion parametro : argumentos){
             parametro.generar(archivo);
+
         }
         archivo.generar(Instrucciones.PUSH+" lbl_"+metodo.getNombreMetodo().getLexema()+"@"+clase.getNombre().getLexema());
         archivo.generar(Instrucciones.CALL+"");
+
+        if(tieneEncadenado()){
+            encadenado.generar(archivo);
+            return;
+        }
 
 
     }

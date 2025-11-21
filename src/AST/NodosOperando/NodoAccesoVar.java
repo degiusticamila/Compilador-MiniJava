@@ -145,7 +145,7 @@ public class NodoAccesoVar extends NodoOperando {
         }
     }
     @Override
-    public void generar(ArchivoSalida archivo) {
+    public void generar(ArchivoSalida archivo) throws ExcepcionSemantica {
         System.out.println("Generando código en NodoAccesoVar "+nombre.getLexema());
         if(referenciaTS instanceof NodoVarLocal varLocal){
 

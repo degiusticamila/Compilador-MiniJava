@@ -113,20 +113,44 @@ public class NodoLlamadaEncadenada extends NodoEncadenado {
 
 
     @Override
-    public void generar(ArchivoSalida archivo) {
+    public void generar(ArchivoSalida archivo) throws ExcepcionSemantica {
         System.out.println("Generando codigo NodoLlamadaEncadenada "+nombre.getLexema());
 
 
         TablaSimbolos ts = TablaSimbolos.tablaSimbolos;
+        if(tipoBase == null || tipoRetorno == null){
+            Tipo base = tipoBase;
+            if(base == null){
+                base = new TipoReferencia("Object");
+                this.tipoBase = base;
+            }
+            Clase claseTmp = ts.obtenerClase(base.getNombre());
+            if (claseTmp != null && claseTmp.metodoDeclarado(super.nombre.getLexema())) {
+                Metodo m = claseTmp.getMetodo(super.nombre.getLexema());
+                if (this.tipoRetorno == null) this.tipoRetorno = m.getTipo();
+            }
+        }
+        System.out.println("Tipo base: "+tipoBase.getNombre());
         Clase clase = ts.obtenerClase(tipoBase.getNombre());
-        Metodo metodo = clase.getMetodo(super.nombre.getLexema());
-
-        int offset = metodo.getOffsetMetodo();
-        boolean esVoid = tipoRetorno instanceof TipoVoid;
+        Metodo metodo;
+        if(clase == null){
+            return;
+        }
+        else{
+            metodo =  clase.getMetodo(super.nombre.getLexema());
+        }
+        int offset = 0;
+        if(metodo != null){
+            offset = metodo.getOffsetMetodo();
+        }
+        assert tipoRetorno != null;
+        boolean esVoid = (tipoRetorno instanceof TipoVoid) || ("void".equals(tipoRetorno.getNombre()));
+        assert metodo != null;
         boolean esEstatico = metodo.esMetodoEstatico();
 
         if(!esVoid){
-           archivo.generar(Instrucciones.DUP+"");          //hago hueco para el retorno
+
+            archivo.generar(Instrucciones.DUP+"");//hago hueco para el retorno
         }
 
         //archivo.generar(Instrucciones.SWAP+"");
@@ -146,6 +170,8 @@ public class NodoLlamadaEncadenada extends NodoEncadenado {
             archivo.generar(Instrucciones.LOADREF + " " + offset); //Desplazamiento dentro de la VT
             System.out.println("CALL " + nombre.getLexema() + " offset=" + offset + " params=" + parametros.size());
             archivo.generar(Instrucciones.CALL + "");
+
+
         }
 
         if (!(encadenado instanceof NodoEncadenadoVacio)) {

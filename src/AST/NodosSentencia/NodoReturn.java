@@ -51,7 +51,7 @@ public class NodoReturn extends NodoSentencia {
     }
 
     @Override
-    public void generar(ArchivoSalida archivo) {
+    public void generar(ArchivoSalida archivo) throws ExcepcionSemantica {
         System.out.println("Generar de NodoReturn");
 
         TablaSimbolos ts = TablaSimbolos.tablaSimbolos;

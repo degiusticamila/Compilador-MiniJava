@@ -29,9 +29,6 @@ public class NodoOperadorUnario extends NodoExpresion{
         Tipo tipoOperando = ladoDerecho.chequear();
         if(tipoOperando != null){
             if(!nombre.getLexema().equals("!")){
-                //si se usa una variable tiene que estar, pero cómo obtengo que a1 es alcanzable?
-
-                //el tipo de lado derecho debe ser entero
                 if(!tipoOperando.esCompatible(new TipoPrimitivo("int"))){
                     throw new ExcepcionSemantica(nombre.getLexema(), nombre.getNroLinea(), "El tipo "+tipoOperando+" es incompatible con el operador "+nombre.getLexema());
                 }
@@ -78,7 +75,7 @@ public class NodoOperadorUnario extends NodoExpresion{
         this.ladoDerecho = ladoDerecho;
     }
     @Override
-    public void generar(ArchivoSalida archivo) {
+    public void generar(ArchivoSalida archivo) throws ExcepcionSemantica {
         System.out.println("Generando codigo en Unarios");
 
         ladoDerecho.generar(archivo);
@@ -90,7 +87,7 @@ public class NodoOperadorUnario extends NodoExpresion{
 
         }
         else if(nombre.getLexema().equals("-")){
-           //TO-DO
+            archivo.generar(Instrucciones.NEG + "");
         }
         else if(nombre.getLexema().equals("++")){
             archivo.generar(Instrucciones.PUSH+" 1");
@@ -103,6 +100,10 @@ public class NodoOperadorUnario extends NodoExpresion{
         else if(nombre.getLexema().equals("--")){
             archivo.generar(Instrucciones.PUSH+" 1");
             archivo.generar(Instrucciones.SUB+"");
+
+            ladoDerecho.setEsLadoIzq();
+            ladoDerecho.generar(archivo);
+            ladoDerecho.setEsLadoIzq();
         }
 
     }

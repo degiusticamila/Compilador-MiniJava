@@ -11,7 +11,7 @@ public abstract class NodoEncadenado {
     public NodoEncadenado(Token nombre) {
         this.nombre = nombre;
     }
-    public abstract void generar(ArchivoSalida archivo);
+    public abstract void generar(ArchivoSalida archivo) throws ExcepcionSemantica;
     public abstract Tipo chequear(Tipo t) throws ExcepcionSemantica;
     public abstract void imprimir(String prefijo);
     public abstract String formatear();
