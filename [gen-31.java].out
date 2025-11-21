@@ -157,18 +157,20 @@ RET 0
 .DATA
 VT@A: 
 
-DW lbl_m1@A
+DW lbl_sum@A
 
 .CODE
-lbl_m1@A: LOADFP
+lbl_sum@A: LOADFP
 LOADSP
 STOREFP
-PUSH 33
-STORE 4
-JUMP lbl_final_m1@A
-lbl_final_m1@A: NOP
+LOAD 5
+LOAD 4
+ADD
+STORE 6
+JUMP lbl_final_sum@A
+lbl_final_sum@A: NOP
 STOREFP
-RET 1
+RET 3
 
 
 lbl_constructor@A: LOADFP
@@ -199,6 +201,10 @@ FMEM 1
 STORE 0
 LOAD 0
 DUP
+PUSH 7
+SWAP
+PUSH 5
+SWAP
 DUP
 LOADREF 0
 LOADREF 0

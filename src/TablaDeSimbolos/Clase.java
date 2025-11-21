@@ -236,6 +236,9 @@ public class Clase {
                 //System.out.println("→ Metodo "+nombreMetodoPadre+ "redefinido en "+this.nombre.getLexema());
             }
         }
+
+
+
     }
     public void chequearRedefinicionMetodosAbstractos() throws ExcepcionSemantica {
         Clase padre = TablaSimbolos.getInstance().obtenerClase(this.getHerencia().getLexema());
@@ -390,25 +393,27 @@ public class Clase {
         }
         else{
             //Heredo VT del padre
-            if(herencia != null){
+            //Heredo VT del padre
+            if (herencia != null) {
                 Clase padre = ts.obtenerClase(herencia.getLexema());
-                if(padre != null){
-                    for(Metodo mPadre : padre.metodosOrdenados){
-                        if(!mPadre.esMetodoEstatico()){
-                            Metodo redefinido = metodosPropios.get(mPadre.getNombreMetodo().getLexema());
-                            if(redefinido != null){
-                                //Redefinido en clase hija
-                                archivo.generar(Instrucciones.DW+" lbl_"+redefinido.getNombreMetodo().getLexema()+"@"+nombre.getLexema());
-                            }
-                            else{
-                                //Heredado de clase padre
-                                archivo.generar(Instrucciones.DW+" lbl_"+mPadre.getNombreMetodo().getLexema()+"@"+padre.getNombre().getLexema());
+                if (padre != null) {
+                    for (Metodo mPadre : padre.metodosOrdenados) {
+                        if (!mPadre.esMetodoEstatico()) {
+                            String nom = mPadre.getNombreMetodo().getLexema();
+                            Metodo redef = metodosPropios.get(nom);
+                            if (redef != null && !redef.esMetodoEstatico()) {
+                                // Redefinido en clase hija → etiqueta de la hija
+                                archivo.generar(Instrucciones.DW + " lbl_" + nom + "@" + nombre.getLexema());
+                            } else {
+                                // Heredado tal cual → etiqueta de la clase donde fue declarado
+                                String claseDecl = mPadre.getClaseDeclarada().getNombre().getLexema();
+                                archivo.generar(Instrucciones.DW + " lbl_" + nom + "@" + claseDecl);
                             }
                         }
-
                     }
                 }
             }
+
             archivo.generar("");
 
 
@@ -418,7 +423,7 @@ public class Clase {
                     String nombreMetodo = m.getNombreMetodo().getLexema();
                     if(herencia != null){
                         Clase padre = ts.obtenerClase(herencia.getLexema());
-                        boolean declaradoEnPadre = padre != null && padre.metodos.containsKey(nombreMetodo);
+                        boolean declaradoEnPadre = padre != null && padre.metodos.containsKey(nombreMetodo) && !padre.metodos.get(nombreMetodo).esMetodoEstatico();
                         if(!declaradoEnPadre){
                             archivo.generar(Instrucciones.DW+" lbl_"+m.getNombreMetodo().getLexema()+"@"+nombre.getLexema());
                         }
@@ -438,7 +443,7 @@ public class Clase {
         archivo.generar(".CODE");
         for(Metodo m : metodosPropios.values()){
             System.out.println(m.getNombre()+" de clase "+nombre.getLexema());
-            archivo.generar("lbl_"+m.getNombre()+"@"+nombre.getLexema()+": "+ Instrucciones.LOADFP);
+            archivo.generar("lbl_" + m.getNombreMetodo().getLexema() + "@" + nombre.getLexema() + ": " + Instrucciones.LOADFP);
             m.generar(archivo);
         }
         archivo.generar("");
@@ -508,14 +513,14 @@ public class Clase {
     }
     public void generarCodigoConstructor(ArchivoSalida archivo){
 
-        archivo.generar("lbl_constructor@"+nombre.getLexema()+": LOADFP");
+       archivo.generar("lbl_constructor@"+nombre.getLexema()+": LOADFP");
         archivo.generar("LOADSP");
         archivo.generar("STOREFP");
-        //int cantLocales = constructor != null ? constructor.getBloque().getVariablesLocales().size() : 0;
-        //archivo.generar("FMEM "+cantLocales);
 
         archivo.generar("STOREFP");
         archivo.generar("RET 0");
+
+
 
         //ESTA HARDCODEADO DE MOMENTO!
         /*

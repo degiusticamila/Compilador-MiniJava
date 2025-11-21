@@ -142,7 +142,8 @@ public class NodoLlamadaConstructor extends NodoOperando{
         TablaSimbolos ts = TablaSimbolos.tablaSimbolos;
         Clase clase = ts.obtenerClase(nombre.getLexema());
         int cantAtributos = clase.getMapAtributos().size();
-        int tamanioObjeto = cantAtributos + 1;
+       int tamanioObjeto = cantAtributos + 1;
+
 
         //Retorno de malloc
         archivo.generar(Instrucciones.RMEM + " 1");
@@ -171,4 +172,5 @@ public class NodoLlamadaConstructor extends NodoOperando{
         System.out.println("Finalizando NodoLlamadaConstructor");
         archivo.generar(Instrucciones.FMEM+" 1");
     }
+
 }

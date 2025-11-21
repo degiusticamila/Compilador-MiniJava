@@ -1,3 +1,9 @@
+.DATA
+label_str5:
+DW "hola mundo",0
+.DATA
+label_str6:
+DW "exitosamente",0
 .CODE
 PUSH lbl_main@Init
 CALL
@@ -155,28 +161,6 @@ STOREFP
 STOREFP
 RET 0
 .DATA
-VT@A: 
-
-DW lbl_m1@A
-
-.CODE
-lbl_m1@A: LOADFP
-LOADSP
-STOREFP
-PUSH 33
-STORE 4
-JUMP lbl_final_m1@A
-lbl_final_m1@A: NOP
-STOREFP
-RET 1
-
-
-lbl_constructor@A: LOADFP
-LOADSP
-STOREFP
-STOREFP
-RET 0
-.DATA
 VT@Init: 
 NOP
 
@@ -184,29 +168,13 @@ NOP
 lbl_main@Init: LOADFP
 LOADSP
 STOREFP
-RMEM 1
-RMEM 1
-PUSH 1
-PUSH simple_malloc
+PUSH label_str5
+PUSH lbl_printSln@System
 CALL
-DUP
-PUSH VT@A
-STOREREF 0
-DUP
-PUSH lbl_constructor@A
-CALL
-FMEM 1
-STORE 0
-LOAD 0
-DUP
-DUP
-LOADREF 0
-LOADREF 0
-CALL
-PUSH lbl_debugPrint@Object
+PUSH label_str6
+PUSH lbl_printSln@System
 CALL
 lbl_final_main@Init: NOP
-FMEM 1
 STOREFP
 RET 0
 

@@ -120,6 +120,7 @@ public class NodoLlamadaEncadenada extends NodoEncadenado {
         TablaSimbolos ts = TablaSimbolos.tablaSimbolos;
         Clase clase = ts.obtenerClase(tipoBase.getNombre());
         Metodo metodo = clase.getMetodo(super.nombre.getLexema());
+
         int offset = metodo.getOffsetMetodo();
         boolean esVoid = tipoRetorno instanceof TipoVoid;
         boolean esEstatico = metodo.esMetodoEstatico();
@@ -128,7 +129,7 @@ public class NodoLlamadaEncadenada extends NodoEncadenado {
            archivo.generar(Instrucciones.DUP+"");          //hago hueco para el retorno
         }
 
-        archivo.generar(Instrucciones.SWAP+"");
+        //archivo.generar(Instrucciones.SWAP+"");
         for (NodoExpresion parametro : parametros) {
             parametro.generar(archivo);
             archivo.generar(Instrucciones.SWAP + "");
