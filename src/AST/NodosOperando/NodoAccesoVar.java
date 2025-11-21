@@ -146,10 +146,10 @@ public class NodoAccesoVar extends NodoOperando {
     }
     @Override
     public void generar(ArchivoSalida archivo) throws ExcepcionSemantica {
-        System.out.println("Generando código en NodoAccesoVar "+nombre.getLexema());
+        //System.out.println("Generando código en NodoAccesoVar "+nombre.getLexema());
         if(referenciaTS instanceof NodoVarLocal varLocal){
 
-            System.out.println(varLocal.getNombreVarLocal()+" "+varLocal.getOffset());
+            //System.out.println(varLocal.getNombreVarLocal()+" "+varLocal.getOffset());
             if(esLadoIzq){
                 archivo.generar(Instrucciones.STORE+ " "+ varLocal.getOffset());
             }
@@ -162,7 +162,7 @@ public class NodoAccesoVar extends NodoOperando {
 
             int offsetAttr = atributo.getOffset(); //offset adentro del CIR
 
-            System.out.println("Desplazamiento de "+atributo.getNombre()+" "+atributo.getOffset());
+            //System.out.println("Desplazamiento de "+atributo.getNombre()+" "+atributo.getOffset());
             //archivo.generar(Instrucciones.LOAD+ " "+ atributo.getOffset());
             if(esLadoIzq){
                 archivo.generar(Instrucciones.LOAD+" 3"); //this
@@ -176,9 +176,11 @@ public class NodoAccesoVar extends NodoOperando {
 
         }
         else if(referenciaTS instanceof Parametro p){
-            System.out.println();
+           /* System.out.println();
             System.out.println("Desplazamiento de" +p.getNombre()+" "+ p.getOffset());
             System.out.println();
+
+            */
             if(esLadoIzq){
                 archivo.generar(Instrucciones.STORE+ " "+ p.getOffset());
             }
@@ -188,7 +190,7 @@ public class NodoAccesoVar extends NodoOperando {
 
         }
         if(!(encadenado instanceof NodoEncadenadoVacio)){
-            System.out.println("Generando codigo del encadenado "+encadenado.nombre.getLexema());
+           // System.out.println("Generando codigo del encadenado "+encadenado.nombre.getLexema());
             encadenado.generar(archivo);
         }
     }

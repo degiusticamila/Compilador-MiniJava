@@ -9,7 +9,7 @@ public class BloquePrintln extends NodoBloque {
         super();
     }
     public void generar(ArchivoSalida archivo){
-        System.out.println("Entro al codigo de PRINTln");
+        //System.out.println("Entro al codigo de PRINTln");
         archivo.generar(""+ Instrucciones.PRNLN);
     }
 }

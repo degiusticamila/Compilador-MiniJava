@@ -33,8 +33,8 @@ public class Parametro extends OffsetElemento implements Elemento{
         return posicion;
     }
     public boolean equals(Parametro p){
-        System.out.println("tipo1"+tipo);
-        System.out.println("tipo2"+p);
+      //  System.out.println("tipo1"+tipo);
+       // System.out.println("tipo2"+p);
         return tipo.equals(p.tipo) && nombre.getLexema().equals(p.nombre.getLexema());
     }
 

@@ -148,11 +148,11 @@ public class Metodo implements Elemento{
 
         int cantidadParametros = parametros.size();
 
-        System.out.println("Cantidad de Parametros en metodo "+nombre.getLexema()+": "+cantidadParametros);
+       // System.out.println("Cantidad de Parametros en metodo "+nombre.getLexema()+": "+cantidadParametros);
 
 
         int cantidadVariablesLocales = bloque.getTodasLasVariablesLocales().size();
-        System.out.println("Cantidad de Variables locales en metodo "+nombre.getLexema()+": "+cantidadVariablesLocales);
+       // System.out.println("Cantidad de Variables locales en metodo "+nombre.getLexema()+": "+cantidadVariablesLocales);
         if(cantidadVariablesLocales != 0){
             archivo.generar(""+Instrucciones.RMEM+" "+cantidadVariablesLocales);
         }

@@ -9,7 +9,7 @@ public class BloquePrintC extends NodoBloque {
         super();
     }
     public void generar(ArchivoSalida archivo){
-        System.out.println("Entro al codigo de PRINTC");
+        //System.out.println("Entro al codigo de PRINTC");
         archivo.generar(Instrucciones.LOAD+" 3");
         archivo.generar(""+Instrucciones.CPRINT);
     }

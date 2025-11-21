@@ -30,7 +30,7 @@ public class Constructor {
         }
     }
     public void generar(ArchivoSalida archivo) throws ExcepcionSemantica {
-        System.out.println("Clase constructor");
+        //System.out.println("Clase constructor");
         archivo.generar("LOADFP");
         archivo.generar("LOADSP");
         archivo.generar("STOREFP");

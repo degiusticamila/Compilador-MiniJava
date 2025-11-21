@@ -137,7 +137,7 @@ public class NodoLlamadaConstructor extends NodoOperando{
 
     @Override
     public void generar(ArchivoSalida archivo) throws ExcepcionSemantica {
-        System.out.println("Generando codigo NodoLlamadaConstructor "+nombre.getLexema());
+       // System.out.println("Generando codigo NodoLlamadaConstructor "+nombre.getLexema());
 
         TablaSimbolos ts = TablaSimbolos.tablaSimbolos;
         Clase clase = ts.obtenerClase(nombre.getLexema());
@@ -169,7 +169,7 @@ public class NodoLlamadaConstructor extends NodoOperando{
         if (!(encadenado instanceof NodoEncadenadoVacio)) {
             encadenado.generar(archivo);
         }
-        System.out.println("Finalizando NodoLlamadaConstructor");
+        //System.out.println("Finalizando NodoLlamadaConstructor");
         archivo.generar(Instrucciones.FMEM+" 1");
     }
 

@@ -24,7 +24,7 @@ public class NodoEncadenadoVacio extends NodoEncadenado {
 
     @Override
     public void imprimir(String prefijo) {
-        System.out.println("encadenado vacio");
+        //System.out.println("encadenado vacio");
     }
 
     @Override

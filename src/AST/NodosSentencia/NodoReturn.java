@@ -52,7 +52,7 @@ public class NodoReturn extends NodoSentencia {
 
     @Override
     public void generar(ArchivoSalida archivo) throws ExcepcionSemantica {
-        System.out.println("Generar de NodoReturn");
+       // System.out.println("Generar de NodoReturn");
 
         TablaSimbolos ts = TablaSimbolos.tablaSimbolos;
         Metodo metodoActual = ts.getMetodoActual();
@@ -65,7 +65,7 @@ public class NodoReturn extends NodoSentencia {
             int cantidadParametros = metodoActual.getParametros().size();
             int offsetRetorno = metodoActual.esMetodoEstatico() ? cantidadParametros + 3 : cantidadParametros + 4;
             archivo.generar(Instrucciones.STORE+" "+offsetRetorno);
-            System.out.println("Offset del retorno del metodo "+metodoActual.getNombre()+": "+offsetRetorno);
+           // System.out.println("Offset del retorno del metodo "+metodoActual.getNombre()+": "+offsetRetorno);
 
 
         }

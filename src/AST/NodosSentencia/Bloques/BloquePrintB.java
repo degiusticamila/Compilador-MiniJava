@@ -9,7 +9,7 @@ public class BloquePrintB extends NodoBloque {
         super();
     }
     public void generar(ArchivoSalida archivo){
-        System.out.println("Entro al codigo de PRINTB");
+        //System.out.println("Entro al codigo de PRINTB");
         archivo.generar(Instrucciones.LOAD+" 3");
         archivo.generar(""+Instrucciones.BPRINT);
     }

@@ -462,7 +462,7 @@ public class Clase {
         archivo.generar("");
         archivo.generar(".CODE");
         for (Metodo m : metodosPropios.values()) {
-            System.out.println(m.getNombre() + " de clase " + nombre.getLexema());
+           // System.out.println(m.getNombre() + " de clase " + nombre.getLexema());
             archivo.generar("lbl_" + m.getNombreMetodo().getLexema() + "@" + nombre.getLexema() + ": " + Instrucciones.LOADFP);
             m.generar(archivo);
         }

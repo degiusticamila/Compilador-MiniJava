@@ -17,7 +17,7 @@ public class NodoVarEncadenada extends NodoEncadenado {
 
     @Override
     public void generar(ArchivoSalida archivo) throws ExcepcionSemantica {
-        System.out.println("Generando código de NodoVarEncadenada " + nombre.getLexema());
+       // System.out.println("Generando código de NodoVarEncadenada " + nombre.getLexema());
 
         int offsetAttr = atributoEnTS.getOffset();
 
@@ -37,13 +37,13 @@ public class NodoVarEncadenada extends NodoEncadenado {
     @Override
     public Tipo chequear(Tipo t) throws ExcepcionSemantica {
         TablaSimbolos tablaSimbolos = TablaSimbolos.getInstance();
-        System.out.println();
-        System.out.println(t.getNombre());
-        System.out.println();
-        System.out.println();
+
+       /* System.out.println(t.getNombre());
         System.out.println(super.nombre.getLexema());
-        System.out.println();
         System.out.println("Chequeando atributo " + nombre.getLexema() + " sobre tipo " + t.getNombre());
+
+
+        */
         if(t.esReferencia() && tablaSimbolos.obtenerClase(t.getNombre()).atributoDeclarado(super.nombre.getLexema())){
 
             atributoEnTS = tablaSimbolos.obtenerClase(t.getNombre()).getAtributo(super.nombre.getLexema());

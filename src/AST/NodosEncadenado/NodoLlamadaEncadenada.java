@@ -114,8 +114,7 @@ public class NodoLlamadaEncadenada extends NodoEncadenado {
 
     @Override
     public void generar(ArchivoSalida archivo) throws ExcepcionSemantica {
-        System.out.println("Generando codigo NodoLlamadaEncadenada "+nombre.getLexema());
-
+        //System.out.println("Generando codigo NodoLlamadaEncadenada "+nombre.getLexema());
 
         TablaSimbolos ts = TablaSimbolos.tablaSimbolos;
         if(tipoBase == null || tipoRetorno == null){
@@ -130,7 +129,7 @@ public class NodoLlamadaEncadenada extends NodoEncadenado {
                 if (this.tipoRetorno == null) this.tipoRetorno = m.getTipo();
             }
         }
-        System.out.println("Tipo base: "+tipoBase.getNombre());
+       // System.out.println("Tipo base: "+tipoBase.getNombre());
         Clase clase = ts.obtenerClase(tipoBase.getNombre());
         Metodo metodo;
         if(clase == null){
@@ -151,9 +150,10 @@ public class NodoLlamadaEncadenada extends NodoEncadenado {
         if(!esVoid){
 
             archivo.generar(Instrucciones.DUP+"");//hago hueco para el retorno
+
         }
 
-        //archivo.generar(Instrucciones.SWAP+"");
+
         for (NodoExpresion parametro : parametros) {
             parametro.generar(archivo);
             archivo.generar(Instrucciones.SWAP + "");
@@ -168,7 +168,7 @@ public class NodoLlamadaEncadenada extends NodoEncadenado {
             archivo.generar(Instrucciones.DUP + "");
             archivo.generar(Instrucciones.LOADREF + " 0");
             archivo.generar(Instrucciones.LOADREF + " " + offset); //Desplazamiento dentro de la VT
-            System.out.println("CALL " + nombre.getLexema() + " offset=" + offset + " params=" + parametros.size());
+            //System.out.println("CALL " + nombre.getLexema() + " offset=" + offset + " params=" + parametros.size());
             archivo.generar(Instrucciones.CALL + "");
 
 
@@ -182,11 +182,12 @@ public class NodoLlamadaEncadenada extends NodoEncadenado {
         }
 
     }
+
     public void generarRetorno(ArchivoSalida archivo) {
 
-        System.out.println("Tipo de retorno de la llamada "+nombre.getLexema()+" "+tipoRetorno.getNombre());
+       // System.out.println("Tipo de retorno de la llamada "+nombre.getLexema()+" "+tipoRetorno.getNombre());
         if(tipoRetorno instanceof TipoVoid){
-            System.out.println("La llamada es void entonces retorna "+nombre.getLexema());
+         //   System.out.println("La llamada es void entonces retorna "+nombre.getLexema());
             return;
         }
 

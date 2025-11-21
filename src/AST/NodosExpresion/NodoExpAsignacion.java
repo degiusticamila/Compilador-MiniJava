@@ -43,9 +43,9 @@ public class NodoExpAsignacion extends NodoExpresion {
 
         Tipo tipoLadoDerecho = ladoDerecho.chequear();
         Tipo tipoLadoIzquierdo = ladoIzquierdo.chequear();
-        System.out.println();
-        System.out.println(tipoLadoIzquierdo.getNombre());
-        System.out.println();
+
+        //System.out.println(tipoLadoIzquierdo.getNombre());
+
 
         // Si se asigna null a una variable de tipo referencia, la expresión completa
         // adopta el tipo del lado izquierdo (destino), no el tipo null.
@@ -60,9 +60,9 @@ public class NodoExpAsignacion extends NodoExpresion {
 
     @Override
     public void generar(ArchivoSalida archivo) throws ExcepcionSemantica {
-        System.out.println();
-        System.out.println("Entro a generar codigo de NodoExpAsignacion");
-        System.out.println();
+
+        //System.out.println("Entro a generar codigo de NodoExpAsignacion");
+
        ladoDerecho.generar(archivo); //me genera el 33
         if(ladoIzquierdo instanceof NodoAccesoVar nodoAccesoVar){
             Elemento referencia = nodoAccesoVar.getReferenciaTS();

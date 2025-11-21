@@ -154,8 +154,9 @@ public class NodoLlamadaMetodo extends NodoOperando{
         Metodo metodoActual = ts.getMetodoActual();
         NodoBloque bloqueActual = metodoActual.getBloque();
     }
+    @Override
     public void generar(ArchivoSalida archivo) throws ExcepcionSemantica {
-        System.out.println("Generando codigo para NodoLlamadaMetodo "+nombre.getLexema());
+       // System.out.println("Generando codigo para NodoLlamadaMetodo "+nombre.getLexema());
         Clase claseActual = TablaSimbolos.tablaSimbolos.getClaseActual();
         Metodo metodo = claseActual.getMetodo(nombre.getLexema());
         Clase claseDelMetodo = metodo.getClaseDeclarada();
@@ -163,7 +164,7 @@ public class NodoLlamadaMetodo extends NodoOperando{
 
 
 
-        System.out.println("Tipo de retorno del método "+nombre+" "+tipoRetorno);
+        //System.out.println("Tipo de retorno del método "+nombre+" "+tipoRetorno);
 
 
 
@@ -202,6 +203,7 @@ public class NodoLlamadaMetodo extends NodoOperando{
             encadenado.generar(archivo);
         }
     }
+
 
     @Override
     public String nombreSentencia() {

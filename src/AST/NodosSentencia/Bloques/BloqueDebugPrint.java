@@ -9,7 +9,7 @@ public class BloqueDebugPrint extends NodoBloque {
         super();
     }
     public void generar(ArchivoSalida archivo){
-        System.out.println("Entro al codigo de DEBUGPRINT");
+        //System.out.println("Entro al codigo de DEBUGPRINT");
         archivo.generar(Instrucciones.LOAD+" 3");
         archivo.generar(""+Instrucciones.IPRINT);
 

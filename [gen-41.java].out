@@ -182,17 +182,17 @@ LOAD 0
 PUSH 0
 NE
 DUP
-BF lbl_and_false_1739876329
+BF lbl_and_false_770189387
 POP
 PUSH 1
 LOAD 0
 DIV
 PUSH 0
 GT
-JUMP lbl_and_end_1739876329
-lbl_and_false_1739876329: POP
+JUMP lbl_and_end_770189387
+lbl_and_false_770189387: POP
 PUSH 0
-lbl_and_end_1739876329: NOP
+lbl_and_end_770189387: NOP
 BF lbl_else@6
 PUSH 999
 PUSH lbl_printIln@System
@@ -204,17 +204,17 @@ LOAD 0
 PUSH 0
 EQ
 DUP
-BT lbl_or_true_1205555397
+BT lbl_or_true_963522361
 POP
 PUSH 1
 LOAD 0
 DIV
 PUSH 0
 GT
-JUMP lbl_or_end_1205555397
-lbl_or_true_1205555397: POP
+JUMP lbl_or_end_963522361
+lbl_or_true_963522361: POP
 PUSH 1
-lbl_or_end_1205555397: NOP
+lbl_or_end_963522361: NOP
 BF lbl_else@7
 PUSH 2
 PUSH lbl_printIln@System

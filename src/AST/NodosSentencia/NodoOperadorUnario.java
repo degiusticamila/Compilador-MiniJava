@@ -76,7 +76,7 @@ public class NodoOperadorUnario extends NodoExpresion{
     }
     @Override
     public void generar(ArchivoSalida archivo) throws ExcepcionSemantica {
-        System.out.println("Generando codigo en Unarios");
+       // System.out.println("Generando codigo en Unarios");
 
         ladoDerecho.generar(archivo);
         if(nombre.getLexema().equals("!")){

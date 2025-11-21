@@ -56,7 +56,7 @@ public class NodoString extends NodoOperando {
 
     @Override
     public void generar(ArchivoSalida archivo) {
-        System.out.println("Generando código para NodoString");
+       // System.out.println("Generando código para NodoString");
         setLabel();
         archivo.generar(Instrucciones.PUSH + " " + this.label);
     }

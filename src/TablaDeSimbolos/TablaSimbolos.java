@@ -443,7 +443,7 @@ public class TablaSimbolos {
     }
     public void generarCodigoClases(ArchivoSalida archivo) throws ExcepcionSemantica {
         for(Clase clase: clases.values()){
-            System.out.println("Generando codigo para la clase: "+clase.getNombre());
+           // System.out.println("Generando codigo para la clase: "+clase.getNombre());
             clase.generarCodigo(archivo);
         }
     }
